@@ -1,12 +1,14 @@
 parameters:
   database_driver: pdo_sqlsrv
-  database_host: DESKTOP-I516SA9\SQLEXPRESS
+  database_host: 37.187.254.75\SQLEXPRESS
   database_port: null
   database_name: BTG_DOS_BATOEI
-  database_user: kebsibadr
-  database_password: Saiko123
+  database_user: Bato
+  database_password: Bato68380!
   database_charset: UTF-8
-    
+
+
+
 doctrine:
     dbal:
         url: '%env(resolve:DATABASE_URL)%'

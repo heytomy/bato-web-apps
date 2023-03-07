@@ -20,9 +20,6 @@ class AppsUtilisateur implements UserInterface, PasswordAuthenticatedUserInterfa
     #[ORM\Column(length: 50, unique: true,  nullable: true)]
     private ?string $Nom_utilisateur = null;
 
-    // #[ORM\Column]
-    // private array $roles = [];
-
     /**
      * @var string The hashed password
      */
@@ -71,35 +68,37 @@ class AppsUtilisateur implements UserInterface, PasswordAuthenticatedUserInterfa
     {
         return (string) $this->Nom_utilisateur;
     }
+   
     /**
      * @see UserInterface
-     * 
-     * 
-     * @return Collection<int, WorkCategory>
+     * Cette fonction a été générée avec la commande "make:user"
+     * Elle a été changée pour qu'elle reste conforme avec la base de donnée
+     * Cette fonction prend les libelles dans l'Entité Roles et les place dans une liste (array)
+     * @return array
      */
-    
     public function getRoles(): array
     {
-        return ['ROLE_USER'];
+        $rolesArray = [];
+        $rolesArray[] = 'ROLE_USER';
+
+        $rolesCollection = $this->roles;
+
+        foreach ($rolesCollection as $key => $role) {
+            $rolesArray[] = $role->getLibelle();
+            }
+        return array_unique($rolesArray);
     }
 
+     /**
+     * Cette fonction est la fonction générée par la relation entre les Entités Apps_Utilisateur et Roles
+     * Donc c'est une collection
+     * @return Collection
+     */
+    
     public function getRolesCollection(): Collection
     {
         return $this->roles;
-        // $roles = $this->roles;
-        // // guarantee every user at least has ROLE_USER
-        // $rolesTable[] = $roles
-
-
-        // return array_unique($roles);
     }
-
-    // public function setRoles(array $roles): self
-    // {
-    //     // $this->roles = $roles;
-
-    //     return $this;
-    // }
 
     /**
      * @see PasswordAuthenticatedUserInterface
@@ -137,10 +136,7 @@ class AppsUtilisateur implements UserInterface, PasswordAuthenticatedUserInterfa
         return $this;
     }
 
-    /**
-     * Cette fonction a été modifié pour qu'elle soit conforme avec la configuration de la base de donnée
-     * Elle cherche si le rôle exist déjà, sinon elle le rajoute dans la liste des rôle
-     */
+
     public function addRole(Roles $role): self
     {
         if (!$this->roles->contains($role)) {
@@ -154,12 +150,12 @@ class AppsUtilisateur implements UserInterface, PasswordAuthenticatedUserInterfa
      * Cette fonction a été modifié pour qu'elle soit conforme avec la configuration de la base de donnée
      * Elle cherche si le rôle exist déjà, sinon elle le rajoute dans la liste des rôle
      */
-    // public function removeRole(Roles $role): self
-    // {
-    //     if ($this->roles->removeElement($role)) {
-    //         $roles->removeAppsUtilisateur($this);
-    //     }
+    public function removeRole(Roles $role): self
+    {
+        if ($this->roles->removeElement($role)) {
+            $role->removeAppsUtilisateur($this);
+        }
 
-    //     return $this;
-    // }
+        return $this;
+    }
 }

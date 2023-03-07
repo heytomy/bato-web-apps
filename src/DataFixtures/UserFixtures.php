@@ -4,6 +4,7 @@ namespace App\DataFixtures;
 
 use App\Entity\AppsUtilisateur;
 use App\Entity\DefAppsUtilisateur;
+use App\Repository\RolesRepository;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Persistence\ObjectManager;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
@@ -12,10 +13,12 @@ use Faker\Factory as Faker;
 class UserFixtures extends Fixture
 {
     private $encoder;
+    protected $rolesRepository;
 
-    public function __construct(UserPasswordHasherInterface $encoder)
+    public function __construct(UserPasswordHasherInterface $encoder, RolesRepository $rolesRepository)
     {
         $this->encoder = $encoder;
+        $this->rolesRepository = $rolesRepository;
     }
 
     public function load(ObjectManager $manager): void
@@ -31,13 +34,15 @@ class UserFixtures extends Fixture
             ->setMail("kebsibadr@gmail.com")
             ;
         $manager->persist($client);
-
+ 
+        $role = $this->rolesRepository->findAll();
 
         $user = new AppsUtilisateur;
         $user
             ->setIDUtilisateur($client)
             ->setNomUtilisateur('Kebsibadr')
             ->setPassword($this->encoder->hashPassword($user, 'admin'))
+            ->addRole($role[0])
             ;
         // $product = new Product();
         $manager->persist($user);

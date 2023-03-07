@@ -15,7 +15,7 @@ class Roles
     #[ORM\Column]
     private ?int $id = null;
 
-    #[ORM\Column(length: 50)]
+    #[ORM\Column(length: 50, name: "libelle")]
     private ?string $Libelle = null;
 
     #[ORM\ManyToMany(targetEntity: AppsUtilisateur::class, mappedBy: 'roles')]

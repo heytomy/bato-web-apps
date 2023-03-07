@@ -3,6 +3,7 @@
 namespace App\Repository;
 
 use App\Entity\AppsUtilisateur;
+use App\Entity\Roles;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Component\Security\Core\Exception\UnsupportedUserException;
@@ -59,7 +60,13 @@ class AppsUtilisateurRepository extends ServiceEntityRepository implements Passw
     // public function listRolesByUserId($userId) 
     // {
     //     $qb = $this->createQueryBuilder('u')
-    //         ->andWhere()
+    //         ->select('u', 'r.libelle')
+    //         ->andWhere('u.id = :userId')
+    //         ->setParameter('userId', $userId)
+    //         ->innerJoin('u.roles', 'r')
+    //         ->getQuery()
+    //         ;
+    //     return $qb->execute();
     // }
 
 //    /**

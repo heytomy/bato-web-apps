@@ -1,0 +1,12 @@
+{% extends 'base.html.twig' %}
+{% block title %}Hello user{% endblock %}
+
+{% block body %}
+<h1>
+    <ul>
+        <li>{{user.getIDUtilisateur().prenom}}</li>
+        <li>{{user.getIDUtilisateur().nom}}</li>
+        <li>{{user.getIDUtilisateur().mail}}</li>
+    </ul>
+</h1>
+{% endblock %}

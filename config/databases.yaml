@@ -1,0 +1,11 @@
+all:
+  propel:
+    class: sfPropelDatabase
+    param:
+      phptype:     mssql
+      classname:   MssqlPropelPDO
+      dsn:         dblib:host=12.34.56.78;dbname=YOURDB
+      username:    kebsibadr
+      password:    Saiko123
+      encoding:    
+      pooling:     true

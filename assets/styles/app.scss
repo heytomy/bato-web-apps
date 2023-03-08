@@ -1,3 +1,47 @@
-body {
-    background-color: #909696;
+* {
+    font-family: 'Poppins', sans-serif;
 }
+
+footer {
+    background-color: #f2f2f2;
+    padding: 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    text-align: center;
+      
+  }
+  
+  .footer-block {
+    width: 33.33%;
+    margin-bottom: 20px;
+  }
+  
+  .footer-block h3 {
+    font-size: 18px;
+    font-weight: bold;
+    margin-bottom: 10px;
+  }
+  
+  .footer-block a {
+    color: black;
+    text-decoration: none;
+    font-size: 14px;
+    line-height: 1.5;
+  }
+  
+  @media (max-width: 768px) {
+    .footer-block {
+      width: 100%;
+    }
+  }
+  
+  /* center copyright */
+  footer .copyright {
+    display: flex;
+    justify-content: center;
+    width: 100%;
+    margin-top: 20px;
+  }
+  

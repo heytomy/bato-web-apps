@@ -50,7 +50,7 @@ class RegistrationController extends AbstractController
             $this->emailVerifier->sendEmailConfirmation('app_verify_email', $user,
                 (new TemplatedEmail())
                     ->from(new Address('no-reply@mrb-studio.fr', 'Bato Dashboard'))
-                    ->to($user->getIDUtilisateur())
+                    ->to($user->getIDUtilisateur()->getMail())
                     ->subject('Please Confirm your Email')
                     ->htmlTemplate('registration/confirmation_email.html.twig')
             );

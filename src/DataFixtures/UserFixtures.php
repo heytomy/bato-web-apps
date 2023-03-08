@@ -23,6 +23,8 @@ class UserFixtures extends Fixture
 
     public function load(ObjectManager $manager): void
     {
+        $faker = Faker::create('fr_FR');
+
         $client = new DefAppsUtilisateur;
         $client
             ->setNom("Kebsi")
@@ -35,17 +37,47 @@ class UserFixtures extends Fixture
             ;
         $manager->persist($client);
  
-        $role = $this->rolesRepository->findAll();
+        $roles = $this->rolesRepository->findAll();
 
         $user = new AppsUtilisateur;
         $user
             ->setIDUtilisateur($client)
             ->setNomUtilisateur('Kebsibadr')
             ->setPassword($this->encoder->hashPassword($user, 'admin'))
-            ->addRole($role[0])
+            ->addRole($roles[0])
             ;
         // $product = new Product();
         $manager->persist($user);
+
+        
+        $password = $this->encoder->hashPassword(new AppsUtilisateur, 'password');
+        /**
+         * Cette boucle génère 50 fausses utilisateurs grâce au package: Faker
+         */
+        for($i=0; $i<50; $i++) {
+            $client = new DefAppsUtilisateur;
+            $client
+                ->setNom($faker->lastName())
+                ->setPrenom($faker->firstName())
+                ->setAdresse($faker->address())
+                ->setCP($faker->postcode())
+                ->setVille($faker->city())
+                ->setTel1("011223344")
+                ->setMail($faker->email())
+                ;
+            $manager->persist($client);
+
+            $user = new AppsUtilisateur;
+            $user
+                ->setIDUtilisateur($client)
+                ->setNomUtilisateur($faker->userName())
+                ->setPassword($password)
+                ->addRole($faker->randomElement($roles))
+                ;
+            $manager->persist($user);
+            
+            
+        }
         $manager->flush();
     }
 }

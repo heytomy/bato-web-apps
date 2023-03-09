@@ -1,47 +1,52 @@
 <!DOCTYPE html>
 <html>
-    <head>
-        <meta charset="UTF-8">
-        <title>{% block title %}Welcome!{% endblock %}</title>
-        <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 128 128%22><text y=%221.2em%22 font-size=%2296%22>⚫️</text></svg>">
-        {% block stylesheets %}
-            <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.3.0/css/all.min.css" integrity="sha512-SzlrxWUlpfuzQ+pcUCosxcglQRNAq/DZjVsC0lE40xsADsfeQoEypE+enwcOiGjk/bSuGGKHEyjSoQ1zVisanQ==" crossorigin="anonymous" referrerpolicy="no-referrer" />
-            {{ encore_entry_link_tags('app') }}
-        {% endblock %}
+	<head>
+		<meta charset="UTF-8">
+		<title>
+			{% block title %}Welcome!
+			{% endblock %}
+		</title>
+		<link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 128 128%22><text y=%221.2em%22 font-size=%2296%22>⚫️</text></svg>">
+		<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.3.0/css/all.min.css" integrity="sha512-SzlrxWUlpfuzQ+pcUCosxcglQRNAq/DZjVsC0lE40xsADsfeQoEypE+enwcOiGjk/bSuGGKHEyjSoQ1zVisanQ==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    {% block stylesheets %}
+			{{ encore_entry_link_tags('app') }}
+		{% endblock %}
 
-        {% block javascripts %}
-            {{ encore_entry_script_tags('app') }}
-        {% endblock %}
-    </head>
+		{% block javascripts %}
+			{{ encore_entry_script_tags('app') }}
+		{% endblock %}
+	</head>
 
-    <header>
-        {% include '_inc/navbar.html.twig' %}
-    </header>
+	<header>
+		{% include '_inc/navbar.html.twig' %}
+	</header>
 
-    <body>
-        {% block body %}{% endblock %}
-    </body>
+	<body>
+		{% block body %}
+    {% endblock %}
+	</body>
 
-<footer>
-  <div class="footer-block">
-    <h3>Contact Support</h3>
-    <a href="mailto:contact@mrb-studio.fr">contact@mrb-studio.fr</a><br>
-    <a href="tel:0388656565">03 88 65 65 65</a>
-  </div>
-  <div class="footer-block">
-    <h3>Informations</h3>
-    <a href="{{ path('app_dashboard')}}">Condition Générale d'Utilisation</a><br>
-    <a href="{{ path('app_dashboard')}}">Condition Générale de Vente</a><br>
-    <a href="{{ path('app_dashboard')}}">RGPD</a>
-  </div>
-  <div class="footer-block">
-    <h3>Contact Entreprise</h3>
-    <a href="https://goo.gl/maps/1yjG2ie8SvvCvqed8">31 Grand Rue 68380 Metzeral</a><br>
-    <a href="tel:0388656565">03 88 65 65 65</a>
-  </div>
-  <div class="copyright">
-    <p>&copy; 2023 Bato SAS. All rights reserved. Réalisation MRB Studio</p>
-  </div>
-</footer>
+	<footer>
+		<div class="footer-block">
+			<h3>Contact Support</h3>
+			<a href="mailto:contact@mrb-studio.fr">contact@mrb-studio.fr</a><br>
+			<a href="tel:0388656565">03 88 65 65 65</a>
+		</div>
+		<div class="footer-block">
+			<h3>Informations</h3>
+			<a href="{{ path('app_dashboard')}}">Condition Générale d'Utilisation</a><br>
+			<a href="{{ path('app_dashboard')}}">Condition Générale de Vente</a><br>
+			<a href="{{ path('app_dashboard')}}">RGPD</a>
+		</div>
+		<div class="footer-block">
+			<h3>Contact Entreprise</h3>
+			<a href="https://goo.gl/maps/1yjG2ie8SvvCvqed8">31 Grand Rue 68380 Metzeral</a><br>
+			<a href="tel:0388656565">03 88 65 65 65</a>
+		</div>
+		<div class="copyright">
+			<p>&copy; 2023 Bato SAS. All rights reserved. Réalisation MRB Studio</p>
+		</div>
+	</footer>
 
 </html>
+

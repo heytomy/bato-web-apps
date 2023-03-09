@@ -26,7 +26,7 @@
                 <li class="p-2 nav-item">
                     <a class="nav-link text-dark" href="#">
                         <i class="fa-regular fa-calendar"></i>
-                         SAV
+                         Calendrier
                     </a>
                 </li>
                 <li class="p-2 nav-item">
@@ -48,7 +48,7 @@
                     </a>
                 </li>
                 <li class="p-2 nav-item">
-                    <a class="nav-link text-secondary" href="#">
+                    <a class="nav-link text-secondary" href="{{ path('app_logout')}}">
                         <i class="fa-solid fa-right-from-bracket"></i>
                          Se Déconnecter
                     </a>
@@ -58,7 +58,7 @@
                 <li class="p-2 nav-item active">
                     <a class="nav-link text-primary" href="{{ path('app_login') }}">
                         <i class="fa-solid fa-desktop"></i>
-                        Se Connceter
+                        Se Connecter
                     </a>
                 </li>
             {% endif %}

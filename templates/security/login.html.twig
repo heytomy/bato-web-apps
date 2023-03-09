@@ -16,12 +16,12 @@
 				<a href="{{ path('app_logout') }}">Logout</a>
 			</div>
 		{% endif %}
-		<div class="container mt-5">
+		<div class="container-xxl mt-5">
 			<div class="row justify-content-center">
 				<div class="col-md-6 col-lg-4">
 					<div class="card">
-						<div class="card-body">
-							<h5 class="card-title mb-4">Login</h5>
+						<div class="d-flex card-body flex-column">
+							<h5 class="card-title mb-4 align-self-center">Login</h5>
 
 							<form>
                                 <label for="inputNom_utilisateur">Utilisateur</label>
@@ -54,9 +54,10 @@
 									</label>
 								</div>
 
-								<button type="submit" class="btn btn-primary">Login</button>
-							
-                            </form>
+								<button type="submit" class="btn btn-primary">Se connecter</button>
+                            	<a class="align-self-center" href="#">Mot de pass oublié ?</a>
+							</form>
+
 						</div>
 					</div>
 				</div>

@@ -11,12 +11,53 @@
     </div>
     <div class="offcanvas offcanvas-end bg-light" tabindex="-1" id="offcanvasNavbar" aria-labelledby="offcanvasNavbarLabel">
         <ul class="p-5 w-50 d-flex flex-column flex-xl-row justify-content-between align-items-center navbar-nav mr-auto w-100">
-            <li class="p-2 nav-item active"><a class="nav-link text-primary" href="{{ path('app_dashboard') }}">Dashboard</a></li>
-            <li class="p-2 nav-item"><a class="nav-link text-dark" href="#">SAV</a></li>
-            <li class="p-2 nav-item"><a class="nav-link text-dark" href="#">Appels</a></li>
-            <li class="p-2 nav-item"><a class="nav-link text-dark" href="#">Devis</a></li>
-            <li class="p-2 nav-item"><a class="nav-link text-dark" href="#">Chantier</a></li>
-            <li class="p-2 nav-item"><a class="nav-link text-secondary" href="#">Se Déconnecter</a></li>
+            {% if app.user %}
+                <li class="p-2 nav-item active">
+                    <a class="nav-link {% if current_page is defined and current_page == 'app_dashboard' %}text-primary{% endif %}" 
+                        href="{{ path('app_dashboard') }}">
+                            <i class="fa-solid fa-desktop"></i>
+                            Dashboard
+                    </a>
+                </li>
+                <li class="p-2 nav-item">
+                    <a class="nav-link text-dark" href="#">
+                        <i class="fa-regular fa-calendar"></i>
+                         SAV
+                    </a>
+                </li>
+                <li class="p-2 nav-item">
+                    <a class="nav-link text-dark" href="#">
+                        <i class="fa-solid fa-phone"></i>
+                         Appels
+                    </a>
+                </li>
+                <li class="p-2 nav-item">
+                    <a class="nav-link text-dark" href="#">
+                        <i class="fa-regular fa-file-lines"></i>
+                         Devis
+                    </a>
+                </li>
+                <li class="p-2 nav-item">
+                    <a class="nav-link text-dark" href="#">
+                        <i class="fa-solid fa-person-digging"></i>
+                         Chantier
+                    </a>
+                </li>
+                <li class="p-2 nav-item">
+                    <a class="nav-link text-secondary" href="#">
+                        <i class="fa-solid fa-right-from-bracket"></i>
+                         Se Déconnecter
+                    </a>
+                </li>
+            {% endif %}
+            {% if not app.user %}
+                <li class="p-2 nav-item active">
+                    <a class="nav-link text-primary" href="{{ path('app_login') }}">
+                        <i class="fa-solid fa-desktop"></i>
+                        Se Connceter
+                    </a>
+                </li>
+            {% endif %}
         </ul>
     </div>
 </nav>

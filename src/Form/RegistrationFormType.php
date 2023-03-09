@@ -30,13 +30,13 @@ class RegistrationFormType extends AbstractType
                 ],
             ])
 
-            ->add('email', EmailType::class, [
-                'required' => true,
-                'label' => 'Votre adresse email',
-                'attr' => [
-                    'placeholder' => 'Entrez votre adresse email ici',
-                ],
-            ])
+            // ->add('email', EmailType::class, [
+            //     'required' => true,
+            //     'label' => 'Votre adresse email',
+            //     'attr' => [
+            //         'placeholder' => 'Entrez votre adresse email ici',
+            //     ],
+            // ])
             
             ->add('agreeTerms', CheckboxType::class, [
                 'label' => 'J\'accepte les conditions d\'utilisation du site',

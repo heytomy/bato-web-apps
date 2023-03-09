@@ -15,6 +15,10 @@
         <h1>{{user.id}}</h1>
         <h1>
             <ul>
+                <li>{{user.getNomUtilisateur}}</li>
+                {% for role in user.getRoles %}
+                    <li>{{role}}</li>
+                {% endfor %}
                 <li>{{user.getIDUtilisateur().prenom}}</li>
                 <li>{{user.getIDUtilisateur().nom}}</li>
                 <li>{{user.getIDUtilisateur().mail}}</li>

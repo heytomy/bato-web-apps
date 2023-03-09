@@ -1,20 +1,22 @@
-<nav class="navbar navbar-expand-lg navbar-light bg-light d-flex flex-row p-2 justify-content-around align-items-center">
+<nav class="navbar navbar-expand-xl navbar-light bg-light d-flex flex-row p-2 justify-content-around align-items-center">
     <div class="p-2">
         <a class="navbar-brand" href="{{ path('app_dashboard') }}">
             <img src="{{ asset('/img/Logo.png') }}" style="height:auto; width:250px;" alt="Logo">
         </a>
     </div>
     <div class="p-2">
-        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+        <button class="navbar-toggler" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasNavbar" aria-controls="offcanvasNavbar">
             <span class="navbar-toggler-icon"></span>
         </button>
     </div>
-    <ul class="collapse navbar-collapse p-5 w-50 d-flex flex-row justify-content-between align-items-center navbar-nav mr-auto" id="navbarSupportedContent">
-        <li class="p-2 nav-item active"><a class="nav-link text-primary" href="{{ path('app_dashboard') }}">Dashboard</a></li>
-        <li class="p-2 nav-item"><a class="nav-link text-dark" href="#">SAV</a></li>
-        <li class="p-2 nav-item"><a class="nav-link text-dark" href="#">Appels</a></li>
-        <li class="p-2 nav-item"><a class="nav-link text-dark" href="#">Devis</a></li>
-        <li class="p-2 nav-item"><a class="nav-link text-dark" href="#">Chantier</a></li>
-        <li class="p-2 nav-item"><a class="nav-link text-secondary" href="#">Se Déconnecter</a></li>
-    </ul>
+    <div class="offcanvas offcanvas-end bg-light" tabindex="-1" id="offcanvasNavbar" aria-labelledby="offcanvasNavbarLabel">
+        <ul class="p-5 w-50 d-flex flex-column flex-xl-row justify-content-between align-items-center navbar-nav mr-auto w-100">
+            <li class="p-2 nav-item active"><a class="nav-link text-primary" href="{{ path('app_dashboard') }}">Dashboard</a></li>
+            <li class="p-2 nav-item"><a class="nav-link text-dark" href="#">SAV</a></li>
+            <li class="p-2 nav-item"><a class="nav-link text-dark" href="#">Appels</a></li>
+            <li class="p-2 nav-item"><a class="nav-link text-dark" href="#">Devis</a></li>
+            <li class="p-2 nav-item"><a class="nav-link text-dark" href="#">Chantier</a></li>
+            <li class="p-2 nav-item"><a class="nav-link text-secondary" href="#">Se Déconnecter</a></li>
+        </ul>
+    </div>
 </nav>

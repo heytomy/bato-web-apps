@@ -41,6 +41,7 @@ security:
             lazy: true
             provider: app_user_provider
             custom_authenticator: App\Security\AppAuthenticator
+            entry_point: App\Security\AppAuthenticator
             logout:
                 path: app_logout
                 # where to redirect after logout
@@ -52,6 +53,12 @@ security:
                 #always_remember_me: true
             login_throttling:
                 limiter: app.login_rate_limiter
+
+            form_login:
+                login_path: app_login
+                check_path: app_login
+                # enable csrf protection
+                enable_csrf: true
             
             # activate different ways to authenticate
             # https://symfony.com/doc/current/security.html#the-firewall

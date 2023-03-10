@@ -6,6 +6,7 @@ use App\Repository\DefAppsUtilisateurRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: DefAppsUtilisateurRepository::class)]
 class DefAppsUtilisateur
@@ -15,27 +16,45 @@ class DefAppsUtilisateur
     #[ORM\Column(name: "ID_Utilisateur", type: "integer")]
     private ?int $ID_Utilisateur = null;
 
+    #[Assert\NotBlank(message: "Veuillez ajouter un nom")]
     #[ORM\Column(length: 50, nullable: true)]
     private ?string $Nom = null;
 
+    #[Assert\NotBlank(message: "Veuillez ajouter un prénom")]
     #[ORM\Column(length: 50, nullable: true)]
     private ?string $Prenom = null;
 
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $Adresse = null;
 
+    #[Assert\Regex(
+        pattern: "\d{0,6}", 
+        message: "Le code postal doit être des nombres"
+        )]
     #[ORM\Column(length: 6, nullable: true)]
     private ?string $CP = null;
 
     #[ORM\Column(length: 50, nullable: true)]
     private ?string $Ville = null;
 
+    #[Assert\Regex(
+        pattern: "\d{0,10}", 
+        message: "Veuillez saisir un numéro"
+        )]
     #[ORM\Column(length: 10, nullable: true)]
     private ?string $Tel_1 = null;
 
+    #[Assert\Regex(
+        pattern: "\d{0,10}", 
+        message: "Veuillez saisir un numéro"
+        )]
     #[ORM\Column(length: 10, nullable: true)]
     private ?string $Tel_2 = null;
 
+    #[Assert\NotBlank(message: "Veuillez ajouter un mail")]
+    #[Assert\Email(
+        message: 'L\'email {{ value }} n\'est pas valide'
+    )]
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $Mail = null;
 

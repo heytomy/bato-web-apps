@@ -3,6 +3,7 @@
 namespace App\Form;
 
 use App\Entity\AppsUtilisateur;
+use App\Entity\DefAppsUtilisateur;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Validator\Constraints\Callback;

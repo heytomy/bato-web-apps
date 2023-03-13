@@ -75,7 +75,7 @@ security:
         ROLE_ADMIN:             [ROLE_GESTION]
 
     access_control:
-        # - { path: ^/admin, roles: ROLE_ADMIN, ROLE_GESTION }
+        - { path: ^/admin, roles: [ROLE_ADMIN, ROLE_GESTION] }
         - { path: ^/dashboard, roles: ROLE_USER }
 
 when@test:

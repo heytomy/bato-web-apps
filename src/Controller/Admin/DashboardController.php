@@ -3,6 +3,7 @@
 namespace App\Controller\Admin;
 
 use App\Entity\AppsUtilisateur;
+use App\Entity\DefAppsUtilisateur;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Crud;
@@ -38,9 +39,12 @@ class DashboardController extends AbstractDashboardController
 
     public function configureMenuItems(): iterable
     {
-        yield MenuItem::section('Dashboard', 'fa fa-home');
+        yield MenuItem::linkToRoute('Go back', 'fa fa-home', 'app_dashboard');
 
-        yield MenuItem::linkToCrud('Users', 'fa fa-plus', AppsUtilisateur::class);
+        yield MenuItem::linkToDashboard('Dashboard', 'fa-solid fa-gear');
+
+        yield MenuItem::linkToCrud('Utilisateur', 'fa fa-plus', AppsUtilisateur::class);
+        yield MenuItem::linkToCrud('DefUtilisateur', 'fa fa-plus', DefAppsUtilisateur::class);
 
     }
 }

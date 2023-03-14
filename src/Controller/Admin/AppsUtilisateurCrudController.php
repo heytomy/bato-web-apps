@@ -87,10 +87,11 @@ class AppsUtilisateurCrudController extends AbstractCrudController
             $password = $form->get('Mot_de_passe')->getData();
             if ($password === null) {
                 return;
-            }
+            } 
 
-            $hash = $this->userPasswordHasher->hashPassword($this->getUser(), $password);
+            $hash = $this->userPasswordHasher->hashPassword(new AppsUtilisateur, $password);
             $form->getData()->setPassword($hash);
+
         };
     }
 }

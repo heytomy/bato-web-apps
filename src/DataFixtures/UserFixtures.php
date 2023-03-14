@@ -45,6 +45,7 @@ class UserFixtures extends Fixture
             ->setNomUtilisateur('Kebsibadr')
             ->setPassword($this->encoder->hashPassword($user, 'admin'))
             ->addRole($roles[0])
+            ->setIsVerified(false)
             ;
         // $product = new Product();
         $manager->persist($user);
@@ -73,6 +74,8 @@ class UserFixtures extends Fixture
                 ->setNomUtilisateur($faker->userName())
                 ->setPassword($password)
                 ->addRole($faker->randomElement($roles))
+                ->setIsVerified(false)
+                
                 ;
             $manager->persist($user);
             

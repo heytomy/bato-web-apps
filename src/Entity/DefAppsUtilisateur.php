@@ -14,7 +14,7 @@ class DefAppsUtilisateur
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column(name: "ID_Utilisateur", type: "integer")]
-    private ?int $ID_Utilisateur = null;
+    public ?int $ID_Utilisateur = null;
 
     #[Assert\NotBlank(message: "Veuillez ajouter un nom")]
     #[ORM\Column(length: 50, nullable: true)]

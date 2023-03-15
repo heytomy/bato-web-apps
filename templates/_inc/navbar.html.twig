@@ -1,75 +1,83 @@
-<nav class="navbar navbar-expand-xl navbar-light bg-light d-flex flex-row p-2 justify-content-between align-items-center">
-	<div class="p-2">
-		<a class="navbar-brand" href="{{ path('app_dashboard') }}">
-			<img src="{{ asset('/img/Logo.png') }}" style="height:auto; width:250px;" alt="Logo">
-		</a>
-	</div>
-	<div class="p-2">
-		<button class="navbar-toggler" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasNavbar" aria-controls="offcanvasNavbar">
-			<span class="navbar-toggler-icon"></span>
-		</button>
-	</div>
-	<div class="offcanvas offcanvas-end bg-light" tabindex="-1" id="offcanvasNavbar" aria-labelledby="offcanvasNavbarLabel">
-		<div class="offcanvas-header">
-			<h5>Menu</h5>
-			<button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
-		</div>
-		<ul class="p-5 w-50 d-flex flex-column flex-xl-row justify-content-between align-items-center navbar-nav mr-auto w-100">
-			{% if is_granted('ROLE_ADMIN', 'ROLE_GESTION') %}
-            <li class="p-2 nav-item">
-				<a class="nav-link" href="{{ path('admin') }}">
-					<i class="fa-solid fa-screwdriver-wrench"></i>
-					Admin
-				</a>
-			</li>
+<nav class="navbar navbar-expand-xl navbar-light bg-light d-flex flex-row p-2 justify-content-between align-items-center fixed-top">
+    <div class="p-2">
+        <a class="navbar-brand" href="{{ path('app_dashboard') }}">
+            <img src="{{ asset('/img/Logo.png') }}" style="height:auto; width:250px;" alt="Logo">
+        </a>
+    </div>
+    <div class="p-2">
+        <button class="navbar-toggler" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasNavbar" aria-controls="offcanvasNavbar">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+    </div>
+    <div class="offcanvas offcanvas-end bg-light" tabindex="-1" id="offcanvasNavbar" aria-labelledby="offcanvasNavbarLabel">
+        <div class="offcanvas-header">
+            <h5>Menu</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+        </div>
+        <ul class="p-5 w-50 d-flex flex-column flex-xl-row justify-content-between align-items-center navbar-nav mr-auto w-100">
+            {% if is_granted('ROLE_ADMIN', 'ROLE_GESTION') %}
+                <li class="p-2 nav-item">
+                    <a class="nav-link" href="{{ path('admin') }}">
+                        <i class="fa-solid fa-screwdriver-wrench"></i>
+                        Admin
+                    </a>
+                </li>
+              {% endif %}
+            {% if app.user %}
+                <li class="p-2 nav-item {% if current_page is defined and current_page == 'app_dashboard' %}active text-primary{% endif %}">
+                    <a class="nav-link {% if current_page is defined and current_page == 'app_dashboard' %}text-primary{% endif %}" 
+                        href="{{ path('app_dashboard') }}">
+                            <i class="fa-solid fa-desktop"></i>
+                            Dashboard
+                    </a>
+                </li>
+                <li class="p-2 nav-item {% if current_page is defined and current_page == 'app_sav' %}active{% endif %}">
+                    <a class="nav-link {% if current_page is defined and current_page == 'app_sav' %}text-primary{% endif %}" 
+                        href="{{ path('app_sav') }}">
+                            <i class="fa-solid fa-headset"></i>
+                            SAV
+                    </a>
+                </li>
+                <li class="p-2 nav-item">
+                    <a class="nav-link text-dark" href="#">
+                        <i class="fa-regular fa-calendar"></i>
+                         Calendrier
+                    </a>
+                </li>
+                <li class="p-2 nav-item">
+                    <a class="nav-link text-dark" href="#">
+                        <i class="fa-solid fa-phone"></i>
+                         Appels
+                    </a>
+                </li>
+                <li class="p-2 nav-item">
+                    <a class="nav-link text-dark" href="#">
+                        <i class="fa-regular fa-file-lines"></i>
+                         Devis
+                    </a>
+                </li>
+                <li class="p-2 nav-item">
+                    <a class="nav-link text-dark" href="#">
+                        <i class="fa-solid fa-person-digging"></i>
+                         Chantier
+                    </a>
+                </li>
+                <li class="p-2 nav-item">
+                    <a class="nav-link text-secondary" href="{{ path('app_logout')}}">
+                        <i class="fa-solid fa-right-from-bracket"></i>
+                         Se Déconnecter
+                    </a>
+                </li>
             {% endif %}
-			{% if app.user %}
-				<li class="p-2 nav-item {% if current_page is defined and current_page == 'app_dashboard' %}active{% endif %}">
-					<a class="nav-link" href="{{ path('app_dashboard') }}">
-						<i class="fa-solid fa-desktop"></i>
-						Dashboard
-					</a>
-				</li>
-				<li class="p-2 nav-item">
-					<a class="nav-link text-dark" href="#">
-						<i class="fa-regular fa-calendar"></i>
-						Calendrier
-					</a>
-				</li>
-				<li class="p-2 nav-item">
-					<a class="nav-link text-dark" href="#">
-						<i class="fa-solid fa-phone"></i>
-						Appels
-					</a>
-				</li>
-				<li class="p-2 nav-item">
-					<a class="nav-link text-dark" href="#">
-						<i class="fa-regular fa-file-lines"></i>
-						Devis
-					</a>
-				</li>
-				<li class="p-2 nav-item">
-					<a class="nav-link text-dark" href="#">
-						<i class="fa-solid fa-person-digging"></i>
-						Chantier
-					</a>
-				</li>
-				<li class="p-2 nav-item">
-					<a class="nav-link text-secondary" href="{{ path('app_logout')}}">
-						<i class="fa-solid fa-right-from-bracket"></i>
-						Se Déconnecter
-					</a>
-				</li>
-			{% endif %}
-			{% if not app.user %}
-				<li class="p-2 nav-item active">
-					<a class="nav-link" href="{{ path('app_login') }}">
-						<i class="fa-solid fa-right-to-bracket"></i>
-						Se Connecter
-					</a>
-				</li>
-				<li class="p-2 nav-item"></li>
-			{% endif %}
-		</ul>
-	</div>
+            {% if not app.user %}
+                <li class="p-2 nav-item active">
+                    <a class="nav-link text-primary" href="{{ path('app_login') }}">
+                        <i class="fa-solid fa-right-to-bracket"></i>
+                        Se Connecter
+                    </a>
+                </li>
+                <li class="p-2 nav-item"></li>
+            {% endif %}
+        </ul>
+    </div>
 </nav>

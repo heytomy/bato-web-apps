@@ -4,7 +4,9 @@ namespace App\Controller;
 
 use App\Entity\AppsUtilisateur;
 use App\Repository\AppsUtilisateurRepository;
+use App\Repository\ContratRepository;
 use App\Repository\RolesRepository;
+use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -18,12 +20,23 @@ class TestController extends AbstractController
 {
     #[IsGranted('ROLE_ADMIN')]
     #[Route('/test/{id}', name: 'app_test_1')]
-    public function user(AppsUtilisateur $user, RolesRepository $rolesRepository): Response
+    public function user(AppsUtilisateur $user, RolesRepository $rolesRepository, ContratRepository $contratRepository, EntityManagerInterface $em): Response
     {
+        $connection = $em->getConnection();
+
+        $sql = "SELECT * FROM Apps_Utilisateur WHERE id = :id";
+        $stmt = $connection->executeQuery($sql, ['id' => $user->getId()]);
+
+        $test2 = $stmt->fetchAssociative();
+
+        // $test = $contratRepository->find("00001");
+        // dd($test);
         // $this->denyAccessUnlessGranted('ROLE_ADMIN');
         return $this->render('test/test.html.twig', [
             'controller_name' => 'TestController',
             'user' => $user,
+            'clients' => $contratRepository->findByLimitArray(0,1000),
+            'total' => $contratRepository->getCountClients(),
         ]);
     }
 

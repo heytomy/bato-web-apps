@@ -1,4 +1,4 @@
-<nav class="navbar navbar-expand-xl navbar-light bg-light d-flex flex-row p-2 justify-content-between align-items-center">
+<nav class="navbar navbar-expand-xl navbar-light bg-light d-flex flex-row p-2 justify-content-between align-items-center fixed-top">
     <div class="p-2">
         <a class="navbar-brand" href="{{ path('app_dashboard') }}">
             <img src="{{ asset('/img/Logo.png') }}" style="height:auto; width:250px;" alt="Logo">
@@ -16,11 +16,18 @@
         </div>
         <ul class="p-5 w-50 d-flex flex-column flex-xl-row justify-content-between align-items-center navbar-nav mr-auto w-100">
             {% if app.user %}
-                <li class="p-2 nav-item {% if current_page is defined and current_page == 'app_dashboard' %}active{% endif %}">
-                    <a class="nav-link" 
+                <li class="p-2 nav-item {% if current_page is defined and current_page == 'app_dashboard' %}active text-primary{% endif %}">
+                    <a class="nav-link {% if current_page is defined and current_page == 'app_dashboard' %}text-primary{% endif %}" 
                         href="{{ path('app_dashboard') }}">
                             <i class="fa-solid fa-desktop"></i>
                             Dashboard
+                    </a>
+                </li>
+                <li class="p-2 nav-item {% if current_page is defined and current_page == 'app_sav' %}active{% endif %}">
+                    <a class="nav-link {% if current_page is defined and current_page == 'app_sav' %}text-primary{% endif %}" 
+                        href="{{ path('app_sav') }}">
+                            <i class="fa-solid fa-headset"></i>
+                            SAV
                     </a>
                 </li>
                 <li class="p-2 nav-item">
@@ -56,7 +63,7 @@
             {% endif %}
             {% if not app.user %}
                 <li class="p-2 nav-item active">
-                    <a class="nav-link" href="{{ path('app_login') }}">
+                    <a class="nav-link text-primary" href="{{ path('app_login') }}">
                         <i class="fa-solid fa-right-to-bracket"></i>
                         Se Connecter
                     </a>

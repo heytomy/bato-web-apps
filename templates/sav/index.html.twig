@@ -1,0 +1,25 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Hello SAVController!{% endblock %}
+
+{% block body %}
+<main role="main">
+    <!-- Main container -->
+    
+    <div class="container p-2">
+        <div class="p-2 justify-self-center">
+            <a class="btn btn-primary" href="{{ path('app_dashboard') }}">
+                <i class="fa-solid fa-chevron-left"></i>
+                Revenir en arrière
+            </a>
+        </div>
+        <div class="client-container border rounded container bg-light p-2"></div>
+    </div>
+</main>
+<button class="btn btn-primary back-to-top"><i class="fa-solid fa-angles-up"></i> Retour en haut</button>
+{% include '_inc/chargementAnimation.html.twig' %}
+{% endblock %}
+	{% block javascripts %}
+        {{ parent() }}
+        <script src="{{ asset('js/infiniteScroll.js') }}"></script>
+	{% endblock %}

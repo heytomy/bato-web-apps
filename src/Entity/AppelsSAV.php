@@ -25,6 +25,12 @@ class AppelsSAV
     #[ORM\JoinColumn(name:'CodeClient', referencedColumnName:'Code', nullable: false)]
     private ?ClientDef $client = null;
 
+    #[ORM\Column(type: Types::DATE_MUTABLE)]
+    private ?\DateTimeInterface $rdvDate = null;
+
+    #[ORM\Column(type: Types::TIME_MUTABLE)]
+    private ?\DateTimeInterface $rdvHeure = null;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -62,6 +68,30 @@ class AppelsSAV
     public function setClient(?ClientDef $client): self
     {
         $this->client = $client;
+
+        return $this;
+    }
+
+    public function getRdvDate(): ?\DateTimeInterface
+    {
+        return $this->rdvDate;
+    }
+
+    public function setRdvDate(\DateTimeInterface $rdvDate): self
+    {
+        $this->rdvDate = $rdvDate;
+
+        return $this;
+    }
+
+    public function getRdvHeure(): ?\DateTimeInterface
+    {
+        return $this->rdvHeure;
+    }
+
+    public function setRdvHeure(\DateTimeInterface $rdvHeure): self
+    {
+        $this->rdvHeure = $rdvHeure;
 
         return $this;
     }

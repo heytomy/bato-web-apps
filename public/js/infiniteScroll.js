@@ -51,7 +51,10 @@ function fetchClients() {
         // append new clients to the list
         data.clients.forEach(client => {
         const clientElement = createClientElement(client);
+        const clientModal = createClientModal(client, clientElement);
+        
         clientListContainer.appendChild(clientElement);
+        clientListContainer.appendChild(clientModal);
         });
 
         // update offset value for the next request
@@ -99,13 +102,54 @@ function createClientElement(client) {
   const clientElement = document.createElement('div');
   clientElement.classList.add('row', 'border', 'border-light', 'rounded', 'bg-client', 'm-2', 'p-2');
   clientElement.innerHTML = `
-    <h1>Nom:                ${client.nom}</h1>
-    <div>Code du client:    ${client.codeContrat}</div>
-    <div>Code du contrat:   ${client.codeClient}</div>
-    <div>Adresse:           ${client.adr}</div>
-    <div>CP:                ${client.cp}</div>
+    <h1>                    ${client.nom}</h1>
+    <div>Code du contrat:    ${client.codeContrat}</div>
+    <div>Code du client:   ${client.codeClient}</div>
   `;
   return clientElement;
+}
+
+// function to create modal when clicking on client
+function createClientModal(client, clientElement) {
+  clientElement.setAttribute('type', 'button');
+  clientElement.setAttribute('data-bs-toggle', 'modal');
+  clientElement.setAttribute('data-bs-target', `#clientModal-${client.codeContrat}`);
+
+  const clientModal = document.createElement('div');
+  clientModal.classList.add('modal', 'fade');
+  clientModal.id = `clientModal-${client.codeContrat}`;
+  clientModal.setAttribute('tabindex','-1');
+  clientModal.setAttribute('aria-hidden','true');
+  clientModal.setAttribute('aria-labelledby',`clientModalLabel-${client.codeContrat}`);
+
+  clientModal.innerHTML = 
+  `
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h1 class="modal-title fs-5" id="clientModalLabel-${client.codeContrat}">${client.nom}</h1>
+          <button type="button" class="btn-close border rounder bg-dark" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <div>Code du contrat:    ${client.codeContrat}</div>
+          <div>Code du client:   ${client.codeClient}</div>
+          </br>
+          <div>Adresse:           ${client.adr}</div>
+          <div>CP:                ${client.cp}</div>
+          </br></br></br>
+        </div>
+        <div class="modal-footer">
+          <div class="row w-100">
+            <a href="/sav/${client.codeContrat}" class="btn btn-primary col p-2 m-2">Devis</a>
+            <a href="/sav/${client.codeContrat}" class="btn btn-primary col p-2 m-2">Photos</a>
+            <a href="/sav/${client.codeContrat}" class="btn btn-primary col p-2 m-2">Commentaires</a>
+            <a href"#" class="btn btn-secondary col p-2 m-2" data-bs-dismiss="modal">Close</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  `
+  return clientModal;
 }
 
 // function to show loading animation

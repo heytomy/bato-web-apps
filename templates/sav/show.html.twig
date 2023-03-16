@@ -1,0 +1,70 @@
+{% extends '_inc/listPage.html.twig' %}
+
+{% block title %}SAV | {{contrat.getCodeClient().nom}}{% endblock %}
+
+{% block list %}
+    <div class="border rounded container bg-light p-2">
+        <div class="row border border-light rounded bg-client m-2 p-2">
+            <h1>{{contrat.getCodeClient().nom}}</h1>
+            <div>Code du contrat: {{contrat.id}}</div>
+            <div>Code du client: {{contrat.getCodeClient().id}}</div>
+        </div>
+
+        <h3 class="row border border-light rounded m-2 p-2">
+            <strong>Devis :</strong>
+        </h3>
+
+        <div class="row border border-light rounded m-2 p-2">
+            
+        </div>
+
+        <h3 class="row border border-light rounded m-2 p-2">
+            <strong>Gallerie Photos :</strong>
+        </h3>
+
+        <div class="row border border-light rounded m-2 p-2">
+            <div class="col border">1</div>
+            <div class="col border">2</div>
+            <div class="col border">3</div>
+        </div>
+        <div class="row border border-light rounded m-2 p-2">
+            <div class="col border">4</div>
+            <div class="col border">5</div>
+            <div class="col border">6</div>
+        </div>
+
+        <h3 class="row border border-light rounded m-2 p-2">
+            <strong>Commentaires :</strong>
+        </h3>
+
+        <div class="row border border-light rounded m-2 p-2">
+            
+        </div>
+    </div>
+{% endblock %}
+
+
+
+{# {% extends 'base.html.twig' %}
+
+{% block title %}SAV | {{contrat.getCodeClient().nom}}{% endblock %}
+
+{% block body %}
+<main role="main" class='main'>
+    <!-- Main container -->
+    
+    <div class="container p-2">
+        <div class="row p-2 container">
+            <div class="p-2 col">
+                <a class="btn btn-primary" href="{{ path('app_dashboard') }}">
+                    <i class="fa-solid fa-chevron-left"></i>
+                    Revenir en arrière
+                </a>
+            </div>
+            {{ render_esi(controller('App\\Controller\\SAVSearchController::index')) }}
+        </div>
+        <div class="client-container border rounded container bg-light p-2"></div>
+    </div>
+</main>
+{% endblock %} #}
+

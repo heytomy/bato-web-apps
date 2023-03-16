@@ -1,0 +1,24 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+<main role="main" class='main'>
+    <!-- Main container -->
+    
+    <div class="container p-2">
+        <div class="row p-2 container">
+            <div class="p-2 col">
+                <a class="btn btn-primary" href="{{ path('app_dashboard') }}">
+                    <i class="fa-solid fa-chevron-left"></i>
+                    Revenir en arrière
+                </a>
+            </div>
+            {% block search %}
+            {% endblock %}
+        </div>
+        {% block list %}
+        {% endblock %}
+    </div>
+    {% block content %}
+    {% endblock %}
+</main>
+{% endblock %}

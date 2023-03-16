@@ -3,6 +3,7 @@
 namespace App\Repository;
 
 use App\Entity\Contrat;
+use App\Entity\SAVSearch;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
@@ -51,6 +52,12 @@ class ContratRepository extends ServiceEntityRepository
         return $qb->getQuery()->getSingleScalarResult();
     }
 
+    /**
+     * Cette fonction existe pour faire un query pour prendre un certain nombre de clients. 
+     * @param ?int $offset Définit un décalage pour les données prises. C'est 0 par défaut
+     * @param int $limit Fixe une certaine limite au nombre de données prises. C'est 10 par défaut
+     * @return Collection Renvoie une collection des clients
+     */
     public function findByLimit(?int $offset = 0, int $limit = 10)
     {
         $qb = $this->createQueryBuilder('c');
@@ -63,6 +70,12 @@ class ContratRepository extends ServiceEntityRepository
         return $qb->getQuery()->getResult();
     }
 
+    /**
+     * Cette fonction existe pour faire un query pour prendre un certain nombre de clients. Mais cette fonction renvoie une liste, qu'on va le transmettre en JSON.
+     * @param ?int $offset Définit un décalage pour les données prises. C'est 0 par défaut
+     * @param int $limit Fixe une certaine limite au nombre de données prises. C'est 10 par défaut
+     * @return array Renvoie une liste des clients
+     */
     public function findByLimitArray(?int $offset = 0, int $limit = 10)
     {
         $clients = $this->findByLimit($offset, $limit);
@@ -84,6 +97,18 @@ class ContratRepository extends ServiceEntityRepository
         }
         
         return $data;
+    }
+
+    public function findBySAVSearchQuery(SAVSearch $savSearch)
+    {
+        $query = $this->createQueryBuilder('c');
+        if ($savSearch->getNom() !== null) {
+            $query
+                ->andWhere('c.nom > :nom')
+                ->setParameter(':nom', $savSearch->getNom())
+            ;
+        }
+        return $query->getQuery();
     }
 //    /**
 //     * @return Contrat[] Returns an array of Contrat objects

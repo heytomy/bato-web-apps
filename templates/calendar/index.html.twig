@@ -1,24 +1,6 @@
 {% extends 'base.html.twig' %}
 
 {% block body %}
-    <div id="calendar"></div>
-{% endblock %}
 
-{% block javascripts %}
-    {{ parent() }}
-    <script src="{{ asset('js/moment.min.js') }}"></script>
-    <script src="{{ asset('js/fullcalendar.min.js') }}"></script>
-    <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            var calendarEl = document.getElementById('calendar');
-
-            var calendar = new FullCalendar.Calendar(calendarEl, {
-                initialView: 'dayGridMonth',
-                events: '{{ path('calendar_events') }}',
-            });
-
-            calendar.render();
-        });
-    </script>
 {% endblock %}
 

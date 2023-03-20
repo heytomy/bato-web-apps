@@ -18,11 +18,11 @@ class TicketUrgents
     private ?int $id = null;
 
     #[ORM\ManyToOne(inversedBy: 'ticketUrgents')]
-    #[ORM\JoinColumn(referencedColumnName:'Appels', nullable: true)]
+    #[ORM\JoinColumn(referencedColumnName:'id', nullable: true)]
     private ?Appels $AppelsUrgents = null;
 
     #[ORM\ManyToOne(inversedBy: 'ticketUrgents')]
-    #[ORM\JoinColumn(referencedColumnName:'AppelsSAV', nullable: true)]
+    #[ORM\JoinColumn(referencedColumnName:'id', nullable: true)]
     private ?AppelsSAV $AppelsSAV = null;
 
     #[ORM\Column]

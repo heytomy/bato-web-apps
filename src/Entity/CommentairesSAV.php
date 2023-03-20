@@ -9,9 +9,18 @@ use Doctrine\ORM\Mapping as ORM;
 #[ORM\Entity(repositoryClass: CommentairesSAVRepository::class)]
 class CommentairesSAV
 {
+    /**
+     * La fonction prePersist sers à instancier la variable date_com à la date de sa création
+     */
+    #[ORM\PrePersist]
+    public function prePersist()
+    {
+        $this->date_com = new \DateTimeInterface();
+    }
+    
     #[ORM\Id]
     #[ORM\GeneratedValue]
-    #[ORM\Column(name: "ID_Commentaire", length: 8)]
+    #[ORM\Column(name: 'ID_Commentaire', length: 8)]
     private ?int $id = null;
 
     #[ORM\Column(name: 'Commentaire_SAV',type: Types::TEXT, nullable: true)]
@@ -23,6 +32,12 @@ class CommentairesSAV
     #[ORM\ManyToOne(inversedBy: 'commentairesSAVs')]
     #[ORM\JoinColumn(name: 'Code', referencedColumnName: 'Code', nullable: false)]
     private ?Contrat $codeContrat = null;
+
+    #[ORM\Column(name: 'Nom',length: 30, nullable: true)]
+    private ?string $nom = null;
+
+    #[ORM\Column(name: 'CodeClient',length: 8)]
+    private ?string $codeClient = null;
 
     public function getId(): ?int
     {
@@ -61,6 +76,30 @@ class CommentairesSAV
     public function setCodeContrat(?Contrat $codeContrat): self
     {
         $this->codeContrat = $codeContrat;
+
+        return $this;
+    }
+
+    public function getNom(): ?string
+    {
+        return $this->nom;
+    }
+
+    public function setNom(?string $nom): self
+    {
+        $this->nom = $nom;
+
+        return $this;
+    }
+
+    public function getCodeClient(): ?string
+    {
+        return $this->codeClient;
+    }
+
+    public function setCodeClient(string $codeClient): self
+    {
+        $this->codeClient = $codeClient;
 
         return $this;
     }

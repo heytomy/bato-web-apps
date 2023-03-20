@@ -2,6 +2,10 @@
 
 {% block title %}SAV{% endblock %}
 
+{% block back_button %}
+    {{ path('app_dashboard') }}
+{% endblock %}
+
 {% block search %}
     {{ render_esi(controller('App\\Controller\\SAVSearchController::index')) }}
 {% endblock %}

@@ -2,15 +2,16 @@
 
 namespace App\DataFixtures;
 
+use Faker\Factory as Faker;
 use App\Entity\AppsUtilisateur;
 use App\Entity\DefAppsUtilisateur;
 use App\Repository\RolesRepository;
-use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Persistence\ObjectManager;
+use Doctrine\Bundle\FixturesBundle\Fixture;
+use Doctrine\Common\DataFixtures\DependentFixtureInterface;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
-use Faker\Factory as Faker;
 
-class UserFixtures extends Fixture
+class UserFixtures extends Fixture implements DependentFixtureInterface
 {
     private $encoder;
     protected $rolesRepository;
@@ -25,30 +26,30 @@ class UserFixtures extends Fixture
     {
         $faker = Faker::create('fr_FR');
 
-        $client = new DefAppsUtilisateur;
-        $client
-            ->setNom("Kebsi")
-            ->setPrenom("Badr")
-            ->setAdresse("Somewhere in the world")
-            ->setCP("67000")
-            ->setVille("Strasbourg")
-            ->setTel1("0769553504")
-            ->setMail("kebsibadr@gmail.com")
-            ;
-        $manager->persist($client);
+        // $client = new DefAppsUtilisateur;
+        // $client
+        //     ->setNom("Kebsi")
+        //     ->setPrenom("Badr")
+        //     ->setAdresse("Somewhere in the world")
+        //     ->setCP("67000")
+        //     ->setVille("Strasbourg")
+        //     ->setTel1("0769553504")
+        //     ->setMail("kebsibadr@gmail.com")
+        //     ;
+        // $manager->persist($client);
  
         $roles = $this->rolesRepository->findAll();
 
-        $user = new AppsUtilisateur;
-        $user
-            ->setIDUtilisateur($client)
-            ->setNomUtilisateur('Kebsibadr')
-            ->setPassword($this->encoder->hashPassword($user, 'admin'))
-            ->addRole($roles[0])
-            ->setIsVerified(false)
-            ;
-        // $product = new Product();
-        $manager->persist($user);
+        // $user = new AppsUtilisateur;
+        // $user
+        //     ->setIDUtilisateur($client)
+        //     ->setNomUtilisateur('Kebsibadr')
+        //     ->setPassword($this->encoder->hashPassword($user, 'admin'))
+        //     ->addRole($roles[0])
+        //     ->setIsVerified(false)
+        //     ;
+        // // $product = new Product();
+        // $manager->persist($user);
 
         
         $password = $this->encoder->hashPassword(new AppsUtilisateur, 'password');
@@ -82,5 +83,11 @@ class UserFixtures extends Fixture
             
         }
         $manager->flush();
+    }
+    public function getDependencies()
+    {
+        return [
+            RoleFixtures::class
+        ];
     }
 }

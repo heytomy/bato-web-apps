@@ -2,7 +2,9 @@
 
 namespace App\Controller;
 
+use App\Entity\CommentairesSAV;
 use App\Entity\Contrat;
+use App\Repository\CommentairesSAVRepository;
 use App\Repository\ContratRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -16,23 +18,23 @@ class SAVController extends AbstractController
 {
     #[Route('/', name: 'app_sav')]
     public function index(ContratRepository $contratRepository): Response
-    {
-        $clients = $contratRepository->findByLimit();
-
-        $newClients = $contratRepository->findByLimitArray();
-        
+    {          
         return $this->render('sav/index.html.twig', [
             'current_page' => 'app_sav',
-            'clients' => $clients,
         ]);
     }
 
     #[Route('/{id}', name: 'app_sav_contrat', methods: ['GET'])]
-    public function show(Contrat $contrat, ContratRepository $contratRepository): Response
+    public function show(Contrat $contrat, CommentairesSAVRepository $commentairesSAVRepository): Response
     {
+        $clientId = $contrat->getCodeClient()->getId();
+        $comments = $commentairesSAVRepository->findBy(['codeClient' => $clientId]);
+
         return $this->render('sav/show.html.twig', [
-            'current_page' => 'app_sav_contrat',
+            'current_page' => 'app_sav',
             'contrat' => $contrat,
+            'comments' => $comments,
+            'restCommentaires' => null,
         ]);
     }
 

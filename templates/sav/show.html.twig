@@ -2,6 +2,10 @@
 
 {% block title %}SAV | {{contrat.getCodeClient().nom}}{% endblock %}
 
+{% block back_button %}
+    {{ path('app_sav') }}
+{% endblock %}
+
 {% block list %}
     <div class="border rounded container bg-light p-2">
         <div class="row border border-light rounded bg-client m-2 p-2">
@@ -38,7 +42,7 @@
         </h3>
 
         <div class="row border border-light rounded m-2 p-2">
-            
+            {% include 'commentaire/comment.html.twig' %}
         </div>
     </div>
 {% endblock %}

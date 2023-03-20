@@ -3,6 +3,8 @@
 namespace App\Entity;
 
 use App\Repository\AppelsSAVRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
@@ -30,6 +32,14 @@ class AppelsSAV
 
     #[ORM\Column(type: Types::TIME_MUTABLE)]
     private ?\DateTimeInterface $rdvHeure = null;
+
+    #[ORM\OneToMany(mappedBy: 'AppelsSAV', targetEntity: TicketUrgents::class)]
+    private Collection $ticketUrgents;
+
+    public function __construct()
+    {
+        $this->ticketUrgents = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -92,6 +102,36 @@ class AppelsSAV
     public function setRdvHeure(\DateTimeInterface $rdvHeure): self
     {
         $this->rdvHeure = $rdvHeure;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, TicketUrgents>
+     */
+    public function getTicketUrgents(): Collection
+    {
+        return $this->ticketUrgents;
+    }
+
+    public function addTicketUrgent(TicketUrgents $ticketUrgent): self
+    {
+        if (!$this->ticketUrgents->contains($ticketUrgent)) {
+            $this->ticketUrgents->add($ticketUrgent);
+            $ticketUrgent->setAppelsSAV($this);
+        }
+
+        return $this;
+    }
+
+    public function removeTicketUrgent(TicketUrgents $ticketUrgent): self
+    {
+        if ($this->ticketUrgents->removeElement($ticketUrgent)) {
+            // set the owning side to null (unless already changed)
+            if ($ticketUrgent->getAppelsSAV() === $this) {
+                $ticketUrgent->setAppelsSAV(null);
+            }
+        }
 
         return $this;
     }

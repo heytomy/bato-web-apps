@@ -28,6 +28,7 @@ class TestController extends AbstractController
         $stmt = $connection->executeQuery($sql, ['id' => $user->getId()]);
 
         $test2 = $stmt->fetchAssociative();
+        dd($contratRepository->findAll());
 
         // $test = $contratRepository->find("00001");
         // dd($test);

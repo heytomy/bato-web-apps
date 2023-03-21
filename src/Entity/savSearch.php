@@ -2,7 +2,7 @@
 
 namespace App\Entity;
 
-class savSearch
+class SAVSearch
 {
     private ?string $nom = null;
 

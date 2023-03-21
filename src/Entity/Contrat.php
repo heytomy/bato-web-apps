@@ -28,6 +28,12 @@ class Contrat
     public function __construct()
     {
         $this->appelsSAVs = new ArrayCollection();
+    #[ORM\OneToMany(mappedBy: 'codeContrat', targetEntity: CommentairesSAV::class)]
+    private Collection $commentairesSAVs;
+
+    public function __construct()
+    {
+        $this->commentairesSAVs = new ArrayCollection();
     }
 
 
@@ -73,10 +79,24 @@ class Contrat
         if (!$this->appelsSAVs->contains($appelsSAV)) {
             $this->appelsSAVs->add($appelsSAV);
             $appelsSAV->setContrats($this);
+     * @return Collection<int, CommentairesSAV>
+     */
+     
+    public function getCommentairesSAVs(): Collection
+    {
+        return $this->commentairesSAVs;
+    }
+
+    public function addCommentairesSAV(CommentairesSAV $commentairesSAV): self
+    {
+        if (!$this->commentairesSAVs->contains($commentairesSAV)) {
+            $this->commentairesSAVs->add($commentairesSAV);
+            $commentairesSAV->setCodeContrat($this);
         }
 
         return $this;
     }
+
 
     public function removeAppelsSAV(AppelsSAV $appelsSAV): self
     {
@@ -84,6 +104,12 @@ class Contrat
             // set the owning side to null (unless already changed)
             if ($appelsSAV->getContrats() === $this) {
                 $appelsSAV->setContrats(null);
+    public function removeCommentairesSAV(CommentairesSAV $commentairesSAV): self
+    {
+        if ($this->commentairesSAVs->removeElement($commentairesSAV)) {
+            // set the owning side to null (unless already changed)
+            if ($commentairesSAV->getCodeContrat() === $this) {
+                $commentairesSAV->setCodeContrat(null);
             }
         }
 

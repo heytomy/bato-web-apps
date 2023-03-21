@@ -2,20 +2,21 @@
 
 namespace App\DataFixtures;
 
-use Faker\Factory as Faker;
-
 use App\Entity\Appels;
+use App\Entity\AppelsSav;
+use App\Entity\TicketUrgents;
 use Doctrine\Persistence\ObjectManager;
 use Doctrine\Bundle\FixturesBundle\Fixture;
+use Faker\Factory as Faker;
 
-class AppFixtures extends Fixture
+class AppelFixtures extends Fixture
 {
     public function load(ObjectManager $manager)
     {
         $faker = Faker::create();
 
-        for ($i = 0; $i < 100; $i++) 
-        {
+        // Generate 100 Appel entities
+        for ($i = 0; $i < 100; $i++) {
             $appel = new Appels();
             $appel->setNom($faker->name);
             $appel->setAdr($faker->address);
@@ -30,5 +31,6 @@ class AppFixtures extends Fixture
 
             $manager->persist($appel);
         }
+        $manager->flush();
     }
 }

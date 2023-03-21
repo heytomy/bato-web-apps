@@ -1,0 +1,17 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Hello AppelsController!{% endblock %}
+
+{% block body %}
+    <h1>Liste des Appels SAV</h1>
+
+            {% for appel in appels %}
+                <tr>
+                    <td>{{ appel.nom}}</td>
+                    <td>{{ appel.ville}}</td>
+                    <td>{{ appel.rdvDate}}</td>
+                    <td>{{ appel.rdvHeure}}</td>
+                    <td>{{ appel.description }}</td>
+                </tr>
+            {% endfor %}
+{% endblock %}

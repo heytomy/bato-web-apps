@@ -3,27 +3,20 @@
 namespace App\Entity;
 
 use App\Repository\CommentairesSAVRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: CommentairesSAVRepository::class)]
 class CommentairesSAV
 {
-    /**
-     * La fonction prePersist sers à instancier la variable date_com à la date de sa création
-     */
-    #[ORM\PrePersist]
-    public function prePersist()
-    {
-        $this->date_com = new \DateTimeInterface();
-    }
-    
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column(name: 'ID_Commentaire', length: 8)]
     private ?int $id = null;
 
-    #[ORM\Column(name: 'Commentaire_SAV',type: Types::TEXT, nullable: true)]
+    #[ORM\Column(name: 'Commentaire_SAV', type: Types::TEXT, nullable: true)]
     private ?string $commentaire_SAV = null;
 
     #[ORM\Column(name: 'Date_Com', type: Types::DATE_MUTABLE, nullable: true)]
@@ -33,11 +26,19 @@ class CommentairesSAV
     #[ORM\JoinColumn(name: 'Code', referencedColumnName: 'Code', nullable: false)]
     private ?Contrat $codeContrat = null;
 
-    #[ORM\Column(name: 'Nom',length: 30, nullable: true)]
+    #[ORM\Column(name: 'Nom', length: 30, nullable: true)]
     private ?string $nom = null;
 
-    #[ORM\Column(name: 'CodeClient',length: 8)]
+    #[ORM\Column(name: 'CodeClient', length: 8)]
     private ?string $codeClient = null;
+
+    #[ORM\OneToMany(mappedBy: 'parent', targetEntity: RepCommentairesSAV::class, orphanRemoval: true)]
+    private Collection $replies;
+
+    public function __construct()
+    {
+        $this->replies = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -100,6 +101,36 @@ class CommentairesSAV
     public function setCodeClient(string $codeClient): self
     {
         $this->codeClient = $codeClient;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, RepCommentairesSAV>
+     */
+    public function getReplies(): Collection
+    {
+        return $this->replies;
+    }
+
+    public function addReplies(RepCommentairesSAV $replies): self
+    {
+        if (!$this->replies->contains($replies)) {
+            $this->replies->add($replies);
+            $replies->setParent($this);
+        }
+
+        return $this;
+    }
+
+    public function removeReplies(RepCommentairesSAV $replies): self
+    {
+        if ($this->replies->removeElement($replies)) {
+            // set the owning side to null (unless already changed)
+            if ($replies->getParent() === $this) {
+                $replies->setParent(null);
+            }
+        }
 
         return $this;
     }

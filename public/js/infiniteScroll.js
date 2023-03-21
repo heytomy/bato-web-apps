@@ -32,7 +32,7 @@ function fetchClients() {
     afficheChargement();
 
     // make a POST request to the server to get the clients
-    fetch('/sav/ajax', {
+    fetch('/ajax/sav', {
         method: 'POST',
         headers: {
         'Content-Type': 'application/json'

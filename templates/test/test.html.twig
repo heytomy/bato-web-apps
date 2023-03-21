@@ -4,6 +4,7 @@
 {% block body %}
 <h1>
     <ul>
+    {{ render_esi(controller('App\\Controller\\SAVSearchController::index')) }}
         <p><a href="#" class="text-primary ">Primary link</a></p>
         <p><a href="#" class="text-secondary">Secondary link</a></p>
         <p><a href="#" class="text-success">Success link</a></p>
@@ -14,10 +15,76 @@
         <p><a href="#" class="text-dark">Dark link</a></p>
         <p><a href="#" class="text-muted">Muted link</a></p>
         <p><a href="#" class="text-white bg-dark">White link</a></p>
+        <div type="button" data-bs-toggle="modal" data-bs-target="#exampleModal" class="border">
+          <ul>
+            <li>First few lines</li>
+            <li>First few lines</li>
+            <li>First few lines</li>
+          </ul>
+        </div>
+
+
+        <div type="button" data-bs-toggle="modal" data-bs-target="#exampleModal2" class="border">
+          <ul>
+            <li>Second few lines</li>
+            <li>Second few lines</li>
+            <li>Second few lines</li>
+          </ul>
+        </div>
         <li>{{user.getIDUtilisateur().prenom}}</li>
         <li>{{user.getIDUtilisateur().nom}}</li>
         <li>{{user.getIDUtilisateur().mail}}</li>
-        <li>{{dump(clients)}}</li>
+
+        <!-- Button trigger modal -->
+        {# <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">
+          Launch demo modal
+        </button> #}
+
+        <!-- Modal -->
+        <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+          <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+              <div class="modal-header">
+                <h1 class="modal-title fs-5" id="exampleModalLabel">Modal title</h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+              </div>
+              <div class="modal-body">
+                <ul>
+                  <h1>FIRST MODAL</h1>
+                </ul>
+              </div>
+              <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary">Save changes</button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+
+
+
+        <div class="modal fade" id="exampleModal2" tabindex="-1" aria-labelledby="exampleModalLabel2" aria-hidden="true">
+          <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+              <div class="modal-header">
+                <h1 class="modal-title fs-5" id="exampleModalLabel2">Modal title</h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+              </div>
+              <div class="modal-body">
+                <ul>
+                  <h1>SECOND MODAL</h1>
+                </ul>
+              </div>
+              <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary">Save changes</button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {# <li>{{dump(clients)}}</li> #}
     </ul>
 </h1>
 

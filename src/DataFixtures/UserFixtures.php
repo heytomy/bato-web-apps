@@ -56,7 +56,7 @@ class UserFixtures extends Fixture implements DependentFixtureInterface
         /**
          * Cette boucle génère 50 fausses utilisateurs grâce au package: Faker
          */
-        for($i=0; $i<50; $i++) {
+        for($i=0; $i<10; $i++) {
             $client = new DefAppsUtilisateur;
             $client
                 ->setNom($faker->lastName())

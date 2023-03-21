@@ -77,14 +77,24 @@ class Contrat
             $this->appelsSAVs->add($appelsSAV);
             $appelsSAV->setContrats($this);
         }
-
         return $this;
-
     }
     
-    /*
-    * @return Collection<int, CommentairesSAV>
-    */
+    public function removeAppelsSAV(AppelsSAV $appelsSAV): self
+    {
+        if ($this->appelsSAVs->removeElement($appelsSAV)) {
+            // set the owning side to null (unless already changed)
+            if ($appelsSAV->getContrats() === $this) {
+                $appelsSAV->setContrats(null);
+            }
+        }
+        return $this;
+    }
+    
+
+    /**
+     * @return Collection<int, CommentairesSAV>
+     */
     public function getCommentairesSAVs(): Collection
     {
         return $this->commentairesSAVs;
@@ -96,17 +106,7 @@ class Contrat
             $this->commentairesSAVs->add($commentairesSAV);
             $commentairesSAV->setCodeContrat($this);
         }
-        return $this;
-    }
 
-    public function removeAppelsSAV(AppelsSAV $appelsSAV): self
-    {
-        if ($this->appelsSAVs->removeElement($appelsSAV)) {
-            // set the owning side to null (unless already changed)
-            if ($appelsSAV->getContrats() === $this) {
-                $appelsSAV->setContrats(null);
-            }
-        }
         return $this;
     }
 
@@ -118,6 +118,7 @@ class Contrat
                 $commentairesSAV->setCodeContrat(null);
             }
         }
+
         return $this;
     }
 }

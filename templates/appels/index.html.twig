@@ -1,29 +1,44 @@
 {% extends '_inc/listPage.html.twig' %}
 
-{% block title %}Hello AppelsController!
-{% endblock %}
+{% block title %}Hello AppelsController!{% endblock %}
 
 {% block back_button %}
     {{ path('app_appels') }}
 {% endblock %}
 
 {% block list %}
-	<h1>Liste des Appels</h1>
-
-	{% for appel in appels %}
-
-        <div class="border rounded container bg-light p-2">
+    <h1>Liste des Appels</h1>
+            
+    <div class="border rounded container bg-light p-2">
+        {% for appel in appels %}
         <div class="row border border-light rounded bg-client m-2 p-2">
-            <h1>{{ appel.nom}}</h1>
-			<p>Ville: {{ appel.ville}}</p>
-			<p>Date de rendez-vous: {{ appel.rdvDate | date('Y-m-d')}}</p>
-			<p>Heure de rendez-vous:  {{ appel.rdvHeure| date('h:s')}}</p>
-			<p>Description: {{ appel.description }}</p>
-			<p>Urgent: {{ appel.isUrgent }}</p>
+            <div class="col-md-6">
+                <h1>{{ appel.nom}}</h1>
+                <div class="card mb-3">
+                    <div class="card-body">
+                        <h4> Informations client</h4>
+                        <p class="card-text">{{ appel.adr }}</p>
+                        <p class="card-text">{{ appel.cp }}</p>
+                        <p class="card-text">{{ appel.ville }}</p>
+                        <p class="card-text">{{ appel.tel }}</p>
+                    </div>
+                </div>
+                <div class="card mb-3">
+                    <div class="card-body">
+                        <h4>Rendez-Vous</h4>
+                        <p>Date de rendez-vous: {{ appel.rdvDate | date('Y-m-d')}}</p>
+                        <p>Heure de rendez-vous: {{ appel.rdvHeure| date('h:s')}}</p>
+                    </div>
+                </div>
+                <div class="card mb-3">
+                    <div class="card-body">
+                        <h4> Description</h4>
+                        <p>{{ appel.description }}</p>
+                    </div>
+                </div>
+                <p class="card-text">Urgent: {{ appel.isUrgent ? 'Oui' : 'Non' }}</p>
+            </div>
         </div>
-               </div>
-	{% endfor %}
+        {% endfor %}
+    </div>
 {% endblock %}
-
-
-

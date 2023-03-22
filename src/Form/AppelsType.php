@@ -72,9 +72,10 @@ class AppelsType extends AbstractType
                 'label' => 'Date du rendez-vous',
                 'attr' => [
                     'placeholder' => 'Entrez la date du rendez-vous',
-                    'class' => 'datepicker'
+                    'html5' => false,
                 ],
                 'years' => range(date('Y'), date('Y') + 5),
+                'widget' => 'single_text',
             ])
             ->add('rdvHeure', TimeType::class, [
                 'label' => 'Heure du rendez-vous',

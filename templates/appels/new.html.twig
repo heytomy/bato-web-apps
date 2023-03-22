@@ -1,0 +1,62 @@
+{% extends '_inc/listPage.html.twig' %}
+
+{% block body %}
+    
+{{ form_start(form, {'attr': {'class': 'form'}}) }}
+<div class="container mb-5">
+    <div class="row">
+    <div class="form-group">
+        {{ form_label(form.Nom, null, {'label_attr': {'class': 'control-label'}}) }}
+        {{ form_widget(form.Nom, {'attr': {'class': 'form-control'}}) }}
+    </div>
+
+    <div class="form-group">
+        {{ form_label(form.Adr, null, {'label_attr': {'class': 'control-label'}}) }}
+        {{ form_widget(form.Adr, {'attr': {'class': 'form-control'}}) }}
+    </div>
+
+    <div class="form-group">
+        {{ form_label(form.CP, null, {'label_attr': {'class': 'control-label'}}) }}
+        {{ form_widget(form.CP, {'attr': {'class': 'form-control'}}) }}
+    </div>
+
+    <div class="form-group">
+        {{ form_label(form.Ville, null, {'label_attr': {'class': 'control-label'}}) }}
+        {{ form_widget(form.Ville, {'attr': {'class': 'form-control'}}) }}
+    </div>
+
+    <div class="form-group">
+        {{ form_label(form.Tel, null, {'label_attr': {'class': 'control-label'}}) }}
+        {{ form_widget(form.Tel, {'attr': {'class': 'form-control'}}) }}
+    </div>
+
+    <div class="form-group">
+        {{ form_label(form.Email, null, {'label_attr': {'class': 'control-label'}}) }}
+        {{ form_widget(form.Email, {'attr': {'class': 'form-control'}}) }}
+    </div>
+
+    <div class="form-group">
+        {{ form_label(form.description, null, {'label_attr': {'class': 'control-label'}}) }}
+        {{ form_widget(form.description, {'attr': {'class': 'form-control'}}) }}
+    </div>
+
+    <div class="form-group">
+        {{ form_label(form.rdvDate, null, {'label_attr': {'class': 'control-label'}}) }}
+        {{ form_widget(form.rdvDate, {'attr': {'class': 'form-control'}}) }}
+    </div>
+
+    <div class="form-group">
+        {{ form_label(form.rdvHeure, null, {'label_attr': {'class': 'control-label'}}) }}
+        {{ form_widget(form.rdvHeure, {'attr': {'class': 'form-control'}}) }}
+    </div>
+
+    <div class="form-group form-check">
+        {{ form_widget(form.isUrgent, {'attr': {'class': 'form-check-input'}}) }}
+        {{ form_label(form.isUrgent, null, {'label_attr': {'class': 'form-check-label'}}) }}
+    </div>
+
+    <button type="submit" class="btn btn-primary">Submit</button>
+    </div>
+</div>
+{{ form_end(form) }}
+{% endblock %}

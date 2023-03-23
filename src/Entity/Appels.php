@@ -51,7 +51,7 @@ class Appels
     #[ORM\OneToMany(mappedBy: 'AppelsUrgents', targetEntity: TicketUrgents::class)]
     private Collection $ticketUrgents;
 
-     #[ORM\ManyToOne(targetEntity: Def_Apps_Utilisateur::class)]
+     #[ORM\ManyToOne(targetEntity: DefAppsUtilisateur::class)]
      #[ORM\JoinColumn(name:"ID_Utilisateur", referencedColumnName:"ID_Utilisateur")]
     private $ID_Utilisateur;
 

@@ -14,7 +14,7 @@ class Appels
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
-    #[ORM\Column]
+    #[ORM\Column(type: Types::INTEGER)]
     private ?int $id = null;
 
     #[Assert\NotBlank(message: 'Veuillez ajouter un nom')]
@@ -52,7 +52,7 @@ class Appels
     private Collection $ticketUrgents;
 
      #[ORM\ManyToOne(targetEntity: DefAppsUtilisateur::class)]
-     #[ORM\JoinColumn(name:"ID_Utilisateur", referencedColumnName:"ID_Utilisateur")]
+     #[ORM\JoinColumn(name:"ID_Utilisateur", referencedColumnName:"ID_Utilisateur", nullable:false)]
     private $ID_Utilisateur;
 
     public function __construct()

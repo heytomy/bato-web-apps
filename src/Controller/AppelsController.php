@@ -30,7 +30,7 @@ class AppelsController extends AbstractController
     public function new(Request $request, AppelsRepository $appelsRepository, EntityManagerInterface $em): Response
     {
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
-    
+
         $appel = new Appels();
         $form = $this->createForm(AppelsType::class, $appel);
     

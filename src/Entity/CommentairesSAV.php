@@ -35,6 +35,10 @@ class CommentairesSAV
     #[ORM\OneToMany(mappedBy: 'parent', targetEntity: RepCommentairesSAV::class, orphanRemoval: true)]
     private Collection $replies;
 
+    #[ORM\ManyToOne(inversedBy: 'commentairesSAVs')]
+    #[ORM\JoinColumn(name: 'ID_Utilisateur', referencedColumnName: 'ID_Utilisateur', nullable: false)]
+    private ?DefAppsUtilisateur $owner = null;
+
     public function __construct()
     {
         $this->replies = new ArrayCollection();
@@ -131,6 +135,18 @@ class CommentairesSAV
                 $replies->setParent(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getOwner(): ?DefAppsUtilisateur
+    {
+        return $this->owner;
+    }
+
+    public function setOwner(?DefAppsUtilisateur $owner): self
+    {
+        $this->owner = $owner;
 
         return $this;
     }

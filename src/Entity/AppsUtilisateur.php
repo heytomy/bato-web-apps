@@ -48,13 +48,9 @@ class AppsUtilisateur implements UserInterface, PasswordAuthenticatedUserInterfa
     #[ORM\Column(type: 'boolean')]
     private $isVerified = false;
 
-    #[ORM\OneToMany(mappedBy: 'codeClient', targetEntity: RepCommentairesSAV::class)]
-    private Collection $repCommentairesSAVs;
-
     public function __construct()
     {
         $this->roles = new ArrayCollection();
-        $this->repCommentairesSAVs = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -182,36 +178,6 @@ class AppsUtilisateur implements UserInterface, PasswordAuthenticatedUserInterfa
     public function setIsVerified(bool $isVerified): self
     {
         $this->isVerified = $isVerified;
-
-        return $this;
-    }
-
-    /**
-     * @return Collection<int, RepCommentairesSAV>
-     */
-    public function getRepCommentairesSAVs(): Collection
-    {
-        return $this->repCommentairesSAVs;
-    }
-
-    public function addRepCommentairesSAV(RepCommentairesSAV $repCommentairesSAV): self
-    {
-        if (!$this->repCommentairesSAVs->contains($repCommentairesSAV)) {
-            $this->repCommentairesSAVs->add($repCommentairesSAV);
-            $repCommentairesSAV->setCodeClient($this);
-        }
-
-        return $this;
-    }
-
-    public function removeRepCommentairesSAV(RepCommentairesSAV $repCommentairesSAV): self
-    {
-        if ($this->repCommentairesSAVs->removeElement($repCommentairesSAV)) {
-            // set the owning side to null (unless already changed)
-            if ($repCommentairesSAV->getCodeClient() === $this) {
-                $repCommentairesSAV->setCodeClient(null);
-            }
-        }
 
         return $this;
     }

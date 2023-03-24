@@ -1,3 +1,4 @@
+
 <section class="gradient-custom justify-content-center">
     <div class="container justify-content-center">
         <div class="row d-flex justify-content-center">
@@ -14,27 +15,32 @@
                                             <div class="p-2 border rounded bg-comment">
                                                 <div class="d-flex justify-content-between align-items-center">
                                                     <p class="mb-1">
-                                                        <span class="commentAuthor">{{ comment.nom }}</span>
+                                                        <span class="commentAuthor">{{ comment.owner.nom }} {{ comment.owner.prenom }}</span>
                                                         
                                                         <span class="small">- {{ comment.getDateCom() | date('Y-m-d h:i') }} <strong>comment id is: {{ comment.id }}</strong></span>
                                                     </p>
-                                                    <button 
-                                                        class="btn btn-primary"
-                                                        data-bs-toggle="collapse" 
-                                                        data-bs-target="#repondre-{{comment.id}}" 
-                                                        aria-expanded="false" 
-                                                        aria-controls="repondre-{{comment.id}}"
-                                                        style="text-decoration: none;"
-                                                    >
-                                                        <i class="fas fa-reply fa-xs"></i><span class="small"> Répondre</span>
-                                                    </button>
                                                 </div>
                                                 <p class="small mb-0 ">
                                                     <span class="commentContent">{{ comment.getCommentaireSAV() }}</span>
                                                 </p>
                                             </div>
+                                            <div class="p-2 d-flex flex-start flex-row-reverse">
+                                                <button 
+                                                    class="btn btn-primary p-2 m-2"
+                                                    data-bs-toggle="collapse" 
+                                                    data-bs-target="#repondre-{{comment.id}}" 
+                                                    aria-expanded="false" 
+                                                    aria-controls="repondre-{{comment.id}}"
+                                                    style="text-decoration: none;"
+                                                    data-id="{{comment.id}}"
+                                                    data-reply
+                                                >
+                                                    <i class="fas fa-reply fa-xs"></i><span class="small"> Répondre</span>
+                                                </button>
+                                                {{ include('commentaire/_delete_comment_form.html.twig') }}
+                                            </div>
                                             <div class="collapse" id="repondre-{{comment.id}}">
-                                                {{ render_esi(controller('App\\Controller\\SAVController::reply', {'id' : comment.id})) }}
+                                                <div id="form-container-{{comment.id}}"></div>
                                             </div>
                                             {# replies #}
                                             {% if replies %}
@@ -43,16 +49,19 @@
                                                         <i class="fa-solid fa-comments rounded-circle shadow-1-strong me-3" style="width: 65px; height:65px; font-size: 2em; color: #0091BE;"></i>
                                                         <div class="flex-grow-1 flex-shrink-1">
                                                             <div class="p-2 border rounded bg-reply">
-                                                            <div class="d-flex justify-content-between align-items-center">
-                                                                <p class="mb-1">
-                                                                <span class="commentAuthor">{{ comment.nom }}</span>
-                                                        
-                                                                <span class="small">- {{ comment.getDateCom() | date('Y-m-d h:i') }} <strong>comment id is: {{ comment.id }}</strong></span>
+                                                                <div class="d-flex justify-content-between align-items-center">
+                                                                    <p class="mb-1">
+                                                                        <span class="commentAuthor">{{ reply.nom }}</span>
+                                                                
+                                                                        <span class="small">- {{ reply.getDateCom() | date('Y-m-d h:i') }} <strong>reply id is: {{ reply.id }}</strong></span>
+                                                                    </p>
+                                                                </div>
+                                                                <p class="small mb-0">
+                                                                    {{ reply.getCommentaireSAV }}
                                                                 </p>
                                                             </div>
-                                                            <p class="small mb-0">
-                                                                {{ reply.getCommentaireSAV }}
-                                                            </p>
+                                                            <div class="p-2 d-flex flex-start flex-row-reverse">
+                                                                {{ include('commentaire/_delete_reply_form.html.twig') }}
                                                             </div>
                                                         </div>
                                                     </div>
@@ -61,7 +70,7 @@
                                         </div>
                                     </div>
                                 {% endfor %}
-
+                                <hr>
                                 {# rest of the comments #}
                                 {% if restCommentaires %}
                                     <div class="container justify-content-center">
@@ -119,30 +128,23 @@
                                         {% endfor %}
                                     </div>
                                 {% endif %}
+                                <hr>
                                 {% if app.user %}
-                                <div class="d-flex flex-start mt-4">
-                                    <div style="width: 65px; height:65px; font-size: 2em; color: #479F9F;"></div>
-                                    <div class="flex-grow-1 flex-shrink-1">
-                                        <div class="p-2">
-                                            <div class="d-flex justify-content-between align-items-center">
-                                                {{ form_start(commentForm, {'attr': {'class': 'row col p-2'}}) }}
-                                                    {{ form_widget(commentForm.commentaire_SAV) }}
-                                                    <div class="">
-                                                        <button class="btn btn-primary m-2" type="submit"> Envoyer </button>
-                                                    </div>
-                                                {{ form_end(commentForm) }}
+                                    <div class="d-flex flex-start mt-4">
+                                        <div style="width: 65px; height:65px; font-size: 2em; color: #479F9F;"></div>
+                                        <div class="flex-grow-1 flex-shrink-1">
+                                            <div class="p-2">
+                                                <div class="d-flex justify-content-between align-items-center">
+                                                    {{ form_start(commentForm, {'attr': {'class': 'd-flex flex-column col p-2'}}) }}
+                                                        {{ form_widget(commentForm.commentaire_SAV) }}
+                                                        <div class="d-flex flex-row-reverse">
+                                                            <button class="btn btn-primary mt-2" type="submit"> Envoyer </button>
+                                                        </div>
+                                                    {{ form_end(commentForm) }}
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
-                                </div>
-                                    {# <div id="ajout-commentaire">
-                                        {{ form_start(commentForm, {'attr': {'class': 'row col p-2'}}) }}
-                                            {{ form_widget(commentForm.commentaire_SAV) }}
-                                            <div class="buttonsPlacement">
-                                                <button class="btn btn-primary" type="submit"> Envoyer </button>
-                                            </div>
-                                        {{ form_end(commentForm) }}
-                                    </div> #}
                                 {% endif %}
                             </div>
                         </div>
@@ -152,3 +154,29 @@
         </div>
     </div>
 </section>
+
+<script>
+    document.querySelectorAll('[data-reply]').forEach(function(button) {
+        button.addEventListener('click', function(event) {
+            event.preventDefault();
+            var commentId = button.getAttribute('data-id');
+            var formHtml = '{{ form(replyForm, {'attr': {'class': 'd-flex flex-column col p-2'}}) }}';
+            formHtml = formHtml.replace(/__parentId__/g, commentId);
+            var formContainer = document.querySelector('#form-container-' + commentId);
+            formContainer.innerHTML = formHtml;
+
+            // creating submit button
+            var form = formContainer.querySelector('form');
+            const buttonElement = document.createElement('div');
+            buttonElement.classList.add('d-flex', 'flex-row-reverse');
+            buttonElement.innerHTML = `<button class="btn btn-primary m-2" type="submit"> Envoyer </button>`;
+            form.appendChild(buttonElement);
+
+            // Reset form values and data
+            form.reset();
+            form.querySelector('#rep_commentaires_sav_parentid').value = commentId;
+            form.querySelector('#rep_commentaires_sav_commentaire_SAV').value = '';
+
+        });
+    });
+</script>

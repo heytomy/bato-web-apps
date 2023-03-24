@@ -49,4 +49,40 @@ class TestController extends AbstractController
             'users' => $appsUtilisateurRepository->findAll(),
         ]);
     }
+
+    // #[Route('/comment/{parentId}/reply', name: 'app_sav_reply', methods:['GET' ,'POST'])]
+    // public function reply(
+    //     int $parentId, 
+    //     Request $request, 
+    //     EntityManagerInterface $em, 
+    //     CommentairesSAVRepository $commentairesSAVRepository
+    //     ): Response
+    // {
+    //     $user = $this->getUser() ?? null;
+    //     $nom = $user->getIdUtilisateur()->getNom() ." ". $user->getIdUtilisateur()->getPrenom();
+    //     $parent = $commentairesSAVRepository->findOneBy(['id' => $parentId]);
+
+    //     $reply = new RepCommentairesSAV();
+    //     $replyForm = $this->createForm(RepCommentairesSAVType::class, $reply);
+    //     $replyForm->handleRequest($request);
+
+    //     if ($replyForm->isSubmitted() && $replyForm->isValid()) {
+    //         dump('we reached form submit');
+    //         $reply
+    //             ->setDateCom(new DateTime())
+    //             ->setParent($parent[0])
+    //             ->setCodeClient($parent->getCodeClient())
+    //             ->setNom($nom)
+    //             ->setOwner($user->getIDUtilisateur())
+    //             ;
+            
+    //         $em->persist($reply);
+    //         $em->flush();
+    //         return $this->redirectToRoute('app_sav_contrat', ['id' => $parent->getCodeContrat()->getId()]);
+    //     }
+
+    //     return $this->render('_inc/_reply-form.html.twig', [
+    //         'form' => $replyForm->createView(),
+    //     ]);
+    // }
 }

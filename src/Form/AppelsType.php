@@ -3,8 +3,6 @@
 namespace App\Form;
 
 use App\Entity\Appels;
-use App\Entity\AppsUtilisateur;
-use Doctrine\ORM\EntityManager;
 use App\Entity\DefAppsUtilisateur;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;

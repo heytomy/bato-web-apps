@@ -38,26 +38,19 @@ class DefAppsUtilisateurRepository extends ServiceEntityRepository
             $this->getEntityManager()->flush();
         }
     }
-
-    // public function findByRole($roleId)
-    // {
-    //     $qb = $this->createQueryBuilder('u');
-        
-    //     // Join the Apps_Utilisateur_Roles and Roles entities
-    //     $qb->join('u.appsUtilisateurRoles', 'r')
-    //         ->join('r.roles', 'role')
-            
-    //     // Add a condition to filter by the specified role ID
-    //         ->where('role.id = :roleId')
-    //         ->setParameter('roleId', $roleId)
-            
-    //     // Select only the required fields
-    //         ->select('u.idUtilisateur', 'u.nom');
-            
-    //     // Execute the query and return the results
-    //     return $qb->getQuery()->getResult();
-    // }
     
+    public function findByRoleTech(string $role): array
+    {
+        $queryBuilder = $this->createQueryBuilder('d');
+        $queryBuilder->innerJoin('d.comptes', 'a')
+            ->innerJoin('a.roles', 'r')
+            ->where('r.Libelle = :role')
+            ->setParameter('role', $role);
+    
+        return $queryBuilder->getQuery()->getResult();
+    }
+    
+
 //    /**
 //     * @return DefAppsUtilisateur[] Returns an array of DefAppsUtilisateur objects
 //     */

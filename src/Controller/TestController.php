@@ -5,6 +5,7 @@ namespace App\Controller;
 use App\Entity\AppsUtilisateur;
 use App\Repository\AppsUtilisateurRepository;
 use App\Repository\ContratRepository;
+use App\Repository\DefAppsUtilisateurRepository;
 use App\Repository\RolesRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -42,11 +43,19 @@ class TestController extends AbstractController
     }
 
     #[Route('/test', name: 'app_test')]
-    public function index(AppsUtilisateurRepository $appsUtilisateurRepository): Response
+    public function index(AppsUtilisateurRepository $appsUtilisateurRepository, DefAppsUtilisateurRepository $defAppsUtilisateurRepository): Response
     {
+
+        $clients = $defAppsUtilisateurRepository->findAll();
+        $users = $appsUtilisateurRepository->findBy(['roles' => 3 ]);
+        dd($users);
+
+
+
         return $this->render('test/index.html.twig', [
             'controller_name' => 'TestController',
             'users' => $appsUtilisateurRepository->findAll(),
         ]);
+
     }
 }

@@ -65,9 +65,17 @@ class Appels
         return $this->id;
     }
 
-    public function getIDUtilisateur(): ?int
+    public function getIDUtilisateur(): ?DefAppsUtilisateur
     {
         return $this->ID_Utilisateur;
+    }
+
+
+    public function setIDUtilisateur(?DefAppsUtilisateur $ID_Utilisateur): self
+    {
+        $this->ID_Utilisateur = $ID_Utilisateur;
+
+        return $this;
     }
 
     public function getNom(): ?string

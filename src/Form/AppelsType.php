@@ -5,6 +5,7 @@ namespace App\Form;
 use App\Entity\Appels;
 use App\Entity\DefAppsUtilisateur;
 use Symfony\Component\Form\AbstractType;
+use App\Repository\DefAppsUtilisateurRepository;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\OptionsResolver\OptionsResolver;
@@ -17,11 +18,19 @@ use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 
 class AppelsType extends AbstractType
 { 
+    private $roles;
+
+    public function __construct(DefAppsUtilisateurRepository $roles)
+    {
+        $this->roles = $roles;
+    }
+
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {        
         $builder
-        ->add('IDUtilisateur', EntityType::class,[
+        ->add('ID_Utilisateur', EntityType::class,[
             'class' => DefAppsUtilisateur::class,
+            'choices' => $this->roles->findByRoleTech('ROLE_TECH_SAV'),
             'label' => 'Technicien',
             'choice_label' => function(DefAppsUtilisateur $fullname){
                 return $fullname->getNom() . ' ' . $fullname->getPrenom();

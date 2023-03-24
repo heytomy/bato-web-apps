@@ -22,8 +22,11 @@
 					<h1>{{ appel.nom}}</h1>
 					<div class="card mb-3">
 						<div class="card-body">
-							<h4>
-								Informations client</h4>
+							<h4>Technicien assigné</h4>
+							{% if appel.IDUtilisateur is defined and appel.IDUtilisateur is not null %}
+							<p>{{ appel.IDUtilisateur.nom }} {{ appel.IDUtilisateur.prenom }}</p>
+							{% endif %}
+							<h4>Informations client</h4>
 							<p class="card-text">{{ appel.adr }}</p>
 							<p class="card-text">{{ appel.cp }}</p>
 							<p class="card-text">{{ appel.ville }}</p>

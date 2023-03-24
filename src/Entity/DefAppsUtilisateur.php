@@ -61,9 +61,17 @@ class DefAppsUtilisateur
     #[ORM\OneToMany(mappedBy: 'ID_Utilisateur', targetEntity: AppsUtilisateur::class, orphanRemoval: true)]
     private Collection $comptes;
 
+    #[ORM\OneToMany(mappedBy: 'owner', targetEntity: CommentairesSAV::class)]
+    private Collection $commentairesSAVs;
+
+    #[ORM\OneToMany(mappedBy: 'owner', targetEntity: RepCommentairesSAV::class)]
+    private Collection $repCommentairesSAVs;
+
     public function __construct()
     {
         $this->comptes = new ArrayCollection();
+        $this->commentairesSAVs = new ArrayCollection();
+        $this->repCommentairesSAVs = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -191,6 +199,66 @@ class DefAppsUtilisateur
             // set the owning side to null (unless already changed)
             if ($compte->getIDUtilisateur() === $this) {
                 $compte->setIDUtilisateur(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, CommentairesSAV>
+     */
+    public function getCommentairesSAVs(): Collection
+    {
+        return $this->commentairesSAVs;
+    }
+
+    public function addCommentairesSAV(CommentairesSAV $commentairesSAV): self
+    {
+        if (!$this->commentairesSAVs->contains($commentairesSAV)) {
+            $this->commentairesSAVs->add($commentairesSAV);
+            $commentairesSAV->setOwner($this);
+        }
+
+        return $this;
+    }
+
+    public function removeCommentairesSAV(CommentairesSAV $commentairesSAV): self
+    {
+        if ($this->commentairesSAVs->removeElement($commentairesSAV)) {
+            // set the owning side to null (unless already changed)
+            if ($commentairesSAV->getOwner() === $this) {
+                $commentairesSAV->setOwner(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, RepCommentairesSAV>
+     */
+    public function getRepCommentairesSAVs(): Collection
+    {
+        return $this->repCommentairesSAVs;
+    }
+
+    public function addRepCommentairesSAV(RepCommentairesSAV $repCommentairesSAV): self
+    {
+        if (!$this->repCommentairesSAVs->contains($repCommentairesSAV)) {
+            $this->repCommentairesSAVs->add($repCommentairesSAV);
+            $repCommentairesSAV->setOwner($this);
+        }
+
+        return $this;
+    }
+
+    public function removeRepCommentairesSAV(RepCommentairesSAV $repCommentairesSAV): self
+    {
+        if ($this->repCommentairesSAVs->removeElement($repCommentairesSAV)) {
+            // set the owning side to null (unless already changed)
+            if ($repCommentairesSAV->getOwner() === $this) {
+                $repCommentairesSAV->setOwner(null);
             }
         }
 

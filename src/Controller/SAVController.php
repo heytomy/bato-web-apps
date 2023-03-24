@@ -9,6 +9,7 @@ use App\Form\CommentairesSAVType;
 use App\Form\RepCommentairesSAVType;
 use App\Repository\CommentairesSAVRepository;
 use App\Repository\ContratRepository;
+use App\Repository\PhotosSAVRepository;
 use App\Repository\RepCommentairesSAVRepository;
 use DateTime;
 use Doctrine\ORM\EntityManagerInterface;
@@ -30,44 +31,23 @@ class SAVController extends AbstractController
         ]);
     }
 
-    #[Route('/comment/{id}/reply', name: 'app_sav_reply')]
-    public function reply(CommentairesSAV $parent, Request $request, EntityManagerInterface $em): Response
-    {
-        $user = $this->getUser() ?? null;
-        $nom = $user->getIdUtilisateur()->getNom() ." ". $user->getIdUtilisateur()->getPrenom();
-
-        $reply = new RepCommentairesSAV();
-        $replyForm = $this->createForm(RepCommentairesSAVType::class, $reply);
-        $replyForm->handleRequest($request);
-        if ($replyForm->isSubmitted() && $replyForm->isValid()) {
-            $reply
-                ->setDateCom(new DateTime())
-                ->setParent($parent)
-                ->setCodeClient($user->getId())
-                ->setNom($nom)
-                ;
-            
-            $em->persist($reply);
-            $em->flush();
-            return $this->redirectToRoute('app_sav_contrat', ['id' => $parent->getCodeContrat()->getId()]);
-        }
-
-        return $this->render('_inc/_reply-form.html.twig', [
-            'form' => $replyForm->createView(),
-        ]);
-    }
-
     #[Route('/{id}', name: 'app_sav_contrat')]
-    public function show(Contrat $contrat, CommentairesSAVRepository $commentairesSAVRepository, Request $request, EntityManagerInterface $em, RepCommentairesSAVRepository $repCommentairesSAVRepository): Response
+    public function show(
+        Contrat $contrat, 
+        CommentairesSAVRepository $commentairesSAVRepository, 
+        Request $request, EntityManagerInterface $em, 
+        RepCommentairesSAVRepository $repCommentairesSAVRepository,
+        PhotosSAVRepository $photosSAVRepository
+        ): Response
     {
         $comments = $commentairesSAVRepository->findBy(['codeContrat' => $contrat->getId()]);
         $user = $this->getUser() ?? null;
-        $replies = $repCommentairesSAVRepository->findAll() ?? null;
         $nom = $user->getIdUtilisateur()->getNom() ." ". $user->getIdUtilisateur()->getPrenom();
         
         /**
          * Partie commentaires
          */
+        // On crée le formulaires pour les commentaires
         $comment = new CommentairesSAV();
         $commentForm = $this->createForm(CommentairesSAVType::class, $comment);
         $commentForm->handleRequest($request);
@@ -75,8 +55,9 @@ class SAVController extends AbstractController
             $comment
                 ->setDateCom(new DateTime())
                 ->setCodeContrat($contrat)
-                ->setCodeClient($user->getId())
+                ->setCodeClient($contrat->getCodeClient()->getId())
                 ->setNom($nom)
+                ->setOwner($user->getIDUtilisateur())
                 ;
             
             $em->persist($comment);
@@ -85,13 +66,54 @@ class SAVController extends AbstractController
             return $this->redirectToRoute('app_sav_contrat', ['id' => $contrat->getId()]);
         }
 
+        /**
+         * Partie Réponses
+         */
+        // On récupère toutes les réponses liées à ce contrat
+        $replies = $repCommentairesSAVRepository->findBy(['codeClient' => $contrat->getCodeClient()->getId()]) ?? null;
+
+        // On crée le formulaires pour les réponses
+        $reply = new RepCommentairesSAV();
+        $replyForm = $this->createForm(RepCommentairesSAVType::class, $reply);
+        $replyForm->handleRequest($request);
+ 
+        if ($replyForm->isSubmitted() && $replyForm->isValid()) {
+            dump('we reached form submit');
+            $reply
+                ->setDateCom(new DateTime())
+                ->setCodeClient($contrat->getCodeClient()->getId())
+                ->setNom($nom)
+                ->setOwner($user->getIDUtilisateur())
+                ;
+
+            // On récupère le contenu du champ parentid
+            $parentid = $replyForm->get('parentid')->getData();
+
+            // On va chercher le commentaire correspondant
+            $parent = $commentairesSAVRepository->find($parentid);
+
+            // On définit le parent
+            $reply->setParent($parent);
+            
+            $em->persist($reply);
+            $em->flush();
+            return $this->redirectToRoute('app_sav_contrat', ['id' => $contrat->getId()]);
+        }
+
+        /**
+         * Partie Photos
+         */
+        $photos = $photosSAVRepository->findBy(['Code' => $contrat->getId()]) ?? null;
+
         return $this->render('sav/show.html.twig', [
-            'current_page' => 'app_sav',
-            'contrat' => $contrat,
-            'comments' => $comments,
-            'restCommentaires' => null,
-            'replies' => $replies,
-            'commentForm' => $commentForm->createView(),
+            'current_page'      => 'app_sav',
+            'contrat'           => $contrat,
+            'comments'          => $comments,
+            'restCommentaires'  => null,
+            'replies'           => $replies,
+            'commentForm'       => $commentForm->createView(),
+            'replyForm'         => $replyForm->createView(),
+            'photos'            => $photos,
         ]);
     }
 }

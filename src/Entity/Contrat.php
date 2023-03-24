@@ -25,9 +25,13 @@ class Contrat
     #[ORM\OneToMany(mappedBy: 'codeContrat', targetEntity: CommentairesSAV::class)]
     private Collection $commentairesSAVs;
 
+    #[ORM\OneToMany(mappedBy: 'Code', targetEntity: PhotosSAV::class)]
+    private Collection $photosSAVs;
+
     public function __construct()
     {
         $this->commentairesSAVs = new ArrayCollection();
+        $this->photosSAVs = new ArrayCollection();
     }
 
 
@@ -84,6 +88,36 @@ class Contrat
             // set the owning side to null (unless already changed)
             if ($commentairesSAV->getCodeContrat() === $this) {
                 $commentairesSAV->setCodeContrat(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, PhotosSAV>
+     */
+    public function getPhotosSAVs(): Collection
+    {
+        return $this->photosSAVs;
+    }
+
+    public function addPhotosSAV(PhotosSAV $photosSAV): self
+    {
+        if (!$this->photosSAVs->contains($photosSAV)) {
+            $this->photosSAVs->add($photosSAV);
+            $photosSAV->setCode($this);
+        }
+
+        return $this;
+    }
+
+    public function removePhotosSAV(PhotosSAV $photosSAV): self
+    {
+        if ($this->photosSAVs->removeElement($photosSAV)) {
+            // set the owning side to null (unless already changed)
+            if ($photosSAV->getCode() === $this) {
+                $photosSAV->setCode(null);
             }
         }
 

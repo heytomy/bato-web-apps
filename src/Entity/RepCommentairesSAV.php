@@ -20,16 +20,19 @@ class RepCommentairesSAV
     #[ORM\Column(name: 'Date_Com', type: Types::DATE_MUTABLE)]
     private ?\DateTimeInterface $date_com = null;
 
-    #[ORM\ManyToOne(inversedBy: 'repCommentairesSAVs')]
-    #[ORM\JoinColumn(name: 'CodeClient')]
-    private ?AppsUtilisateur $codeClient = null;
-
     #[ORM\Column(name: 'Nom',length: 30, nullable: true)]
     private ?string $nom = null;
 
     #[ORM\ManyToOne(inversedBy: 'replies')]
     #[ORM\JoinColumn(name: 'Parent', referencedColumnName:'ID_Commentaire', nullable: false)]
     private ?CommentairesSAV $parent = null;
+
+    #[ORM\Column(name: 'CodeClient', length: 8, nullable: true)]
+    private ?string $codeClient = null;
+
+    #[ORM\ManyToOne(inversedBy: 'repCommentairesSAVs')]
+    #[ORM\JoinColumn(name: 'ID_Utilisateur', referencedColumnName: 'ID_Utilisateur', nullable: false)]
+    private ?DefAppsUtilisateur $owner = null;
 
     public function getId(): ?int
     {
@@ -60,18 +63,6 @@ class RepCommentairesSAV
         return $this;
     }
 
-    public function getCodeClient(): ?AppsUtilisateur
-    {
-        return $this->codeClient;
-    }
-
-    public function setCodeClient(?AppsUtilisateur $codeClient): self
-    {
-        $this->codeClient = $codeClient;
-
-        return $this;
-    }
-
     public function getNom(): ?string
     {
         return $this->nom;
@@ -92,6 +83,30 @@ class RepCommentairesSAV
     public function setParent(?CommentairesSAV $parent): self
     {
         $this->parent = $parent;
+
+        return $this;
+    }
+
+    public function getCodeClient(): ?string
+    {
+        return $this->codeClient;
+    }
+
+    public function setCodeClient(?string $codeClient): self
+    {
+        $this->codeClient = $codeClient;
+
+        return $this;
+    }
+
+    public function getOwner(): ?DefAppsUtilisateur
+    {
+        return $this->owner;
+    }
+
+    public function setOwner(?DefAppsUtilisateur $owner): self
+    {
+        $this->owner = $owner;
 
         return $this;
     }

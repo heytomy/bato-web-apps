@@ -14,7 +14,7 @@ class Appels
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
-    #[ORM\Column]
+    #[ORM\Column(type: Types::INTEGER)]
     private ?int $id = null;
 
     #[Assert\NotBlank(message: 'Veuillez ajouter un nom')]
@@ -51,6 +51,10 @@ class Appels
     #[ORM\OneToMany(mappedBy: 'AppelsUrgents', targetEntity: TicketUrgents::class)]
     private Collection $ticketUrgents;
 
+     #[ORM\ManyToOne(targetEntity: DefAppsUtilisateur::class)]
+     #[ORM\JoinColumn(name:"ID_Utilisateur", referencedColumnName:"ID_Utilisateur", nullable:false)]
+    private $ID_Utilisateur;
+
     public function __construct()
     {
         $this->ticketUrgents = new ArrayCollection();
@@ -59,6 +63,11 @@ class Appels
     public function getId(): ?int
     {
         return $this->id;
+    }
+
+    public function getIDUtilisateur(): ?int
+    {
+        return $this->ID_Utilisateur;
     }
 
     public function getNom(): ?string

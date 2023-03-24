@@ -23,6 +23,7 @@ Encore
     .addEntry('app',            './assets/app.js')
     .addEntry('infiniteScroll', './assets/infiniteScroll.js')
     // .addEntry('replyForm',      './assets/replyForm.js')
+    .addEntry('datePicker', './assets/datePicker.js')
 
     // enables the Symfony UX Stimulus bridge (used in assets/bootstrap.js)
     .enableStimulusBridge('./assets/controllers.json')

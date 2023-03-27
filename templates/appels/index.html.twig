@@ -3,16 +3,14 @@
 {% block title %}Hello AppelsController!
 {% endblock %}
 
-{% block back_button %}
-	{{ path('app_appels') }}
-{% endblock %}
-
-{% block new_button %}
-	{{ path('app_appels_new') }}
-{% endblock %}
-
-
 {% block list %}
+<div class="container mb-5">
+	<a class="btn btn-primary"
+		href="{% block new_button %}{{ path('app_appels_new') }}{% endblock %}">
+			<i class="fa-solid fa-chevron-right"></i>
+			Nouvel Appel
+		</a>
+	</div>
 	<h1>Liste des Appels</h1>
 
 	<div class="border rounded container bg-light p-2">
@@ -24,7 +22,8 @@
 						<div class="card-body">
 							<h4>Technicien assigné</h4>
 							{% if appel.IDUtilisateur is defined and appel.IDUtilisateur is not null %}
-							<p>{{ appel.IDUtilisateur.nom }} {{ appel.IDUtilisateur.prenom }}</p>
+								<p>{{ appel.IDUtilisateur.nom }}
+									{{ appel.IDUtilisateur.prenom }}</p>
 							{% endif %}
 							<h4>Informations client</h4>
 							<p class="card-text">{{ appel.adr }}</p>

@@ -4,7 +4,7 @@
 {% block body %}
 <h1>
     <ul>
-    {{ render_esi(controller('App\\Controller\\SAVSearchController::index')) }}
+    {{ render(controller('App\\Controller\\SAVSearchController::index')) }}
         <p><a href="#" class="text-primary ">Primary link</a></p>
         <p><a href="#" class="text-secondary">Secondary link</a></p>
         <p><a href="#" class="text-success">Success link</a></p>

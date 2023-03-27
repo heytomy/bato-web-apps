@@ -4,8 +4,9 @@ namespace App\Repository;
 
 use App\Entity\Contrat;
 use App\Entity\SAVSearch;
-use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
+use phpDocumentor\Reflection\Types\Collection;
+use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 
 /**
  * @extends ServiceEntityRepository<Contrat>
@@ -71,15 +72,12 @@ class ContratRepository extends ServiceEntityRepository
     }
 
     /**
-     * Cette fonction existe pour faire un query pour prendre un certain nombre de clients. Mais cette fonction renvoie une liste, qu'on va le transmettre en JSON.
-     * @param ?int $offset Définit un décalage pour les données prises. C'est 0 par défaut
-     * @param int $limit Fixe une certaine limite au nombre de données prises. C'est 10 par défaut
-     * @return array Renvoie une liste des clients
+     * Cette fonction existe pour transformer une collection à un array JSON
+     * @param array $clients c'est la variable de la liste des clients
+     * @return array Renvoie une liste des clients transformer en array JSON
      */
-    public function findByLimitArray(?int $offset = 0, int $limit = 10)
+    public function collectionToArray(array $clients)
     {
-        $clients = $this->findByLimit($offset, $limit);
-
         $data = [];
 
         foreach ($clients as $key => $client) {
@@ -99,16 +97,22 @@ class ContratRepository extends ServiceEntityRepository
         return $data;
     }
 
-    public function findBySAVSearchQuery(SAVSearch $savSearch)
+    /**
+     * Cette fonction existe pour chercher un contrat par le nom du client
+     * @param string $nom c'est la variable du filtrage
+     * @return Collection Renvoie une collection des clients filtrés par nom
+     */
+    public function findBySAVSearchQuery(string $nom)
     {
-        $query = $this->createQueryBuilder('c');
-        if ($savSearch->getNom() !== null) {
+        $query = $this->createQueryBuilder('cont');
+        if ($nom !== null) {
             $query
-                ->andWhere('c.nom > :nom')
-                ->setParameter(':nom', $savSearch->getNom())
+                ->innerJoin('cont.CodeClient', 'client')
+                ->andWhere('client.Nom LIKE :nom')
+                ->setParameter(':nom', '%'.$nom.'%')
             ;
         }
-        return $query->getQuery();
+        return $query->getQuery()->getResult();
     }
 //    /**
 //     * @return Contrat[] Returns an array of Contrat objects

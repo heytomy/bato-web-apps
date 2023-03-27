@@ -3,12 +3,15 @@
 namespace App\Controller;
 
 use App\Entity\Appels;
+use App\Entity\ClientDef;
 use App\Form\AppelsType;
 use App\Repository\AppelsRepository;
+use App\Repository\ClientDefRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
@@ -46,5 +49,5 @@ class AppelsController extends AbstractController
         return $this->render('appels/new.html.twig', [
             'form' => $form->createView(),
         ]);
-    }    
+    }  
 }

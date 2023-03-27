@@ -6,7 +6,23 @@
 
 	<div class="container mb-5">
 		<div class="row p-5 container">
+		<div class="container mb-3">
+			<div class="form-group form-check">
+				{{ form_widget(form.NouveauClient, {'attr': {'class': 'form-check-input'}}) }}
+				{{ form_label(form.NouveauClient, null, {'label_attr': {'class': 'form-check-label'}}) }}
+			</div>
 
+			<div class="form-group form-check">
+				{{ form_widget(form.Client, {'attr': {'class': 'form-check-input'}}) }}
+				{{ form_label(form.Client, null, {'label_attr': {'class': 'form-check-label'}}) }}
+
+			</div>
+
+			<div class="form-group form-check">
+				{{ form_widget(form.ClientSAV, {'attr': {'class': 'form-check-input'}}) }}
+				{{ form_label(form.ClientSAV, null, {'label_attr': {'class': 'form-check-label'}}) }}
+			</div>
+		</div>
 			<div class="form-group">
 				{{ form_label(form.ID_Utilisateur, 'Technicien') }}
 				{{ form_widget(form.ID_Utilisateur, {'attr': {'class': 'form-select', 'aria-label': 'Choisir un technicien'}}) }}
@@ -70,7 +86,7 @@
 	{{ form_end(form) }}
 {% endblock %}
 
-{# {% block javascripts %}
-	{{ encore_entry_script_tags('datePicker') }}
-{% endblock %} #}
+{% block javascripts %}
+	{{ encore_entry_script_tags('app') }}
+{% endblock %}
 

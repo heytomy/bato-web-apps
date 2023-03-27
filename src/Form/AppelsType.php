@@ -9,6 +9,7 @@ use App\Repository\DefAppsUtilisateurRepository;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\OptionsResolver\OptionsResolver;
+use Symfony\Component\Form\Extension\Core\Type\TelType;
 use Symfony\Component\Form\Extension\Core\Type\DateType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\Extension\Core\Type\TimeType;
@@ -28,6 +29,31 @@ class AppelsType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {        
         $builder
+        ->add('NouveauClient', CheckboxType::class, [
+            'label' => 'Nouveau client ?',
+            'required' => false,
+            'mapped' => false,
+            'attr' => [
+                'class' => 'NouveauClient'
+            ]
+        ])
+        ->add('Client', CheckboxType::class, [
+            'label' => 'Client existant ?',
+            'required' => false,
+            'mapped' => false,
+            'attr' => [
+                'class' => 'Client'
+            ]
+        ])
+        ->add('ClientSAV', CheckboxType::class, [
+            'label' => 'Client ayant un contrat d\'entretien ?',
+            'required' => false,
+            'mapped' => false,
+            'attr' => [
+                'class' => 'ClientSAV'
+            ]
+        ])
+
         ->add('ID_Utilisateur', EntityType::class,[
             'class' => DefAppsUtilisateur::class,
             'choices' => $this->roles->findByRoleTech('ROLE_TECH_SAV'),
@@ -41,6 +67,7 @@ class AppelsType extends AbstractType
             ]
         ])
             ->add('Nom', TextType::class, [
+                'required' => true,
                 'label' => 'Nom',
                 'attr' => [
                     'placeholder' => 'Entrez le nom du client',
@@ -48,6 +75,7 @@ class AppelsType extends AbstractType
                 ]
             ])
             ->add('Adr', TextType::class, [
+                'required' => true,
                 'label' => 'Adresse',
                 'attr' => [
                     'placeholder' => 'Entrez l\'adresse du client',
@@ -55,6 +83,7 @@ class AppelsType extends AbstractType
                 ]
             ])
             ->add('CP', TextType::class, [
+                'required' => true,
                 'label' => 'Code postal',
                 'attr' => [
                     'placeholder' => 'Entrez le code postal',
@@ -62,13 +91,15 @@ class AppelsType extends AbstractType
                 ]
             ])
             ->add('Ville', TextType::class, [
+                'required' => true,
                 'label' => 'Ville',
                 'attr' => [
                     'placeholder' => 'Entrez la ville',
                     'class' => 'form-control'
                 ]
             ])
-            ->add('Tel', TextType::class, [
+            ->add('Tel', TelType::class, [
+                'required' => true,
                 'label' => 'Numéro de téléphone',
                 'attr' => [
                     'placeholder' => 'Entrez votre numéro de téléphone',
@@ -76,6 +107,7 @@ class AppelsType extends AbstractType
                 ]
             ])
             ->add('Email', EmailType::class, [
+                'required' => true,
                 'label' => 'Adresse email',
                 'attr' => [
                     'placeholder' => 'Entrez votre adresse email',
@@ -83,6 +115,7 @@ class AppelsType extends AbstractType
                 ]
             ])
             ->add('description', TextareaType::class, [
+                'required' => true,
                 'label' => 'Description',
                 'attr' => [
                     'placeholder' => 'Décrivez le problème',
@@ -90,6 +123,7 @@ class AppelsType extends AbstractType
                 ]
             ])
             ->add('rdvDate', DateType::class, [
+                'required' => true,
                 'label' => 'Date du rendez-vous',
                 'attr' => [
                     'placeholder' => 'Entrez la date du rendez-vous',
@@ -99,6 +133,7 @@ class AppelsType extends AbstractType
                 'widget' => 'single_text',
             ])
             ->add('rdvHeure', TimeType::class, [
+                'required' => true,
                 'label' => 'Heure du rendez-vous',
                 'attr' => [
                     'placeholder' => 'Entrez l\'heure du rendez-vous',
@@ -113,6 +148,7 @@ class AppelsType extends AbstractType
             ])
             
             ->add('isUrgent', CheckboxType::class, [
+                'required' => false,
                 'label' => 'Urgent ?',
             ]);
     }

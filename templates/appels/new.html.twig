@@ -1,6 +1,7 @@
 {% extends '_inc/listPage.html.twig' %}
 
 {% block back_button %}{{ path('app_appels') }}{% endblock %}
+
 {% block list %}
 	{{ form_start(form, {'attr': {'class': 'form'}}) }}
 
@@ -89,4 +90,3 @@
 {% block javascripts %}
 	{{ encore_entry_script_tags('app') }}
 {% endblock %}
-

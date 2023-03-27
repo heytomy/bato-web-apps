@@ -29,7 +29,14 @@ class TestController extends AbstractController
         $stmt = $connection->executeQuery($sql, ['id' => $user->getId()]);
 
         $test2 = $stmt->fetchAssociative();
-        dd($contratRepository->findAll());
+        $clients = $contratRepository->findByLimit();
+        $clients = $contratRepository->collectionToArray($clients);
+
+        $filter = 'ric';
+
+        $clients = $contratRepository->findBySAVSearchQuery($filter);
+        $data = $contratRepository->collectionToArray($clients);
+        dd($data);
 
         // $test = $contratRepository->find("00001");
         // dd($test);
@@ -37,7 +44,7 @@ class TestController extends AbstractController
         return $this->render('test/test.html.twig', [
             'controller_name' => 'TestController',
             'user' => $user,
-            'clients' => $contratRepository->findByLimitArray(0,1000),
+            'clients' => $contratRepository->findByLimit(0,1000),
             'total' => $contratRepository->getCountClients(),
         ]);
     }

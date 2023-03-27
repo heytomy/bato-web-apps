@@ -35,7 +35,7 @@ class SAVSearchType extends AbstractType
             ])
             ->add('submit', SubmitType::class, [
                 'attr' => [
-                    'class' => 'btn btn-secondary',
+                    'class' => 'btn btn-outline-secondary',
                 ]
             ])
         ;

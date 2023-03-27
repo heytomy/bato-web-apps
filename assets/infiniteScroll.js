@@ -7,10 +7,12 @@ const backToTopButton = document.querySelector('.back-to-top');
 
 // initialize offset and limit values
 let offset = 0;
+let url = '/ajax/sav';
 const limit = 10;
 
 // initialize variable to track whether a request is in progress
 let isFetching = false;
+let inputValue = '';
 
 
 // add event listener to hide the "Back to top" button when the user scrolls back to the top of the page
@@ -32,14 +34,15 @@ function fetchClients() {
     afficheChargement();
 
     // make a POST request to the server to get the clients
-    fetch('/ajax/sav', {
+    fetch(url, {
         method: 'POST',
         headers: {
         'Content-Type': 'application/json'
         },
         body: JSON.stringify({
         offset: offset,
-        limit: limit
+        limit: limit,
+        search: inputValue
         })
     })
     .then(response => response.json())
@@ -100,7 +103,7 @@ function infiniteScrollHandler() {
 // function to create a new client element
 function createClientElement(client) {
   const clientElement = document.createElement('div');
-  clientElement.classList.add('row', 'border', 'border-light', 'rounded', 'bg-client', 'm-2', 'p-2');
+  clientElement.classList.add('row', 'border', 'border-light', 'rounded', 'bg-client', 'm-2', 'p-2', 'client');
   clientElement.innerHTML = `
     <h1>                    ${client.nom}</h1>
     <div>Code du contrat:    ${client.codeContrat}</div>
@@ -116,7 +119,7 @@ function createClientModal(client, clientElement) {
   clientElement.setAttribute('data-bs-target', `#clientModal-${client.codeContrat}`);
 
   const clientModal = document.createElement('div');
-  clientModal.classList.add('modal', 'fade');
+  clientModal.classList.add('modal', 'fade', 'client');
   clientModal.id = `clientModal-${client.codeContrat}`;
   clientModal.setAttribute('tabindex','-1');
   clientModal.setAttribute('aria-hidden','true');
@@ -141,7 +144,7 @@ function createClientModal(client, clientElement) {
         <div class="modal-footer">
           <div class="row w-100">
             <a href="/sav/${client.codeContrat}" class="btn btn-primary col p-2 m-2">Afficher</a>
-            <a href"#" class="btn btn-secondary col p-2 m-2" data-bs-dismiss="modal">Fermer</a>
+            <a href="#" class="btn btn-secondary col p-2 m-2" data-bs-dismiss="modal">Fermer</a>
           </div>
         </div>
       </div>
@@ -176,3 +179,25 @@ backToTopButton.addEventListener('click', backToTop)
 
 // fetch initial set of clients
 fetchClients();
+
+const form = document.querySelector('#search-form');
+form.addEventListener('submit', event => {
+  event.preventDefault();
+
+  removeElementsByClass('client');
+
+  inputValue = document.querySelector('#nom').value;
+  url = '/ajax/sav/search';
+
+  console.log(inputValue);
+
+  fetchClients();
+})
+
+
+function removeElementsByClass(className){
+  const elements = document.getElementsByClassName(className);
+  while(elements.length > 0){
+      elements[0].parentNode.removeChild(elements[0]);
+  }
+}

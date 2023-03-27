@@ -7,7 +7,14 @@
 {% endblock %}
 
 {% block search %}
-    {{ render_esi(controller('App\\Controller\\SAVSearchController::index')) }}
+    {{ form_start(searchForm, {'attr': {'class': 'row col p-2', 'id': 'search-form'}}) }}
+        <div class="col">
+            {{ form_row(searchForm.nom) }}
+        </div>
+        <div class="col">
+            {{ form_row(searchForm.submit) }}
+        </div>
+    {{ form_end(searchForm) }}
 {% endblock %}
 
 {% block list %}

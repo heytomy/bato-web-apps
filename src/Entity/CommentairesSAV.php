@@ -7,6 +7,7 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: CommentairesSAVRepository::class)]
 class CommentairesSAV
@@ -16,6 +17,13 @@ class CommentairesSAV
     #[ORM\Column(name: 'ID_Commentaire', length: 8)]
     private ?int $id = null;
 
+    #[Assert\NotBlank(message: 'Veuillez ajouter un commentaire')]
+    #[Assert\Length(
+        min: 2,
+        max: 250,
+        minMessage: 'Il faut avoir un minimum de {{ limit }} caractères',
+        maxMessage: 'Il ne faut pas passer de {{ limit }} caractères',
+    )]
     #[ORM\Column(name: 'Commentaire_SAV', type: Types::TEXT, nullable: true)]
     private ?string $commentaire_SAV = null;
 

@@ -104,7 +104,7 @@ class AppelsType extends AbstractType
                 'attr' => [
                     'placeholder' => 'Entrez votre numéro de téléphone',
                     'class' => 'form-control',
-                    'pattern' => '\d+' // Only allows digits (0-9)
+                    'pattern' => '\d+'
                 ]
             ])
             

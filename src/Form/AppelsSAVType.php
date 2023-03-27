@@ -12,11 +12,12 @@ class AppelsSAVType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
+            ->add('client')
+            ->add('contrats')
             ->add('description')
             ->add('rdvDate')
             ->add('rdvHeure')
-            ->add('contrats')
-            ->add('client')
+
         ;
     }
 

@@ -103,9 +103,11 @@ class AppelsType extends AbstractType
                 'label' => 'Numéro de téléphone',
                 'attr' => [
                     'placeholder' => 'Entrez votre numéro de téléphone',
-                    'class' => 'form-control'
+                    'class' => 'form-control',
+                    'pattern' => '\d+' // Only allows digits (0-9)
                 ]
             ])
+            
             ->add('Email', EmailType::class, [
                 'required' => true,
                 'label' => 'Adresse email',

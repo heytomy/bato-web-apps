@@ -15,9 +15,9 @@ class CommentairesSAVType extends AbstractType
     {
         $builder
             ->add('commentaire_SAV', TextareaType::class, [
-                'label' => 'Veuillez ecrire un commentaire',
+                'label' => 'Veuillez écrire un commentaire',
                 'attr' => [
-                    'placeholder'   => 'Veuillez ecrire un commentaire',
+                    'placeholder'   => 'Veuillez écrire un commentaire',
                     'class'         => 'form-control mr-sm-2',
                     'autocomplete'  =>  'off',
                     'spellcheck'    =>  'false',

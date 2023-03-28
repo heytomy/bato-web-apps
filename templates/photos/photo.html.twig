@@ -1,12 +1,12 @@
 <div id="carouselExample" class="carousel slide carousel-dark">
   <div class="carousel-inner">
     {% for photo in photos %}
-        <div class="carousel-item active" data-bs-interval="1000">
+        <div class="carousel-item active bg-client" data-bs-interval="1000">
             <img src={{photo.urlPhoto}} class="responsive" alt="..." >
             <div class="carousel-caption d-none d-md-block outsideDiv">
                 <div class="myDiv">
-                    <h1 class="myTitle">{{ photo.nom }}</h1>
-                    <button type="button" class="btn btn-outline-primary" data-bs-toggle="modal" data-bs-target="#exampleModal-{{photo.id}}">
+                    <h1 class="myTitle text-secondary">{{ photo.nom }}</h1>
+                    <button type="button" class="btn btn-outline-secondary" data-bs-toggle="modal" data-bs-target="#exampleModal-{{photo.id}}">
                         Afficher
                     </button>
                 </div>
@@ -33,12 +33,12 @@
         </div>
     {% endfor %}
   </div>
-    <button class="carousel-control-prev" type="button" data-bs-target="#carouselExample" data-bs-slide="prev">
-      <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-      <span class="visually-hidden">Previous</span>
-    </button>
-    <button class="carousel-control-next" type="button" data-bs-target="#carouselExample" data-bs-slide="next">
-      <span class="carousel-control-next-icon" aria-hidden="true"></span>
-      <span class="visually-hidden">Next</span>
-    </button>
+        <button class="carousel-control-prev" type="button" data-bs-target="#carouselExample" data-bs-slide="prev">
+            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+            <span class="visually-hidden">Previous</span>
+        </button>
+        <button class="carousel-control-next" type="button" data-bs-target="#carouselExample" data-bs-slide="next">
+            <span class="carousel-control-next-icon" aria-hidden="true"></span>
+            <span class="visually-hidden">Next</span>
+        </button>
 </div>

@@ -27,13 +27,17 @@
         </h3>
         
         <div class="row border border-light rounded m-2 p-2">
-            {% include 'photos/photo.html.twig' %}
-        
+            {% if photos %}
+                {% include 'photos/photo.html.twig' %}
+            {% else %}
+                
+            {% endif %}
+        </div>
 
         <h3 class="row border border-light rounded m-2 p-2">
             <strong>Commentaires :</strong>
         </h3>
-
+        
         <div class="row border border-light rounded m-2 p-2">
             {% include 'commentaire/comment.html.twig' %}
         </div>

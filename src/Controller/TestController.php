@@ -20,7 +20,7 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 class TestController extends AbstractController
 {
     #[IsGranted('ROLE_ADMIN')]
-    #[Route('/test/{id}', name: 'app_test_1')]
+    #[Route('/test/{id}', name: 'app_test_1', methods: ['POST', 'GET'])]
     public function user(AppsUtilisateur $user, RolesRepository $rolesRepository, ContratRepository $contratRepository, EntityManagerInterface $em): Response
     {
         $connection = $em->getConnection();
@@ -31,12 +31,6 @@ class TestController extends AbstractController
         $test2 = $stmt->fetchAssociative();
         $clients = $contratRepository->findByLimit();
         $clients = $contratRepository->collectionToArray($clients);
-
-        $filter = 'ric';
-
-        $clients = $contratRepository->findBySAVSearchQuery($filter);
-        $data = $contratRepository->collectionToArray($clients);
-        dd($data);
 
         // $test = $contratRepository->find("00001");
         // dd($test);

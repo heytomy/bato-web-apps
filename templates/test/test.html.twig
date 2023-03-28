@@ -4,7 +4,10 @@
 {% block body %}
 <h1>
     <ul>
-    {{ render(controller('App\\Controller\\SAVSearchController::index')) }}
+    {% for i in 0..2 %}
+      {{ render(controller('App\\Controller\\SAVSearchController::index')) }}
+    {% endfor %}
+    
         <p><a href="#" class="text-primary ">Primary link</a></p>
         <p><a href="#" class="text-secondary">Secondary link</a></p>
         <p><a href="#" class="text-success">Success link</a></p>

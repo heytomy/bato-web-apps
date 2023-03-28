@@ -44,7 +44,7 @@ class SAVSearchType extends AbstractType
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults([
-            'data_class' => savSearch::class,
+            'data_class' => SAVSearch::class,
             'method' => 'get', // lors de la soumission du formulaire, les paramètres transiteront dans l'url. Utile pour partager la recherche par exemple
             'csrf_protection' => false,
         ]);

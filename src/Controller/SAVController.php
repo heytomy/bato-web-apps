@@ -2,32 +2,42 @@
 
 namespace App\Controller;
 
-use App\Entity\CommentairesSAV;
+use DateTime;
 use App\Entity\Contrat;
-use App\Entity\RepCommentairesSAV;
+use App\Entity\SAVSearch;
+use App\Form\SAVSearchType;
+use App\Entity\CommentairesSAV;
 use App\Form\CommentairesSAVType;
+use App\Entity\RepCommentairesSAV;
 use App\Form\RepCommentairesSAVType;
-use App\Repository\CommentairesSAVRepository;
 use App\Repository\ContratRepository;
 use App\Repository\PhotosSAVRepository;
-use App\Repository\RepCommentairesSAVRepository;
-use DateTime;
 use Doctrine\ORM\EntityManagerInterface;
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use App\Repository\CommentairesSAVRepository;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use App\Repository\RepCommentairesSAVRepository;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
 #[Route('/sav')]
 #[IsGranted('ROLE_GESTION')]
 class SAVController extends AbstractController
 {
     #[Route('/', name: 'app_sav')]
-    public function index(ContratRepository $contratRepository): Response
-    {          
+    public function index(Request $request, ContratRepository $contratRepository): Response
+    {
+        $savSearch = new SAVSearch;
+        $searchForm = $this->createForm(SAVSearchType::class, $savSearch);
+
+        $searchForm->handleRequest($request);
+        if ($searchForm->isSubmitted() && $searchForm->isValid()) {
+            dd('Hi');
+        }
         return $this->render('sav/index.html.twig', [
             'current_page' => 'app_sav',
+            'searchForm' => $searchForm->createView(),
         ]);
     }
 

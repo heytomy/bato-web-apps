@@ -6,6 +6,15 @@ body {
   padding-top: 100px;
 }
 
+// -----------------------------CAROUSEL-----------------------------------------
+
+.carousel-item img {
+  display: block;
+  margin: 0 auto;
+  max-height: 500px;
+  width: auto;
+  
+}
 // -----------------------------BACKGROUNDS-----------------------------------------
 
 .bg-client {

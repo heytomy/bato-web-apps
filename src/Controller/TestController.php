@@ -20,7 +20,7 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 class TestController extends AbstractController
 {
     #[IsGranted('ROLE_ADMIN')]
-    #[Route('/test/{id}', name: 'app_test_1')]
+    #[Route('/test/{id}', name: 'app_test_1', methods: ['POST', 'GET'])]
     public function user(AppsUtilisateur $user, RolesRepository $rolesRepository, ContratRepository $contratRepository, EntityManagerInterface $em): Response
     {
         $connection = $em->getConnection();
@@ -29,7 +29,8 @@ class TestController extends AbstractController
         $stmt = $connection->executeQuery($sql, ['id' => $user->getId()]);
 
         $test2 = $stmt->fetchAssociative();
-        dd($contratRepository->findAll());
+        $clients = $contratRepository->findByLimit();
+        $clients = $contratRepository->collectionToArray($clients);
 
         // $test = $contratRepository->find("00001");
         // dd($test);
@@ -37,7 +38,7 @@ class TestController extends AbstractController
         return $this->render('test/test.html.twig', [
             'controller_name' => 'TestController',
             'user' => $user,
-            'clients' => $contratRepository->findByLimitArray(0,1000),
+            'clients' => $contratRepository->findByLimit(0,1000),
             'total' => $contratRepository->getCountClients(),
         ]);
     }

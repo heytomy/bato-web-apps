@@ -45,8 +45,8 @@ class AppelsSAVType extends AbstractType
             ->add('Adr', TextType::class, [
                 'mapped' => false,
                 'label' => 'Adresse',
+                'empty_data' => null,
                 'attr' => [
-                    'readonly' => true,
                     'placeholder' => 'Adresse du client',
                     'class' => 'form-control'
                 ]
@@ -54,8 +54,8 @@ class AppelsSAVType extends AbstractType
             ->add('CP', TextType::class, [
                 'mapped' => false,
                 'label' => 'Code postal',
+                'empty_data' => null,
                 'attr' => [
-                    'readonly' => true,
                     'placeholder' => 'Code postal',
                     'class' => 'form-control'
                 ]
@@ -63,8 +63,8 @@ class AppelsSAVType extends AbstractType
             ->add('Ville', TextType::class, [
                 'mapped' => false,
                 'label' => 'Ville',
+                'empty_data' => null,
                 'attr' => [
-                    'readonly' => true,
                     'fieldset' => false,
                     'placeholder' => 'Ville',
                     'class' => 'form-control'
@@ -73,21 +73,22 @@ class AppelsSAVType extends AbstractType
             ->add('Tel', TelType::class, [
                 'mapped' => false,
                 'label' => 'Numéro de téléphone',
+                'empty_data' => null,
                 'attr' => [
-                    'readonly' => true,
                     'placeholder' => 'Numéro de téléphone',
                     'class' => 'form-control',
-                    'pattern' => '\d+'
+                    'pattern' => '\d+',
                 ]
             ])
             
             ->add('Email', EmailType::class, [
                 'mapped' => false,
-                'required' => false,
                 'label' => 'Adresse email',
+                'empty_data' => null,
                 'attr' => [
                     'placeholder' => 'Entrez votre adresse email',
-                    'class' => 'form-control'
+                    'class' => 'form-control',
+                    'disabled' => empty($options['data']) ? false : true,
                 ]
             ])
             ->add('description', TinymceType::class, [

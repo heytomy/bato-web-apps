@@ -88,7 +88,7 @@ class AppelsSAVType extends AbstractType
                 'attr' => [
                     'placeholder' => 'Entrez votre adresse email',
                     'class' => 'form-control',
-                    'disabled' => empty($options['data']) ? false : true,
+                    // 'disabled' => empty($options['data']) ? false : true,
                 ]
             ])
             ->add('description', TinymceType::class, [

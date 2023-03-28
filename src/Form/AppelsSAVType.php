@@ -42,19 +42,8 @@ class AppelsSAVType extends AbstractType
             'attr' => [
                 'class' => 'form-select'
             ]])
-            ->add('Nom', TextType::class, [
-                'mapped' => false,
-                'required' => true,
-                'label' => 'Nom',
-                'attr' => [
-                    'class' => 'form-control',
-                    'readonly' => true,
-                    'placeholder' => 'Nom du client',
-                ]
-            ])
             ->add('Adr', TextType::class, [
                 'mapped' => false,
-                'required' => true,
                 'label' => 'Adresse',
                 'attr' => [
                     'readonly' => true,
@@ -64,7 +53,6 @@ class AppelsSAVType extends AbstractType
             ])
             ->add('CP', TextType::class, [
                 'mapped' => false,
-                'required' => true,
                 'label' => 'Code postal',
                 'attr' => [
                     'readonly' => true,
@@ -74,7 +62,6 @@ class AppelsSAVType extends AbstractType
             ])
             ->add('Ville', TextType::class, [
                 'mapped' => false,
-                'required' => true,
                 'label' => 'Ville',
                 'attr' => [
                     'readonly' => true,
@@ -85,7 +72,6 @@ class AppelsSAVType extends AbstractType
             ])
             ->add('Tel', TelType::class, [
                 'mapped' => false,
-                'required' => true,
                 'label' => 'Numéro de téléphone',
                 'attr' => [
                     'readonly' => true,

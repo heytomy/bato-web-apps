@@ -3,12 +3,14 @@
 namespace App\Controller;
 
 use App\Entity\AppelsSAV;
+use App\Entity\ClientDef;
 use App\Form\AppelsSAVType;
 use App\Repository\AppelsSAVRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
@@ -46,5 +48,20 @@ class AppelsSAVController extends AbstractController
         return $this->render('appels_sav/new.html.twig', [
             'form' => $form->createView(),
         ]);
+    }
+
+    #[IsGranted('ROLE_ADMIN')]
+    #[Route('/get-client-info/{id}', name:'get_client_info', methods:'GET')]
+    public function getClientInfo(ClientDef $client): JsonResponse
+    {
+        $data = [
+            'adr' => $client->getAdr(),
+            'cp' => $client->getCp(),
+            'ville' => $client->getVille(),
+            'tel' => $client->getTel(),
+            'email' => $client->getEMail(),
+        ];
+
+        return new JsonResponse($data);
     }
 }

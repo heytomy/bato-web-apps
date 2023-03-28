@@ -3,16 +3,18 @@
 {% block title %}Hello AppelsController!
 {% endblock %}
 
+{% block new_button %}
+	<a class="btn btn-primary" href="{{ path('app_appels_new') }}">
+		<i class="fa-solid fa-chevron-right"></i>
+		Nouvel Appel
+	</a>
+{% endblock %}
+
 {% block list %}
 <div class="container mb-5">
-	<a class="btn btn-primary"
-		href="{% block new_button %}{{ path('app_appels_new') }}{% endblock %}">
-			<i class="fa-solid fa-chevron-right"></i>
-			Nouvel Appel
-		</a>
+
 	</div>
 	<h1>Liste des Appels</h1>
-
 	<div class="border rounded container bg-light p-2">
 		{% for appel in appels %}
 			<div class="row border border-light rounded bg-client m-2 p-2">

@@ -24,7 +24,7 @@ class AppelsSAVType extends AbstractType
         $builder
             ->add('client', EntityType::class,[
             'class' => ClientDef::class,
-            'choices' => $this->contrats->findByCodeClient('contrats'),
+            'choices' => $this->contrats->findAll(),
             'label' => 'Client SAV',
             'choice_label' => function(ClientDef $codeClient){
                 return $codeClient->getContrats();

@@ -1,90 +1,10 @@
 {% extends '_inc/listPage.html.twig' %}
 
-{% block back_button %}{{ path('app_appels') }}{% endblock %}
+{% block back_button %}{{ path('app_appels_sav') }}{% endblock %}
 
 {% block list %}
-	{{ form_start(form, {'attr': {'class': 'form'}}) }}
+	{{ form(form) }}
 
-	<div class="container mb-5">
-		<div class="row p-5 container">
-		<div class="container mb-3">
-			<div class="form-group form-check">
-				{{ form_widget(form.NouveauClient, {'attr': {'class': 'form-check-input'}}) }}
-				{{ form_label(form.NouveauClient, null, {'label_attr': {'class': 'form-check-label'}}) }}
-			</div>
-
-			<div class="form-group form-check">
-				{{ form_widget(form.Client, {'attr': {'class': 'form-check-input'}}) }}
-				{{ form_label(form.Client, null, {'label_attr': {'class': 'form-check-label'}}) }}
-
-			</div>
-
-			<div class="form-group form-check">
-				{{ form_widget(form.ClientSAV, {'attr': {'class': 'form-check-input'}}) }}
-				{{ form_label(form.ClientSAV, null, {'label_attr': {'class': 'form-check-label'}}) }}
-			</div>
-		</div>
-			<div class="form-group">
-				{{ form_label(form.ID_Utilisateur, 'Technicien') }}
-				{{ form_widget(form.ID_Utilisateur, {'attr': {'class': 'form-select', 'aria-label': 'Choisir un technicien'}}) }}
-			
-			</div>
-
-			<div class="form-group">
-				{{ form_label(form.Nom, null, {'label_attr': {'class': 'control-label'}}) }}
-				{{ form_widget(form.Nom, {'attr': {'class': 'form-control'}}) }}
-			</div>
-
-			<div class="form-group">
-				{{ form_label(form.Adr, null, {'label_attr': {'class': 'control-label'}}) }}
-				{{ form_widget(form.Adr, {'attr': {'class': 'form-control'}}) }}
-			</div>
-
-			<div class="form-group">
-				{{ form_label(form.CP, null, {'label_attr': {'class': 'control-label'}}) }}
-				{{ form_widget(form.CP, {'attr': {'class': 'form-control'}}) }}
-			</div>
-
-			<div class="form-group">
-				{{ form_label(form.Ville, null, {'label_attr': {'class': 'control-label'}}) }}
-				{{ form_widget(form.Ville, {'attr': {'class': 'form-control'}}) }}
-			</div>
-
-			<div class="form-group">
-				{{ form_label(form.Tel, null, {'label_attr': {'class': 'control-label'}}) }}
-				{{ form_widget(form.Tel, {'attr': {'class': 'form-control'}}) }}
-			</div>
-
-			<div class="form-group">
-				{{ form_label(form.Email, null, {'label_attr': {'class': 'control-label'}}) }}
-				{{ form_widget(form.Email, {'attr': {'class': 'form-control'}}) }}
-			</div>
-
-			<div class="form-group">
-				{{ form_label(form.description, null, {'label_attr': {'class': 'control-label'}}) }}
-				{{ form_widget(form.description, {'attr': {'class': 'form-control'}}) }}
-			</div>
-
-			<div class="form-group p-2 col">
-				{{ form_label(form.rdvDate) }}
-				{{ form_widget(form.rdvDate) }}
-
-			</div>
-
-			<div class="form-group p-2 col">
-				{{ form_label(form.rdvHeure) }}
-				{{ form_widget(form.rdvHeure) }}
-			</div>
-
-			<div class="form-group form-check">
-				{{ form_widget(form.isUrgent, {'attr': {'class': 'form-check-input'}}) }}
-				{{ form_label(form.isUrgent, null, {'label_attr': {'class': 'form-check-label'}}) }}
-			</div>
-
-			<button type="submit" class="btn btn-primary">Submit</button>
-		</div>
-	</div>
-	{{ form_end(form) }}
 {% endblock %}
 
 {% block javascripts %}

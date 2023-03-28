@@ -38,20 +38,7 @@ class ClientDefRepository extends ServiceEntityRepository
             $this->getEntityManager()->flush();
         }
     }
-
-    public function findByCodeClient($codeClient)
-    {
-    $queryBuilder = $this->createQueryBuilder('c');
     
-    $queryBuilder->select('c.code as codeContrat', 'c.note as noteContrat', 'cd.codeClient', 'cd.nom', 'cd.adr', 'cd.cp', 'cd.ville', 'cd.tel', 'cd.email')
-                 ->join('c.clientDef', 'cd')
-                 ->where('cd.codeClient = :codeClient')
-                 ->setParameter('codeClient', $codeClient);
-                 
-    return $queryBuilder->getQuery()->getResult();
-    }
-
-
 //    /**
 //     * @return ClientDef[] Returns an array of ClientDef objects
 //     */

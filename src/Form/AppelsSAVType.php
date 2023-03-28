@@ -6,6 +6,7 @@ use App\Entity\AppelsSAV;
 use App\Entity\ClientDef;
 use App\Repository\ClientDefRepository;
 use Symfony\Component\Form\AbstractType;
+use Eckinox\TinymceBundle\Form\Type\TinymceType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\OptionsResolver\OptionsResolver;
@@ -46,8 +47,9 @@ class AppelsSAVType extends AbstractType
                 'required' => true,
                 'label' => 'Nom',
                 'attr' => [
-                    'placeholder' => 'Entrez le nom du client',
-                    'class' => 'form-control'
+                    'class' => 'form-control',
+                    'readonly' => true,
+                    'placeholder' => 'Nom du client',
                 ]
             ])
             ->add('Adr', TextType::class, [
@@ -55,7 +57,8 @@ class AppelsSAVType extends AbstractType
                 'required' => true,
                 'label' => 'Adresse',
                 'attr' => [
-                    'placeholder' => 'Entrez l\'adresse du client',
+                    'readonly' => true,
+                    'placeholder' => 'Adresse du client',
                     'class' => 'form-control'
                 ]
             ])
@@ -64,7 +67,8 @@ class AppelsSAVType extends AbstractType
                 'required' => true,
                 'label' => 'Code postal',
                 'attr' => [
-                    'placeholder' => 'Entrez le code postal',
+                    'readonly' => true,
+                    'placeholder' => 'Code postal',
                     'class' => 'form-control'
                 ]
             ])
@@ -73,7 +77,9 @@ class AppelsSAVType extends AbstractType
                 'required' => true,
                 'label' => 'Ville',
                 'attr' => [
-                    'placeholder' => 'Entrez la ville',
+                    'readonly' => true,
+                    'fieldset' => false,
+                    'placeholder' => 'Ville',
                     'class' => 'form-control'
                 ]
             ])
@@ -82,7 +88,8 @@ class AppelsSAVType extends AbstractType
                 'required' => true,
                 'label' => 'Numéro de téléphone',
                 'attr' => [
-                    'placeholder' => 'Entrez votre numéro de téléphone',
+                    'readonly' => true,
+                    'placeholder' => 'Numéro de téléphone',
                     'class' => 'form-control',
                     'pattern' => '\d+'
                 ]
@@ -97,12 +104,12 @@ class AppelsSAVType extends AbstractType
                     'class' => 'form-control'
                 ]
             ])
-            ->add('description', TextareaType::class, [
+            ->add('description', TinymceType::class, [
                 'required' => true,
                 'label' => 'Description',
                 'attr' => [
-                    'placeholder' => 'Décrivez le problème',
-                    'class' => 'form-control'
+                    "toolbar" => "bold italic underline | bullist numlist",
+                    'placeholder' => 'Décrivez le problème rencontré par le client',
                 ]
             ])
             ->add('rdvDate', DateType::class, [

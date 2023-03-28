@@ -15,7 +15,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 #[IsGranted('ROLE_GESTION')]
 class SAVSearchController extends AbstractController
 {
-    #[Route('/sav/search', name: 'app_sav_search', methods: ['GET'])]
+    #[Route('/sav/search', name: 'app_sav_search', methods: ['GET', 'POST'])]
     public function index(Request $request, ContratRepository $contratRepository): Response
     {
         $savSearch = new SAVSearch;

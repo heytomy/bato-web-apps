@@ -56,8 +56,9 @@ class AppelsSAVController extends AbstractController
     public function getClientInfo(ClientDef $client, Contrat $contrat): JsonResponse
     {
         $data = [
-            'codeclient' => $contrat->getCodeClient(),
-            'codecontrat' => $client->getContrats(),
+            'codeclient' => $contrat->getCodeClient()->getId(),
+            'codecontrat' => $client->getContrats()[0]->getId(),
+            'nom' => $client->getNom(),
             'adr' => $client->getAdr(),
             'cp' => $client->getCp(),
             'ville' => $client->getVille(),

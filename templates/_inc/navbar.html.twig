@@ -31,7 +31,7 @@
                             Dashboard
                     </a>
                 </li>
-                <li class="p-2 nav-item">
+                <li class="p-2 nav-item {% if current_page is defined and current_page == 'app_sav' %}active text-primary{% endif %}">
                     <a class="nav-link {% if current_page is defined and current_page == 'app_sav' %}text-primary{% endif %}" 
                         href="{{ path('app_sav') }}">
                             <i class="fa-solid fa-headset"></i>
@@ -44,8 +44,8 @@
                          Calendrier
                     </a>
                 </li>
-                <li class="p-2 nav-item">
-                    <a class="nav-link text-dark" 
+                <li class="p-2 nav-item {% if current_page is defined and current_page == 'app_appels' %}active text-primary{% endif %}">
+                    <a class="nav-link {% if current_page is defined and current_page == 'app_appels' %}text-primary{% endif %}" 
                         href="{{ path('app_appels') }}">
                         <i class="fa-solid fa-phone"></i>
                          Appels

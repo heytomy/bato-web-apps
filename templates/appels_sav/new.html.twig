@@ -1,0 +1,11 @@
+{% extends '_inc/listPage.html.twig' %}
+
+{% block back_button %}{{ path('app_appels_sav') }}{% endblock %}
+
+{% block list %}
+	{{ form(form) }}
+{% endblock %}
+
+{% block javascripts %}
+	{{ encore_entry_script_tags('app') }}
+{% endblock %}

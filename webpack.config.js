@@ -22,8 +22,8 @@ Encore
      */
     .addEntry('app',            './assets/app.js')
     .addEntry('infiniteScroll', './assets/infiniteScroll.js')
+    .addEntry('appelsSAV', './assets/appelsSAVautocomplete.js')
     // .addEntry('replyForm',      './assets/replyForm.js')
-
 
     // enables the Symfony UX Stimulus bridge (used in assets/bootstrap.js)
     .enableStimulusBridge('./assets/controllers.json')

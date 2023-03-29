@@ -4,6 +4,7 @@ namespace App\Controller;
 
 use App\Entity\AppelsSAV;
 use App\Entity\ClientDef;
+use App\Entity\Contrat;
 use App\Form\AppelsSAVType;
 use App\Repository\AppelsSAVRepository;
 use Doctrine\ORM\EntityManagerInterface;
@@ -52,9 +53,11 @@ class AppelsSAVController extends AbstractController
 
     #[IsGranted('ROLE_ADMIN')]
     #[Route('/get-client-info/{id}', name:'get_client_info', methods:'GET')]
-    public function getClientInfo(ClientDef $client): JsonResponse
+    public function getClientInfo(ClientDef $client, Contrat $contrat): JsonResponse
     {
         $data = [
+            'codeclient' => $contrat->getCodeClient(),
+            'codecontrat' => $client->getContrats(),
             'adr' => $client->getAdr(),
             'cp' => $client->getCp(),
             'ville' => $client->getVille(),

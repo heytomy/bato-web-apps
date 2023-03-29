@@ -23,15 +23,6 @@ class TestController extends AbstractController
     #[Route('/test/{id}', name: 'app_test_1', methods: ['POST', 'GET'])]
     public function user(AppsUtilisateur $user, RolesRepository $rolesRepository, ContratRepository $contratRepository, EntityManagerInterface $em): Response
     {
-        $connection = $em->getConnection();
-
-        $sql = "SELECT * FROM Apps_Utilisateur WHERE id = :id";
-        $stmt = $connection->executeQuery($sql, ['id' => $user->getId()]);
-
-        $test2 = $stmt->fetchAssociative();
-        $clients = $contratRepository->findByLimit();
-        $clients = $contratRepository->collectionToArray($clients);
-
         // $test = $contratRepository->find("00001");
         // dd($test);
         // $this->denyAccessUnlessGranted('ROLE_ADMIN');

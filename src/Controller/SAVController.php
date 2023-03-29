@@ -33,7 +33,8 @@ class SAVController extends AbstractController
 
         $searchForm->handleRequest($request);
         if ($searchForm->isSubmitted() && $searchForm->isValid()) {
-            dd('Hi');
+            // error message
+            dd('There\'s a problem with the JS');
         }
         return $this->render('sav/index.html.twig', [
             'current_page' => 'app_sav',

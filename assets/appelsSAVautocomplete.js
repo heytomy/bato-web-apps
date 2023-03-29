@@ -10,7 +10,8 @@ clientField.addEventListener('change', function() {
         url: '/get-client-info/' + clientId,
         method: 'GET',
         success: function(response) {
-            // Update the form fields with the client's information
+            $('#appels_sav_CodeContrat').val(response.codecontrat);
+            $('#appels_sav_CodeClient').val(response.codeclient);
             $('#appels_sav_Adr').val(response.adr);
             $('#appels_sav_CP').val(response.cp);
             $('#appels_sav_Ville').val(response.ville);

@@ -40,10 +40,14 @@ class ClientDef
     #[ORM\OneToMany(mappedBy: 'client', targetEntity: AppelsSAV::class)]
     private Collection $appelsSAVs;
 
+    #[ORM\OneToMany(mappedBy: 'CodeClient', targetEntity: Appels::class)]
+    private Collection $appels;
+
     public function __construct()
     {
         $this->contrats = new ArrayCollection();
         $this->appelsSAVs = new ArrayCollection();
+        $this->appels = new ArrayCollection();
     }
 
     public function getId(): ?string
@@ -186,5 +190,35 @@ class ClientDef
     public function __toString()
     {
         return $this->getNom();
+    }
+
+    /**
+     * @return Collection<int, Appels>
+     */
+    public function getAppels(): Collection
+    {
+        return $this->appels;
+    }
+
+    public function addAppel(Appels $appel): self
+    {
+        if (!$this->appels->contains($appel)) {
+            $this->appels->add($appel);
+            $appel->setCodeClient($this);
+        }
+
+        return $this;
+    }
+
+    public function removeAppel(Appels $appel): self
+    {
+        if ($this->appels->removeElement($appel)) {
+            // set the owning side to null (unless already changed)
+            if ($appel->getCodeClient() === $this) {
+                $appel->setCodeClient(null);
+            }
+        }
+
+        return $this;
     }
 }

@@ -51,9 +51,13 @@ class Appels
     #[ORM\OneToMany(mappedBy: 'AppelsUrgents', targetEntity: TicketUrgents::class)]
     private Collection $ticketUrgents;
 
-     #[ORM\ManyToOne(targetEntity: DefAppsUtilisateur::class)]
-     #[ORM\JoinColumn(name:"ID_Utilisateur", referencedColumnName:"ID_Utilisateur", nullable:false)]
+    #[ORM\ManyToOne(targetEntity: DefAppsUtilisateur::class)]
+    #[ORM\JoinColumn(name:"ID_Utilisateur", referencedColumnName:"ID_Utilisateur", nullable:false)]
     private $ID_Utilisateur;
+
+    #[ORM\ManyToOne(inversedBy: 'appels')]
+    #[ORM\JoinColumn(name:"CodeClient", referencedColumnName:"Code", nullable:true)]
+    private ?ClientDef $CodeClient = null;
 
     public function __construct()
     {
@@ -224,6 +228,18 @@ class Appels
                 $ticketUrgent->setAppelsUrgents(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getCodeClient(): ?ClientDef
+    {
+        return $this->CodeClient;
+    }
+
+    public function setCodeClient(?ClientDef $CodeClient): self
+    {
+        $this->CodeClient = $CodeClient;
 
         return $this;
     }

@@ -5,6 +5,7 @@ namespace App\Form;
 use App\Entity\AppelsSAV;
 use App\Entity\ClientDef;
 use App\Repository\ClientDefRepository;
+use Doctrine\ORM\Mapping\Id;
 use Symfony\Component\Form\AbstractType;
 use Eckinox\TinymceBundle\Form\Type\TinymceType;
 use Symfony\Component\Form\FormBuilderInterface;
@@ -16,6 +17,7 @@ use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\Extension\Core\Type\TimeType;
 use Symfony\Component\Form\Extension\Core\Type\EmailType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
+use Symfony\Component\Form\Extension\Core\Type\IntegerType;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 
@@ -37,13 +39,30 @@ class AppelsSAVType extends AbstractType
             'label' => 'Client SAV',
             'choice_label' => function(ClientDef $nom){
                 return $nom->getNom();
+                // $nom->getContrats()[0]->getId();
             },
             'placeholder' => 'Choisissez le client',
             'attr' => [
                 'class' => 'form-select'
             ]])
-            ->add('Adr', TextType::class, [
+
+            ->add('CodeContrat', TextType::class, [
                 'mapped' => false,
+                'label' => 'Code Contrat',
+                'attr' => [
+                    'placeholder' => 'Code Contrat',
+                    'class' => 'form-control'
+                ]
+            ])
+            ->add('CodeClient', TextType::class, [
+                'mapped' => false,
+                'label' => 'Code Client',
+                'attr' => [
+                    'placeholder' => 'Code Client',
+                    'class' => 'form-control'
+                ]
+            ])
+            ->add('Adr', TextType::class, [
                 'label' => 'Adresse',
                 'empty_data' => null,
                 'attr' => [
@@ -52,7 +71,6 @@ class AppelsSAVType extends AbstractType
                 ]
             ])
             ->add('CP', TextType::class, [
-                'mapped' => false,
                 'label' => 'Code postal',
                 'empty_data' => null,
                 'attr' => [
@@ -61,7 +79,6 @@ class AppelsSAVType extends AbstractType
                 ]
             ])
             ->add('Ville', TextType::class, [
-                'mapped' => false,
                 'label' => 'Ville',
                 'empty_data' => null,
                 'attr' => [
@@ -71,7 +88,6 @@ class AppelsSAVType extends AbstractType
                 ]
             ])
             ->add('Tel', TelType::class, [
-                'mapped' => false,
                 'label' => 'Numéro de téléphone',
                 'empty_data' => null,
                 'attr' => [
@@ -82,7 +98,6 @@ class AppelsSAVType extends AbstractType
             ])
             
             ->add('Email', EmailType::class, [
-                'mapped' => false,
                 'label' => 'Adresse email',
                 'empty_data' => null,
                 'attr' => [

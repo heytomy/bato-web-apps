@@ -51,8 +51,16 @@ class AppelsSAVType extends AbstractType
                 'choices' => $this->contrats->findAll(),
                 'label' => 'Client SAV',
                 'choice_label' => function (ClientDef $nom) {
-                    return $nom->getNom();
+                    $contrats = $nom->getContrats();
+                    $contrat = $contrats[0] ?? null; // Get the first contrat, or null if there are no contrats
+                    if ($contrat === null) {
+                        // Debug output
+                        dd($nom); // dump the client object
+                        dd($contrats); // dump the contrats array
+                    }
+                    return $contrat ? $contrat->getId() : '';
                 },
+                                
                 'placeholder' => 'Choisissez le client',
                 'attr' => [
                     'class' => 'form-select',

@@ -104,11 +104,12 @@ class AppelsType extends AbstractType
                 'label' => 'Date du rendez-vous',
                 'attr' => [
                     'placeholder' => 'Entrez la date du rendez-vous',
-                    'html5' => false,
+                    'class' => 'form-control date datepicker input-group-text d-block',
                 ],
+                'html5' => false,
                 'years' => range(date('Y'), date('Y') + 5),
                 'widget' => 'single_text',
-            ])
+            ])  
             ->add('rdvHeure', TimeType::class, [
                 'required' => true,
                 'label' => 'Heure du rendez-vous',

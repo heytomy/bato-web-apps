@@ -39,6 +39,17 @@ class ClientDefRepository extends ServiceEntityRepository
         }
     }
     
+    public function findByClientWithContrats(): array
+    {
+        return $this->createQueryBuilder('c')
+            ->join('c.contrats', 'contrat')
+            ->andWhere('contrat.id is not null')
+            ->orderBy('contrat.id', 'ASC')
+            ->getQuery()
+            ->getResult();
+    }
+    
+
 //    /**
 //     * @return ClientDef[] Returns an array of ClientDef objects
 //     */

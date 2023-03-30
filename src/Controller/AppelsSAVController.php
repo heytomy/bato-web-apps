@@ -3,13 +3,12 @@
 namespace App\Controller;
 
 use App\Entity\AppelsSAV;
-use App\Entity\ClientDef;
-use App\Entity\Contrat;
-use App\Entity\TicketUrgents;
 use App\Form\AppelsSAVType;
+use App\Entity\TicketUrgents;
 use App\Repository\AppelsSAVRepository;
-use App\Repository\TicketUrgentsRepository;
+use App\Repository\ClientDefRepository;
 use Doctrine\ORM\EntityManagerInterface;
+use App\Repository\TicketUrgentsRepository;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -65,11 +64,18 @@ class AppelsSAVController extends AbstractController
 
     #[IsGranted('ROLE_ADMIN')]
     #[Route('/get-client-info/{id}', name:'get_client_info', methods:'GET')]
-    public function getClientInfo(ClientDef $client, Contrat $contrat): JsonResponse
+    public function getClientInfo(ClientDefRepository $clientDefRepository, int $id): JsonResponse
     {
+        // Get the selected ClientDef object
+        $client = $clientDefRepository->find($id);
+    
+        // Get the first Contrat object associated with the selected client
+        $contrat = $client->getContrats()[0];
+    
+        // Build the JSON response data array
         $data = [
             'codeclient' => $contrat->getCodeClient()->getId(),
-            'codecontrat' => $client->getContrats()[0]->getId(),
+            'codecontrat' => $contrat->getId(),
             'nom' => $client->getNom(),
             'adr' => $client->getAdr(),
             'cp' => $client->getCp(),
@@ -77,7 +83,9 @@ class AppelsSAVController extends AbstractController
             'tel' => $client->getTel(),
             'email' => $client->getEMail(),
         ];
-
+    
+        // Return the JSON response
         return new JsonResponse($data);
     }
+    
 }

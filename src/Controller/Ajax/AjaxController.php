@@ -2,6 +2,9 @@
 
 namespace App\Controller\Ajax;
 
+use DateTime;
+use App\Entity\Calendrier;
+use App\Repository\CalendrierRepository;
 use App\Repository\ContratRepository;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -11,7 +14,11 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
 class AjaxController extends AbstractController
 {
-    
+    /** 
+     * Cette fonction reçoit une requette AJAX du fichier: assets/infiniteScroll.js
+     * Elle cherche un certain nombre des clients selon les 2 variable $limit et $offset
+     * Enfin, elle envoit ces clients comme une réponse JSON
+     */
     #[Route('/ajax/sav', name: 'app_ajax_sav' , methods:['POST'])]
     public function getClients(Request $request, ContratRepository $contratRepository)
     {
@@ -29,6 +36,11 @@ class AjaxController extends AbstractController
         ]);
     }
 
+    /** 
+     * Cette fonction reçoit une requette AJAX du fichier: assets/infiniteScroll.js
+     * Elle cherche les clients par le nom envoyée par l'ajax $nom
+     * Enfin, elle envoit ces clients comme une réponse JSON
+     */
     #[Route('/ajax/sav/search', name: 'app_ajax_sav_search', methods: ['POST'])]
     public function search(Request $request, ContratRepository $contratRepository): JsonResponse
     {
@@ -42,6 +54,47 @@ class AjaxController extends AbstractController
             'clients' => $clients,
             'total' => null,
         ]);
+    }
+
+    #[Route('/ajax/calendrier/{id}/edit', name: 'app_ajax_calendrier_edit', methods: ['PUT'])]
+    public function majEvent(?Calendrier $booking, Request $request, CalendrierRepository $calendrierRepository)
+    {  
+        // On récupère les données
+        $data = json_decode($request->getContent());
+
+        if(
+            isset($data->titre) && !empty($data->titre) &&
+            isset($data->dateDebut) && !empty($data->dateDebut)
+        ){
+            // Les données sont complètes
+            // On initialise un code
+            $code = 200;
+            // On vérifie si l'id existe
+            if(!$booking){
+                // On instancie un rendez-vous
+                $booking = new Calendrier;
+
+                // On change le code
+                $code = 201;
+            }
+
+            // On hydrate l'objet avec les données
+            $booking
+                ->setTitre($data->titre)
+                ->setDateDebut(new DateTime($data->dateDebut))
+                ;
+            // On met la dateFin à null s'il n'y a pas de donnée, sinon on insert la donnée dateFin
+            if(isset($data->dateFin) && !empty($data->dateFin)){
+                $booking->setDateFin(new DateTime($data->dateFin));
+            }
+            $calendrierRepository->save($booking, true);
+
+            // On rerourne le code
+            return new Response('Ok', $code);
+        } else {
+            // Les données sont incomplètes
+            return new Response('Données incomplète', 404);
+        }
     }
 }
 

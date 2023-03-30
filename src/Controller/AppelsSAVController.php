@@ -66,16 +66,11 @@ class AppelsSAVController extends AbstractController
     #[Route('/get-client-info/{id}', name:'get_client_info', methods:'GET')]
     public function getClientInfo(ClientDefRepository $clientDefRepository, int $id): JsonResponse
     {
-        // Get the selected ClientDef object
         $client = $clientDefRepository->find($id);
     
-        // Get the first Contrat object associated with the selected client
-        $contrat = $client->getContrats()[0];
-    
-        // Build the JSON response data array
         $data = [
-            'codeclient' => $contrat->getCodeClient()->getId(),
-            'codecontrat' => $contrat->getId(),
+            'codeclient' => $client->getId(),
+            'codecontrat' => $client->getContrats()[0]->getId(),
             'nom' => $client->getNom(),
             'adr' => $client->getAdr(),
             'cp' => $client->getCp(),

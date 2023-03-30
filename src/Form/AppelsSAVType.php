@@ -2,9 +2,9 @@
 
 namespace App\Form;
 
+use App\Entity\Contrat;
 use App\Entity\AppelsSAV;
 use App\Entity\ClientDef;
-use App\Entity\Contrat;
 use App\Entity\DefAppsUtilisateur;
 use App\Repository\ClientDefRepository;
 use Symfony\Component\Form\AbstractType;
@@ -18,6 +18,7 @@ use Symfony\Component\Form\Extension\Core\Type\DateType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\Extension\Core\Type\TimeType;
 use Symfony\Component\Form\Extension\Core\Type\EmailType;
+use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\HiddenType;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 
@@ -67,11 +68,11 @@ class AppelsSAVType extends AbstractType
                     'class' => 'form-control'
                 ]
             ])
-            ->add('Contrats', TextType::class, [
+            ->add('Contrats', ChoiceType::class, [
                 'required' => true,
+                'choices' => [],
                 'label' => 'Code Contrat',
                 'attr' => [
-                    // 'disabled' => true,
                     'placeholder' => 'Code Contrat',
                     'class' => 'form-control'
                 ]

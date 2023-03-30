@@ -89,7 +89,6 @@ class SAVController extends AbstractController
         $replyForm->handleRequest($request);
  
         if ($replyForm->isSubmitted() && $replyForm->isValid()) {
-            dump('we reached form submit');
             $reply
                 ->setDateCom(new DateTime())
                 ->setCodeClient($contrat->getCodeClient()->getId())

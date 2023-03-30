@@ -7,7 +7,7 @@
     <div class="container p-2">
         <div class="row p-2 container">
             <div class="p-2 col">
-                <a class="btn btn-primary" href="{% block back_button %}{% endblock %}">
+                <a class="btn btn-primary" href="{% block back_button %}{{ path('app_dashboard') }}{% endblock %}">
                     <i class="fa-solid fa-chevron-left"></i>
                     Revenir en arrière
                 </a>

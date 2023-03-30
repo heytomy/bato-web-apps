@@ -10,18 +10,18 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
-#[Route('/calendrier')]
 class CalendrierController extends AbstractController
 {
-    #[Route('/', name: 'app_calendrier_index', methods: ['GET'])]
+    #[Route('/calendrier/', name: 'app_calendrier_index', methods: ['GET'])]
     public function index(CalendrierRepository $calendrierRepository): Response
     {
         return $this->render('calendrier/index.html.twig', [
             'calendriers' => $calendrierRepository->findAll(),
+            'current_page' => 'app_calendrier',
         ]);
     }
 
-    #[Route('/new', name: 'app_calendrier_new', methods: ['GET', 'POST'])]
+    #[Route('/calendrier/new', name: 'app_calendrier_new', methods: ['GET', 'POST'])]
     public function new(Request $request, CalendrierRepository $calendrierRepository): Response
     {
         $calendrier = new Calendrier();
@@ -31,24 +31,26 @@ class CalendrierController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             $calendrierRepository->save($calendrier, true);
 
-            return $this->redirectToRoute('app_calendrier_index', [], Response::HTTP_SEE_OTHER);
+            return $this->redirectToRoute('app_calendrier_calendar', [], Response::HTTP_SEE_OTHER);
         }
 
         return $this->renderForm('calendrier/new.html.twig', [
             'calendrier' => $calendrier,
             'form' => $form,
+            'current_page' => 'app_calendrier',
         ]);
     }
 
-    #[Route('/{id}', name: 'app_calendrier_show', methods: ['GET'])]
+    #[Route('/calendrier/{id}', name: 'app_calendrier_show', methods: ['GET'])]
     public function show(Calendrier $calendrier): Response
     {
         return $this->render('calendrier/show.html.twig', [
             'calendrier' => $calendrier,
+            'current_page' => 'app_calendrier',
         ]);
     }
 
-    #[Route('/{id}/edit', name: 'app_calendrier_edit', methods: ['GET', 'POST'])]
+    #[Route('/calendrier/{id}/edit', name: 'app_calendrier_edit', methods: ['GET', 'POST'])]
     public function edit(Request $request, Calendrier $calendrier, CalendrierRepository $calendrierRepository): Response
     {
         $form = $this->createForm(CalendrierType::class, $calendrier);
@@ -57,28 +59,31 @@ class CalendrierController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             $calendrierRepository->save($calendrier, true);
 
-            return $this->redirectToRoute('app_calendrier_index', [], Response::HTTP_SEE_OTHER);
+            return $this->redirectToRoute('app_calendrier_calendar', [], Response::HTTP_SEE_OTHER);
         }
 
         return $this->renderForm('calendrier/edit.html.twig', [
             'calendrier' => $calendrier,
             'form' => $form,
+            'current_page' => 'app_calendrier',
         ]);
     }
 
-    #[Route('/{id}', name: 'app_calendrier_delete', methods: ['POST'])]
+    #[Route('/calendrier/{id}', name: 'app_calendrier_delete', methods: ['POST'])]
     public function delete(Request $request, Calendrier $calendrier, CalendrierRepository $calendrierRepository): Response
     {
         if ($this->isCsrfTokenValid('delete'.$calendrier->getId(), $request->request->get('_token'))) {
             $calendrierRepository->remove($calendrier, true);
         }
 
-        return $this->redirectToRoute('app_calendrier_index', [], Response::HTTP_SEE_OTHER);
+        return $this->redirectToRoute('app_calendrier_calendar', [], Response::HTTP_SEE_OTHER);
     }
 
     #[Route('/calendar', name: 'app_calendrier_calendar', methods: ['GET'])]
     public function calendar(): Response
     {
-        return $this->render('calendrier/calendar.html.twig');
+        return $this->render('calendrier/calendar.html.twig', [
+            'current_page' => 'app_calendrier',
+        ]);
     }
 }

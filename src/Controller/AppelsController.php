@@ -25,6 +25,7 @@ class AppelsController extends AbstractController
 
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
         return $this->render('appels/index.html.twig', [
+            'current_page' => 'app_appels',
             'appels' => $appels,
         ]);
     }
@@ -47,6 +48,7 @@ class AppelsController extends AbstractController
         }
     
         return $this->render('appels/new.html.twig', [
+            'current_page' => 'app_appels',
             'form' => $form->createView(),
         ]);
     }  

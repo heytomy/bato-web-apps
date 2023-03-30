@@ -1,11 +1,13 @@
-{% extends 'base.html.twig' %}
+{% extends '_inc/listPage.html.twig' %}
 
 {% block title %}New Calendrier{% endblock %}
 
-{% block body %}
+{% block back_button %}{{ path('app_calendrier_calendar') }}{% endblock %}
+
+{% block list %}
     <h1>Create new Calendrier</h1>
 
     {{ include('calendrier/_form.html.twig') }}
 
-    <a href="{{ path('app_calendrier_index') }}">back to list</a>
+    
 {% endblock %}

@@ -5,8 +5,10 @@ namespace App\Controller;
 use App\Entity\AppelsSAV;
 use App\Entity\ClientDef;
 use App\Entity\Contrat;
+use App\Entity\TicketUrgents;
 use App\Form\AppelsSAVType;
 use App\Repository\AppelsSAVRepository;
+use App\Repository\TicketUrgentsRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -30,26 +32,36 @@ class AppelsSAVController extends AbstractController
     }
 
     #[Route('/appels_sav/new', name: 'app_appels_sav_new')]
-    public function new(Request $request, AppelsSAVRepository $appelsSAVRepository, EntityManagerInterface $em): Response
+    public function new(Request $request, AppelsSAVRepository $appelsSAVRepository, EntityManagerInterface $em, TicketUrgentsRepository $ticketUrgent): Response
     {
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
-
+    
         $appelSAV = new AppelsSAV();
         $form = $this->createForm(AppelsSAVType::class, $appelSAV);
-
+    
         $form->handleRequest($request);
-
+    
         if ($form->isSubmitted() && $form->isValid()) {
             $em->persist($appelSAV);
-            $em->flush();
 
+    
+            if ($form->get('isUrgent')->getData()) {
+
+                $ticketUrgent = new TicketUrgents();
+                $ticketUrgent->setAppelsSAV($appelSAV);
+    
+                $em->persist($ticketUrgent);
+                $em->flush();
+            }
+    
             return $this->redirectToRoute('app_appels');
         }
-
+    
         return $this->render('appels_sav/new.html.twig', [
             'form' => $form->createView(),
         ]);
     }
+    
 
     #[IsGranted('ROLE_ADMIN')]
     #[Route('/get-client-info/{id}', name:'get_client_info', methods:'GET')]

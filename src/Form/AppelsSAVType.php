@@ -70,7 +70,7 @@ class AppelsSAVType extends AbstractType
                 'required' => true,
                 'label' => 'Code Contrat',
                 'attr' => [
-                    'disabled' => true,
+                    // 'disabled' => true,
                     'placeholder' => 'Code Contrat',
                     'class' => 'form-control'
                 ]
@@ -146,18 +146,20 @@ class AppelsSAVType extends AbstractType
                 'label' => 'Date du rendez-vous',
                 'attr' => [
                     'placeholder' => 'Entrez la date du rendez-vous',
-                    'class' => 'input-group date',
+                    'class' => 'form-control date datepicker input-group-text d-block',
                 ],
+                'html5' => false,
                 'years' => range(date('Y'), date('Y') + 5),
                 'widget' => 'single_text',
-            ])
+            ])            
             ->add('rdvHeure', TimeType::class, [
                 'required' => true,
                 'label' => 'Heure du rendez-vous',
                 'attr' => [
                     'placeholder' => 'Entrez l\'heure du rendez-vous',
-                    'class' => ''
+                    'class' => 'form-control timepicker input-group-text d-block'
                 ],
+                'html5' => false,
                 'widget' => 'choice',
                 'minutes' => range(0, 50, 10),
                 'with_seconds' => false,
@@ -168,6 +170,9 @@ class AppelsSAVType extends AbstractType
             ->add('isUrgent', CheckboxType::class, [
                 'required' => false,
                 'label' => 'Urgent ?',
+                'attr' => [
+                    'data-urgent-ticket' => 'true'
+                ]
             ]);
     }
 

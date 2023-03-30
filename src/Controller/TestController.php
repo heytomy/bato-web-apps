@@ -3,7 +3,9 @@
 namespace App\Controller;
 
 use App\Entity\AppsUtilisateur;
+use App\Entity\ClientDef;
 use App\Repository\AppsUtilisateurRepository;
+use App\Repository\ClientDefRepository;
 use App\Repository\ContratRepository;
 use App\Repository\DefAppsUtilisateurRepository;
 use App\Repository\RolesRepository;
@@ -21,10 +23,11 @@ class TestController extends AbstractController
 {
     #[IsGranted('ROLE_ADMIN')]
     #[Route('/test/{id}', name: 'app_test_1', methods: ['POST', 'GET'])]
-    public function user(AppsUtilisateur $user, RolesRepository $rolesRepository, ContratRepository $contratRepository, EntityManagerInterface $em): Response
+    public function user(AppsUtilisateur $user, RolesRepository $rolesRepository, ContratRepository $contratRepository, EntityManagerInterface $em, ClientDefRepository $clientDefRepository): Response
     {
+        $client = $clientDefRepository->findOneBy(['id' => 6]);
         // $test = $contratRepository->find("00001");
-        // dd($test);
+        dd($client->getContrats()[0]->getId());
         // $this->denyAccessUnlessGranted('ROLE_ADMIN');
         return $this->render('test/test.html.twig', [
             'controller_name' => 'TestController',
@@ -37,13 +40,6 @@ class TestController extends AbstractController
     #[Route('/test', name: 'app_test')]
     public function index(AppsUtilisateurRepository $appsUtilisateurRepository, DefAppsUtilisateurRepository $defAppsUtilisateurRepository): Response
     {
-
-        $clients = $defAppsUtilisateurRepository->findAll();
-        $users = $appsUtilisateurRepository->findBy(['roles' => 3 ]);
-        dd($users);
-
-
-
         return $this->render('test/index.html.twig', [
             'controller_name' => 'TestController',
             'users' => $appsUtilisateurRepository->findAll(),

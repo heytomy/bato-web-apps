@@ -2,9 +2,10 @@
 
 namespace App\Repository;
 
+use DateTime;
 use App\Entity\Calendrier;
-use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
+use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 
 /**
  * @extends ServiceEntityRepository<Calendrier>
@@ -38,6 +39,18 @@ class CalendrierRepository extends ServiceEntityRepository
             $this->getEntityManager()->flush();
         }
     }
+
+//     public function findByStartDateAndEndDate(DateTime $start, DateTime $end): array
+//    {
+//        return $this
+//             ->createQueryBuilder('booking')
+//             ->where('booking.beginAt BETWEEN :start and :end OR booking.endAt BETWEEN :start and :end')
+//             ->setParameter('start', $start->format('Y-m-d H:i:s'))
+//             ->setParameter('end', $end->format('Y-m-d H:i:s'))
+//             ->getQuery()
+//             ->getResult()
+//        ;
+//    }
 
 //    /**
 //     * @return Calendrier[] Returns an array of Calendrier objects

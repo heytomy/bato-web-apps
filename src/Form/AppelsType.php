@@ -29,31 +29,6 @@ class AppelsType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {        
         $builder
-        ->add('NouveauClient', CheckboxType::class, [
-            'label' => 'Nouveau client ?',
-            'required' => false,
-            'mapped' => false,
-            'attr' => [
-                'class' => 'NouveauClient'
-            ]
-        ])
-        ->add('Client', CheckboxType::class, [
-            'label' => 'Client existant ?',
-            'required' => false,
-            'mapped' => false,
-            'attr' => [
-                'class' => 'Client'
-            ]
-        ])
-        ->add('ClientSAV', CheckboxType::class, [
-            'label' => 'Client ayant un contrat d\'entretien ?',
-            'required' => false,
-            'mapped' => false,
-            'attr' => [
-                'class' => 'ClientSAV'
-            ]
-        ])
-
         ->add('ID_Utilisateur', EntityType::class,[
             'class' => DefAppsUtilisateur::class,
             'choices' => $this->roles->findByRoleTech('ROLE_TECH_SAV'),
@@ -64,8 +39,8 @@ class AppelsType extends AbstractType
             'placeholder' => 'Choisissez un technicien',
             'attr' => [
                 'class' => 'form-select'
-            ]
-        ])
+                ]
+            ])
             ->add('Nom', TextType::class, [
                 'required' => true,
                 'label' => 'Nom',
@@ -129,11 +104,12 @@ class AppelsType extends AbstractType
                 'label' => 'Date du rendez-vous',
                 'attr' => [
                     'placeholder' => 'Entrez la date du rendez-vous',
-                    'html5' => false,
+                    'class' => 'form-control date datepicker input-group-text d-block',
                 ],
+                'html5' => false,
                 'years' => range(date('Y'), date('Y') + 5),
                 'widget' => 'single_text',
-            ])
+            ])  
             ->add('rdvHeure', TimeType::class, [
                 'required' => true,
                 'label' => 'Heure du rendez-vous',

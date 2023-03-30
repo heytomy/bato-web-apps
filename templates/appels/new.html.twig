@@ -8,22 +8,6 @@
 	<div class="container mb-5">
 		<div class="row p-5 container">
 		<div class="container mb-3">
-			<div class="form-group form-check">
-				{{ form_widget(form.NouveauClient, {'attr': {'class': 'form-check-input'}}) }}
-				{{ form_label(form.NouveauClient, null, {'label_attr': {'class': 'form-check-label'}}) }}
-			</div>
-
-			<div class="form-group form-check">
-				{{ form_widget(form.Client, {'attr': {'class': 'form-check-input'}}) }}
-				{{ form_label(form.Client, null, {'label_attr': {'class': 'form-check-label'}}) }}
-
-			</div>
-
-			<div class="form-group form-check">
-				{{ form_widget(form.ClientSAV, {'attr': {'class': 'form-check-input'}}) }}
-				{{ form_label(form.ClientSAV, null, {'label_attr': {'class': 'form-check-label'}}) }}
-			</div>
-		</div>
 			<div class="form-group">
 				{{ form_label(form.ID_Utilisateur, 'Technicien') }}
 				{{ form_widget(form.ID_Utilisateur, {'attr': {'class': 'form-select', 'aria-label': 'Choisir un technicien'}}) }}
@@ -65,28 +49,24 @@
 				{{ form_widget(form.description, {'attr': {'class': 'form-control'}}) }}
 			</div>
 
-			<div class="form-group p-2 col">
-				{{ form_label(form.rdvDate) }}
-				{{ form_widget(form.rdvDate) }}
+			<div class="row mt-3 mb-2">
+				<div class="col-md-6">{{ form_row(form.rdvDate) }}</div>
+				<div class="col-md-6">{{ form_row(form.rdvHeure) }}</div>
+			</div>  
 
-			</div>
-
-			<div class="form-group p-2 col">
-				{{ form_label(form.rdvHeure) }}
-				{{ form_widget(form.rdvHeure) }}
-			</div>
-
-			<div class="form-group form-check">
+			<div class="form-group form-check mb-5">
 				{{ form_widget(form.isUrgent, {'attr': {'class': 'form-check-input'}}) }}
 				{{ form_label(form.isUrgent, null, {'label_attr': {'class': 'form-check-label'}}) }}
 			</div>
 
-			<button type="submit" class="btn btn-primary">Submit</button>
+			<button type="submit" class="btn btn-primary">{{ button_label|default('Enregistrer') }}</button>
 		</div>
 	</div>
 	{{ form_end(form) }}
 {% endblock %}
 
 {% block javascripts %}
-	{{ encore_entry_script_tags('app') }}
+	{{ parent() }}
+	{{ encore_entry_script_tags('appelsSAV') }}
+	{{ encore_entry_script_tags('datePicker') }}
 {% endblock %}

@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Entity\AppelsSAV;
+use App\Entity\Contrat;
 use App\Form\AppelsSAVType;
 use App\Entity\TicketUrgents;
 use App\Repository\AppelsSAVRepository;
@@ -63,24 +64,29 @@ class AppelsSAVController extends AbstractController
     
 
     #[IsGranted('ROLE_ADMIN')]
-    #[Route('/get-client-info/{id}', name:'get_client_info', methods:'GET')]
-    public function getClientInfo(ClientDefRepository $clientDefRepository, int $id): JsonResponse
+    #[Route('/get-client-and-contrats-info/{id}', name:'get_client_and_contrats_info', methods:'GET')]
+    public function getClientAndContratsInfo(ClientDefRepository $clientDefRepository, int $id): JsonResponse
     {
         $client = $clientDefRepository->find($id);
     
+        $contrats = [];
+        foreach ($client->getContrats() as $contrat) {
+            $contrats[] = [
+                'codecontrat' => $contrat->getId(),
+            ];
+        }
+    
         $data = [
             'codeclient' => $client->getId(),
-            'codecontrat' => $client->getContrats()[0]->getId(),
             'nom' => $client->getNom(),
             'adr' => $client->getAdr(),
             'cp' => $client->getCp(),
             'ville' => $client->getVille(),
             'tel' => $client->getTel(),
             'email' => $client->getEMail(),
+            'contrats' => $contrats,
         ];
     
-        // Return the JSON response
         return new JsonResponse($data);
     }
-    
 }

@@ -21,7 +21,7 @@ $.fn.datepicker.dates['fr'] = {
 $(".datepicker").datepicker({
   isRTL: true,
   daysOfWeekDisabled: '06',
-  format: 'dd/mm/yyyy',
+  format: 'dd-mm-yyyy',
   autoclose: true,
   todayHighlight: true,
   language: 'fr',

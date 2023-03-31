@@ -38,7 +38,7 @@ class ClientDefRepository extends ServiceEntityRepository
             $this->getEntityManager()->flush();
         }
     }
-    
+
     public function findByClientWithContrats(): array
     {
         return $this->createQueryBuilder('c')
@@ -47,8 +47,7 @@ class ClientDefRepository extends ServiceEntityRepository
             ->orderBy('contrat.id', 'ASC')
             ->getQuery()
             ->getResult();
-    }
-    
+    } 
 
 //    /**
 //     * @return ClientDef[] Returns an array of ClientDef objects

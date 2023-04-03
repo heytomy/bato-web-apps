@@ -3,13 +3,13 @@
 namespace App\Controller;
 
 use App\Entity\AppelsSAV;
-use App\Entity\ClientDef;
 use App\Entity\Contrat;
-use App\Entity\TicketUrgents;
 use App\Form\AppelsSAVType;
+use App\Entity\TicketUrgents;
 use App\Repository\AppelsSAVRepository;
-use App\Repository\TicketUrgentsRepository;
+use App\Repository\ClientDefRepository;
 use Doctrine\ORM\EntityManagerInterface;
+use App\Repository\TicketUrgentsRepository;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -64,20 +64,29 @@ class AppelsSAVController extends AbstractController
     
 
     #[IsGranted('ROLE_ADMIN')]
-    #[Route('/get-client-info/{id}', name:'get_client_info', methods:'GET')]
-    public function getClientInfo(ClientDef $client, Contrat $contrat): JsonResponse
+    #[Route('/get-client-and-contrats-info/{id}', name:'get_client_and_contrats_info', methods:'GET')]
+    public function getClientAndContratsInfo(ClientDefRepository $clientDefRepository, int $id): JsonResponse
     {
+        $client = $clientDefRepository->find($id);
+    
+        $contrats = [];
+        foreach ($client->getContrats() as $contrat) {
+            $contrats[] = [
+                'codecontrat' => $contrat->getId(),
+            ];
+        }
+    
         $data = [
-            'codeclient' => $contrat->getCodeClient()->getId(),
-            'codecontrat' => $client->getContrats()[0]->getId(),
+            'codeclient' => $client->getId(),
             'nom' => $client->getNom(),
             'adr' => $client->getAdr(),
             'cp' => $client->getCp(),
             'ville' => $client->getVille(),
             'tel' => $client->getTel(),
             'email' => $client->getEMail(),
+            'contrats' => $contrats,
         ];
-
+    
         return new JsonResponse($data);
     }
 }

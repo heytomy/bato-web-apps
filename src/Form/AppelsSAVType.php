@@ -2,11 +2,13 @@
 
 namespace App\Form;
 
+use App\Entity\Contrat;
 use App\Entity\AppelsSAV;
 use App\Entity\ClientDef;
 use App\Entity\DefAppsUtilisateur;
 use App\Repository\ClientDefRepository;
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Routing\RouterInterface;
 use App\Repository\DefAppsUtilisateurRepository;
 use Eckinox\TinymceBundle\Form\Type\TinymceType;
 use Symfony\Component\Form\FormBuilderInterface;
@@ -17,18 +19,21 @@ use Symfony\Component\Form\Extension\Core\Type\DateType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\Extension\Core\Type\TimeType;
 use Symfony\Component\Form\Extension\Core\Type\EmailType;
+use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\HiddenType;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 
 class AppelsSAVType extends AbstractType
 {
-    private $contrats;
+    private $clientDefRepository;
     private $roles;
+    private $router;
 
-    public function __construct(ClientDefRepository $contrats, DefAppsUtilisateurRepository $roles)
+    public function __construct(ClientDefRepository $clientDefRepository, DefAppsUtilisateurRepository $roles, RouterInterface $router )
     {
-        $this->contrats = $contrats;
+        $this->clientDefRepository = $clientDefRepository;
         $this->roles = $roles;
+        $this->router = $router;
     }
 
     public function buildForm(FormBuilderInterface $builder, array $options): void
@@ -47,25 +52,20 @@ class AppelsSAVType extends AbstractType
                 ]
             ])
             ->add('client', EntityType::class, [
+                'required' => true,
                 'class' => ClientDef::class,
-                'choices' => $this->contrats->findAll(),
+                'choices' => $this->clientDefRepository->findByClientWithContrats(),
                 'label' => 'Client SAV',
-                'choice_label' => function (ClientDef $nom) {
-                    $contrats = $nom->getContrats();
-                    $contrat = $contrats[0] ?? null; // Get the first contrat, or null if there are no contrats
-                    if ($contrat === null) {
-                        // Debug output
-                        dd($nom); // dump the client object
-                        dd($contrats); // dump the contrats array
-                    }
-                    return $contrat ? $contrat->getId() : '';
+                'choice_label' => function (ClientDef $client) {
+                    return $client->getNom()
+                    . ' ' . $client->getContrats()[0]->getId() . ' ' . $client->getId();
                 },
-                                
                 'placeholder' => 'Choisissez le client',
                 'attr' => [
                     'class' => 'form-select',
+                    'data-contrats-url' => $this->router->generate('get_client_and_contrats_info', ['id' => '__clientId__']),
                 ]
-            ])
+            ])            
             ->add('Nom', HiddenType::class, [
                 'required' => true,
                 'label' => 'Nom',
@@ -74,13 +74,14 @@ class AppelsSAVType extends AbstractType
                     'class' => 'form-control'
                 ]
             ])
-            ->add('Contrats', TextType::class, [
+            ->add('Contrats', ChoiceType::class, [
                 'required' => true,
+                'choices' => [],
                 'label' => 'Code Contrat',
                 'attr' => [
-                    // 'disabled' => true,
                     'placeholder' => 'Code Contrat',
-                    'class' => 'form-control'
+                    'class' => 'form-control',
+                    'id' => 'contrats-field'
                 ]
             ])
             ->add('Client', TextType::class, [
@@ -138,8 +139,7 @@ class AppelsSAVType extends AbstractType
                 'attr' => [
                     'placeholder' => 'Entrez votre adresse email',
                     'class' => 'form-control',
-                    // 'disabled' => empty($options['data']) ? false : true,
-                ]
+                                    ]
             ])
             ->add('description', TinymceType::class, [
                 'required' => true,
@@ -157,7 +157,7 @@ class AppelsSAVType extends AbstractType
                     'class' => 'form-control date datepicker input-group-text d-block',
                 ],
                 'html5' => false,
-                'years' => range(date('Y'), date('Y') + 5),
+                'format' => 'dd-MM-yyyy',
                 'widget' => 'single_text',
             ])            
             ->add('rdvHeure', TimeType::class, [

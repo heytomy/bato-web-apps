@@ -31,37 +31,19 @@ document.addEventListener("DOMContentLoaded", () => {
       center: "title",
       right: "dayGridMonth,timeGridWeek,timeGridDay,listWeek"
     },
-    buttonText: {
-        today: 'Aujourd\'hui',
-        month: 'Mois',
-        week: 'Semaine',
-        list: 'Liste',
-        day: 'Jour',
-    },
-    locale: 'fr',
+    locale: frLocale,
     initialView: "dayGridMonth",
     editable: true,
     navLinks: true, // can click day/week names to navigate views
     plugins: [ interactionPlugin, dayGridPlugin, timeGridPlugin, listPlugin ],
     timeZone: "Europe/Paris",
     eventResizableFromStart: true,
+    businessHours: {
+        daysOfWeek: [1,2,3,4,5],
 
-    events: [
-        {
-            title  : 'event1',
-            start  : '2023-03-30'
-        },
-        {
-            title  : 'event2',
-            start  : '2023-03-30',
-            end    : '2023-03-31'
-        },
-        {
-            title  : 'event3',
-            start  : '2023-03-30T12:30:00',
-            allDay : false // will make the time show
-        }
-        ]
+        startTime: '06:00',
+        endTime: '20:00'
+    }
   });
 
   calendar.on('eventChange', (e) => {

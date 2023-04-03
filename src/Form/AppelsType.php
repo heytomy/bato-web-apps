@@ -15,6 +15,7 @@ use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\Extension\Core\Type\TimeType;
 use Symfony\Component\Form\Extension\Core\Type\EmailType;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
+use Symfony\Component\Form\Extension\Core\Type\DateTimeType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 
 class AppelsType extends AbstractType
@@ -99,32 +100,19 @@ class AppelsType extends AbstractType
                     'class' => 'form-control'
                 ]
             ])
-            ->add('rdvDate', DateType::class, [
+            ->add('rdvDateTime', DateTimeType::class, [
                 'required' => true,
-                'format' => 'dd-MM-yyyy',
-                'label' => 'Date du rendez-vous',
+                'label' => 'Date et heure du rendez-vous',
                 'attr' => [
-                    'placeholder' => 'Entrez la date du rendez-vous',
-                    'class' => 'form-control date datepicker input-group-text d-block',
+                    'placeholder' => 'Entrez la date et l\'heure du rendez-vous',
+                    'class' => 'form-control datetimepicker input-group-text d-block',
                 ],
                 'html5' => false,
+                'format' => 'dd-MM-yyyy HH:mm',
                 'widget' => 'single_text',
-            ])  
-            ->add('rdvHeure', TimeType::class, [
-                'required' => true,
-                'label' => 'Heure du rendez-vous',
-                'attr' => [
-                    'placeholder' => 'Entrez l\'heure du rendez-vous',
-                    'class' => ''
-                ],
-                'widget' => 'choice',
-                'minutes' => range(0, 50, 10),
-                'with_seconds' => false,
                 'input' => 'datetime',
-                'input_format' => 'H:i:s',
-                'hours' => range(7, 19),
-            ])
-            
+                'input_format' => 'yyyy-MM-dd HH:mm:ss',
+            ])      
             ->add('isUrgent', CheckboxType::class, [
                 'required' => false,
                 'label' => 'Urgent ?',

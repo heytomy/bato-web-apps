@@ -42,8 +42,9 @@ class AppelsSAVController extends AbstractController
         $form->handleRequest($request);
     
         if ($form->isSubmitted() && $form->isValid()) {
+            // dd($appelSAV);
             $em->persist($appelSAV);
-
+            $em->flush($appelSAV);
     
             if ($form->get('isUrgent')->getData()) {
 
@@ -51,10 +52,10 @@ class AppelsSAVController extends AbstractController
                 $ticketUrgent->setAppelsSAV($appelSAV);
     
                 $em->persist($ticketUrgent);
-                $em->flush();
+                $em->flush($ticketUrgent);
             }
     
-            return $this->redirectToRoute('app_appels');
+            return $this->redirectToRoute('app_appels_sav_new');
         }
     
         return $this->render('appels_sav/new.html.twig', [

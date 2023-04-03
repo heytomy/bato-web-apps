@@ -39,10 +39,9 @@
 					<div class="card mb-3">
 						<div class="card-body">
 							<h4>Rendez-Vous</h4>
-							<p>Date de rendez-vous:
-								{{ appel.rdvDate | date('Y-m-d')}}</p>
-							<p>Heure de rendez-vous:
-								{{ appel.rdvHeure| date('h:s')}}</p>
+							<p>Date et heure du rendez-vous:
+								{{ appel.rdvDateTime | date('Y-m-d h:s')}}
+							</p>
 						</div>
 					</div>
 					<div class="card mb-3">

@@ -23,6 +23,9 @@ class Calendrier
     #[ORM\Column(type: Types::DATETIME_MUTABLE, nullable: true)]
     private ?\DateTimeInterface $dateFin = null;
 
+    #[ORM\Column]
+    private ?bool $allDay = null;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -60,6 +63,18 @@ class Calendrier
     public function setDateFin(?\DateTimeInterface $dateFin): self
     {
         $this->dateFin = $dateFin;
+
+        return $this;
+    }
+
+    public function isAllDay(): ?bool
+    {
+        return $this->allDay;
+    }
+
+    public function setAllDay(bool $allDay): self
+    {
+        $this->allDay = $allDay;
 
         return $this;
     }

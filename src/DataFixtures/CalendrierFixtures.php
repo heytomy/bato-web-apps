@@ -13,11 +13,20 @@ class CalendrierFixtures extends Fixture implements FixtureGroupInterface
     public function load(ObjectManager $manager): void
     {
         $faker = Faker::create('fr_FR');
-        for ($i=0; $i < 500; $i++) { 
+        
+        
+
+        for ($i=0; $i < 50; $i++) { 
+            $dateDebut = $faker->dateTimeInInterval('-2 months', '+2 months');
+            $dateFin = clone $dateDebut;
+            $dateFin->modify('+1 hour');
+
             $booking = new Calendrier;
             $booking
                 ->setTitre($faker->word())
-                ->setDateDebut($faker->dateTimeInInterval('-2 months', '+2 months'))
+                ->setDateDebut($dateDebut)
+                ->setDateFin($dateFin)
+                ->setAllDay($faker->boolean(50))
                 ;
             $manager->persist($booking);
         }

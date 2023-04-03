@@ -61,11 +61,12 @@ class CalendarSubscriber implements EventSubscriberInterface
              * For more information see: https://fullcalendar.io/docs/event-object
              * and: https://github.com/fullcalendar/fullcalendar/blob/master/src/core/options.ts
              */
-
+            
             $bookingEvent->setOptions([
-                'backgroundColor' => 'blue',
-                'borderColor' => 'blue',
+                'backgroundColor' => '#26d4ae',
+                'borderColor' => '#26d4ae',
                 'id' => $booking->getId(),
+                'allDay' => $booking->isAllDay(),
             ]);
             $bookingEvent->addOption(
                 'url',

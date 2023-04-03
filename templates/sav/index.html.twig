@@ -7,11 +7,11 @@
 {% endblock %}
 
 {% block search %}
-    {{ form_start(searchForm, {'attr': {'class': 'row col p-2', 'id': 'search-form'}}) }}
-        <div class="col">
+    {{ form_start(searchForm, {'attr': {'class': 'd-flex justify-content-end col p-2', 'id': 'search-form'}}) }}
+        <div class="">
             {{ form_row(searchForm.nom) }}
         </div>
-        <div class="col">
+        <div class="px-2">
             {{ form_row(searchForm.submit) }}
         </div>
     {{ form_end(searchForm) }}

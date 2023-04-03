@@ -48,6 +48,9 @@ class AppsUtilisateur implements UserInterface, PasswordAuthenticatedUserInterfa
     #[ORM\Column(type: 'boolean')]
     private $isVerified = false;
 
+    #[ORM\Column(name: 'colorCode',length: 7, nullable: true)]
+    private ?string $colorCode = null;
+
     public function __construct()
     {
         $this->roles = new ArrayCollection();
@@ -178,6 +181,18 @@ class AppsUtilisateur implements UserInterface, PasswordAuthenticatedUserInterfa
     public function setIsVerified(bool $isVerified): self
     {
         $this->isVerified = $isVerified;
+
+        return $this;
+    }
+
+    public function getColorCode(): ?string
+    {
+        return $this->colorCode;
+    }
+
+    public function setColorCode(?string $colorCode): self
+    {
+        $this->colorCode = $colorCode;
 
         return $this;
     }

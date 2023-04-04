@@ -22,6 +22,7 @@ use Symfony\Component\Form\Extension\Core\Type\EmailType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\HiddenType;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
+use Symfony\Component\Form\Extension\Core\Type\DateTimeType;
 
 class AppelsSAVType extends AbstractType
 {
@@ -74,24 +75,27 @@ class AppelsSAVType extends AbstractType
                     'class' => 'form-control'
                 ]
             ])
-            ->add('Contrats', ChoiceType::class, [
+            ->add('Contrats', EntityType::class, [
                 'required' => true,
-                'choices' => [],
-                'label' => 'Code Contrat',
+                'class' => Contrat::class,
+                'label' => 'Contrats',
                 'attr' => [
-                    'placeholder' => 'Code Contrat',
                     'class' => 'form-control',
                     'id' => 'contrats-field'
-                ]
-            ])
-            ->add('Client', TextType::class, [
+                ],
+           ])
+            ->add('Client', EntityType::class, [
+                'mapped' => false,
                 'required' => true,
+                'class' => ClientDef::class,
                 'label' => 'Code Client',
                 'attr' => [
                     'disabled' => true,
                     'placeholder' => 'Code Client',
-                    'class' => 'form-control'
-                ]
+                    'class' => 'form-control',
+                    'id' => 'client-field'
+                ],
+                'choice_label' => 'id'
             ])
             ->add('Adr', TextType::class, [
                 'required' => true,
@@ -128,7 +132,7 @@ class AppelsSAVType extends AbstractType
                 'attr' => [
                     'placeholder' => 'Numéro de téléphone',
                     'class' => 'form-control',
-                    'pattern' => '\d+',
+                    // 'pattern' => '\d+',
                 ]
             ])
 
@@ -150,34 +154,21 @@ class AppelsSAVType extends AbstractType
                 ]
             ])
             ->add('rdvDate', DateType::class, [
+                'mapped' => false,
                 'required' => true,
                 'label' => 'Date du rendez-vous',
-                'attr' => [
-                    'placeholder' => 'Entrez la date du rendez-vous',
-                    'class' => 'form-control date datepicker input-group-text d-block',
-                ],
-                'html5' => false,
-                'format' => 'dd-MM-yyyy',
                 'widget' => 'single_text',
-            ])            
-            ->add('rdvHeure', TimeType::class, [
+            ])
+            ->add('rdvTime', TimeType::class, [
+                'mapped' => false,
                 'required' => true,
                 'label' => 'Heure du rendez-vous',
-                'attr' => [
-                    'placeholder' => 'Entrez l\'heure du rendez-vous',
-                    'class' => 'form-control timepicker input-group-text d-block'
-                ],
-                'html5' => false,
-                'widget' => 'choice',
-                'minutes' => range(0, 50, 10),
-                'with_seconds' => false,
-                'input' => 'datetime',
-                'input_format' => 'H:i:s',
-                'hours' => range(7, 19),
+                'widget' => 'single_text',
             ])
+            
             ->add('isUrgent', CheckboxType::class, [
                 'required' => false,
-                'label' => 'Urgent ?',
+                'label' => 'Urgent ? ',
                 'attr' => [
                     'data-urgent-ticket' => 'true'
                 ]

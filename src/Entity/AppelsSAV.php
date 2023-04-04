@@ -47,11 +47,8 @@ class AppelsSAV
     #[ORM\JoinColumn(name:'CodeClient', referencedColumnName:'Code', nullable: false)]
     private ?ClientDef $client = null;
 
-    #[ORM\Column(type: Types::DATE_MUTABLE)]
-    private ?\DateTimeInterface $rdvDate = null;
-
-    #[ORM\Column(type: Types::TIME_MUTABLE)]
-    private ?\DateTimeInterface $rdvHeure = null;
+    #[ORM\Column(name:'rdv_DateHour', type: Types::DATETIME_MUTABLE)]
+    private ?\DateTimeInterface $rdvDateTime = null;
 
     #[ORM\OneToMany(mappedBy: 'AppelsSAV', targetEntity: TicketUrgents::class)]
     private Collection $ticketUrgents;
@@ -194,26 +191,14 @@ class AppelsSAV
         return $this;
     }
 
-    public function getRdvDate(): ?\DateTimeInterface
+    public function getRdvDateTime(): ?\DateTimeInterface
     {
-        return $this->rdvDate;
+        return $this->rdvDateTime;
     }
 
-    public function setRdvDate(\DateTimeInterface $rdvDate): self
+    public function setRdvDateTime(\DateTimeInterface $rdvDateTime): self
     {
-        $this->rdvDate = $rdvDate;
-
-        return $this;
-    }
-
-    public function getRdvHeure(): ?\DateTimeInterface
-    {
-        return $this->rdvHeure;
-    }
-
-    public function setRdvHeure(\DateTimeInterface $rdvHeure): self
-    {
-        $this->rdvHeure = $rdvHeure;
+        $this->rdvDateTime = $rdvDateTime;
 
         return $this;
     }

@@ -43,7 +43,8 @@ document.addEventListener("DOMContentLoaded", () => {
 
         startTime: '06:00',
         endTime: '20:00'
-    }
+    },
+    themeSystem: 'standard',
   });
 
   calendar.on('eventChange', (e) => {

@@ -28,6 +28,7 @@
         "@fullcalendar/interaction": "^6.1.5",
         "@fullcalendar/list": "^6.1.5",
         "@fullcalendar/timegrid": "^6.1.5",
+        "@popperjs/core": "^2.11.7",
         "autoprefixer": "^10.4.13",
         "bootstrap": "^5.2.3",
         "bootstrap-datepicker": "^1.9.0",

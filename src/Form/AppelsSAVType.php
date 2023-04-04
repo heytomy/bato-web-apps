@@ -153,23 +153,22 @@ class AppelsSAVType extends AbstractType
                     'placeholder' => 'Décrivez le problème rencontré par le client',
                 ]
             ])
-            ->add('rdvDateTime', DateTimeType::class, [
+            ->add('rdvDate', DateType::class, [
+                'mapped' => false,
                 'required' => true,
-                'label' => 'Date et heure du rendez-vous',
-                'attr' => [
-                    'placeholder' => 'Entrez la date et l\'heure du rendez-vous',
-                    'class' => 'form-control datepicker input-group-text d-block',
-                ],
-                'html5' => false,
-                'format' => 'dd-MM-yyyy HH:mm',
+                'label' => 'Date du rendez-vous',
                 'widget' => 'single_text',
-                'input' => 'datetime',
-                'input_format' => 'yyyy-MM-dd HH:mm:ss',
-            ])            
-
+            ])
+            ->add('rdvTime', TimeType::class, [
+                'mapped' => false,
+                'required' => true,
+                'label' => 'Heure du rendez-vous',
+                'widget' => 'single_text',
+            ])
+            
             ->add('isUrgent', CheckboxType::class, [
                 'required' => false,
-                'label' => 'Urgent ?',
+                'label' => 'Urgent ? ',
                 'attr' => [
                     'data-urgent-ticket' => 'true'
                 ]

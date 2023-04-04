@@ -16,6 +16,7 @@ use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use DateTime;
 
 #[IsGranted('ROLE_ADMIN')]
 class AppelsSAVController extends AbstractController
@@ -42,7 +43,16 @@ class AppelsSAVController extends AbstractController
         $form->handleRequest($request);
     
         if ($form->isSubmitted() && $form->isValid()) {
-            // dd($appelSAV);
+            $rdvDate = $form->get('rdvDate')->getData()->format('Y-m-d');
+            $rdvTime = $form->get('rdvTime')->getData()->format('H:i:s');
+            $rdvDateHour = $rdvDate . ' ' . $rdvTime;
+
+            $dateTime = new DateTime($rdvDateHour);
+
+            $appelSAV->setRdvDateTime($dateTime);
+
+            // dd($dateTime);
+
             $em->persist($appelSAV);
             $em->flush($appelSAV);
     

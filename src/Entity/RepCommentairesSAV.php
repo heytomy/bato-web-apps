@@ -25,7 +25,7 @@ class RepCommentairesSAV
     #[ORM\Column(name: 'Commentaire_SAV',type: Types::TEXT)]
     private ?string $commentaire_SAV = null;
 
-    #[ORM\Column(name: 'Date_Com', type: Types::DATE_MUTABLE)]
+    #[ORM\Column(name: 'Date_Com', type: Types::DATETIME_MUTABLE)]
     private ?\DateTimeInterface $date_com = null;
 
     #[ORM\Column(name: 'Nom',length: 30, nullable: true)]

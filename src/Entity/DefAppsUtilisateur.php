@@ -67,11 +67,19 @@ class DefAppsUtilisateur
     #[ORM\OneToMany(mappedBy: 'owner', targetEntity: RepCommentairesSAV::class)]
     private Collection $repCommentairesSAVs;
 
+    #[ORM\OneToMany(mappedBy: 'owner', targetEntity: CommentairesAppels::class)]
+    private Collection $commentairesAppels;
+
+    #[ORM\OneToMany(mappedBy: 'owner', targetEntity: RepCommentairesAppels::class)]
+    private Collection $repCommentairesAppels;
+
     public function __construct()
     {
         $this->comptes = new ArrayCollection();
         $this->commentairesSAVs = new ArrayCollection();
         $this->repCommentairesSAVs = new ArrayCollection();
+        $this->commentairesAppels = new ArrayCollection();
+        $this->repCommentairesAppels = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -268,5 +276,65 @@ class DefAppsUtilisateur
     public function __toString(): string
     {
         return $this->getNom();
+    }
+
+    /**
+     * @return Collection<int, CommentairesAppels>
+     */
+    public function getCommentairesAppels(): Collection
+    {
+        return $this->commentairesAppels;
+    }
+
+    public function addCommentairesAppel(CommentairesAppels $commentairesAppel): self
+    {
+        if (!$this->commentairesAppels->contains($commentairesAppel)) {
+            $this->commentairesAppels->add($commentairesAppel);
+            $commentairesAppel->setOwner($this);
+        }
+
+        return $this;
+    }
+
+    public function removeCommentairesAppel(CommentairesAppels $commentairesAppel): self
+    {
+        if ($this->commentairesAppels->removeElement($commentairesAppel)) {
+            // set the owning side to null (unless already changed)
+            if ($commentairesAppel->getOwner() === $this) {
+                $commentairesAppel->setOwner(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, RepCommentairesAppels>
+     */
+    public function getRepCommentairesAppels(): Collection
+    {
+        return $this->repCommentairesAppels;
+    }
+
+    public function addRepCommentairesAppel(RepCommentairesAppels $repCommentairesAppel): self
+    {
+        if (!$this->repCommentairesAppels->contains($repCommentairesAppel)) {
+            $this->repCommentairesAppels->add($repCommentairesAppel);
+            $repCommentairesAppel->setOwner($this);
+        }
+
+        return $this;
+    }
+
+    public function removeRepCommentairesAppel(RepCommentairesAppels $repCommentairesAppel): self
+    {
+        if ($this->repCommentairesAppels->removeElement($repCommentairesAppel)) {
+            // set the owning side to null (unless already changed)
+            if ($repCommentairesAppel->getOwner() === $this) {
+                $repCommentairesAppel->setOwner(null);
+            }
+        }
+
+        return $this;
     }
 }

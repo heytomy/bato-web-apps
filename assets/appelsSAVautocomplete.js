@@ -1,5 +1,4 @@
 import 'bootstrap';
-import 'bootstrap-datepicker';
 
 const $ = require('jquery');
 

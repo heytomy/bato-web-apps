@@ -190,6 +190,7 @@ class ClientDef
     public function __toString()
     {
         return $this->getNom();
+        
     }
 
     /**

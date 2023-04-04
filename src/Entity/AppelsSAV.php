@@ -47,7 +47,7 @@ class AppelsSAV
     #[ORM\JoinColumn(name:'CodeClient', referencedColumnName:'Code', nullable: false)]
     private ?ClientDef $client = null;
 
-    #[ORM\Column(name:'rdv_DateHour', type: Types::DATETIME_MUTABLE)]
+    #[ORM\Column(name:'rdv_DateHour')]
     private ?\DateTimeInterface $rdvDateTime = null;
 
     #[ORM\OneToMany(mappedBy: 'AppelsSAV', targetEntity: TicketUrgents::class)]

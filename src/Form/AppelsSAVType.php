@@ -158,12 +158,19 @@ class AppelsSAVType extends AbstractType
                 'required' => true,
                 'label' => 'Date du rendez-vous',
                 'widget' => 'single_text',
+                'attr' => [
+                    'class' => 'form-control datepicker',
+                ],
+                'html5' => false,
             ])
             ->add('rdvTime', TimeType::class, [
                 'mapped' => false,
                 'required' => true,
                 'label' => 'Heure du rendez-vous',
                 'widget' => 'single_text',
+                'attr' => [
+                    'class' => 'form-control timepicker',
+                ],
             ])
             
             ->add('isUrgent', CheckboxType::class, [

@@ -51,7 +51,7 @@ class AppelsSAVController extends AbstractController
 
             $appelSAV->setRdvDateTime($dateTime);
 
-            // dd($dateTime);
+            dd($dateTime);
 
             $em->persist($appelSAV);
             $em->flush($appelSAV);
@@ -59,7 +59,10 @@ class AppelsSAVController extends AbstractController
             if ($form->get('isUrgent')->getData()) {
 
                 $ticketUrgent = new TicketUrgents();
-                $ticketUrgent->setAppelsSAV($appelSAV);
+                $ticketUrgent
+                    ->setAppelsSAV($appelSAV)
+                    ->setStatus(0)
+                ;
     
                 $em->persist($ticketUrgent);
                 $em->flush($ticketUrgent);

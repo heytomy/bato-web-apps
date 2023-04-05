@@ -11,7 +11,7 @@ $.fn.datepicker.dates['fr'] = {
     monthsShort: ['janv.', 'févr.', 'mars', 'avr.', 'mai', 'juin', 'juil.', 'août', 'sept.', 'oct.', 'nov.', 'déc.'],
     today: 'Aujourd\'hui',
     clear: 'Effacer',
-    format: 'yyyy/mm/dd',
+    format: 'dd-mm-yyyy',
     weekStart: 1,
     monthsTitle: 'Mois',
     yearSelectTitle: 'Année',
@@ -21,7 +21,7 @@ $.fn.datepicker.dates['fr'] = {
 $(".datepicker").datepicker({
   isRTL: true,
   daysOfWeekDisabled: '06',
-  format: 'yyyy/mm/dd',
+  format: 'dd-mm-yyyy',
   autoclose: true,
   todayBtn: true,
   todayHighlight: true,

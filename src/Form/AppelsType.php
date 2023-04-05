@@ -161,8 +161,10 @@ class AppelsType extends AbstractType
                 'required' => true,
                 'label' => 'Date du rendez-vous',
                 'widget' => 'single_text',
+                'format' => 'dd-MM-yyyy',
                 'attr' => [
                     'class' => 'form-control datepicker',
+                    'placeholder' => 'Selectionnez une date de RDV',
                 ],
                 'html5' => false,
             ])
@@ -178,11 +180,18 @@ class AppelsType extends AbstractType
             
             ->add('isUrgent', CheckboxType::class, [
                 'required' => false,
-                'label' => 'Urgent ? ',
+                'label' => 'Rendez-vous urgent ?',
                 'attr' => [
-                    'data-urgent-ticket' => 'true'
+                    'class' => 'form-check-input',
+                    'data-urgent-ticket' => 'true',
+                    'id' => 'isUrgentCheckbox'
+                ],
+                'label_attr' => [
+                    'class' => 'form-check-label',
+                    'for' => 'isUrgentCheckbox'
                 ]
             ]);
+            
     }
 
     public function configureOptions(OptionsResolver $resolver): void

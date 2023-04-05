@@ -8,6 +8,8 @@ use App\Form\AppelsType;
 use App\Entity\TicketUrgents;
 use App\Repository\AppelsRepository;
 use App\Repository\ClientDefRepository;
+use App\Controller\CalendrierController;
+use App\Repository\CalendrierRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use App\Repository\TicketUrgentsRepository;
 use Symfony\Component\HttpFoundation\Request;
@@ -33,7 +35,7 @@ class AppelsController extends AbstractController
     }
 
     #[Route('/appels/new', name: 'app_appels_new')]
-    public function new(Request $request, AppelsRepository $appelsRepository, EntityManagerInterface $em, TicketUrgentsRepository $ticketUrgent): Response
+    public function new(Request $request, EntityManagerInterface $em, TicketUrgentsRepository $ticketUrgent): Response
     {
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
     
@@ -43,13 +45,11 @@ class AppelsController extends AbstractController
         $form->handleRequest($request);
     
         if ($form->isSubmitted() && $form->isValid()) {
-            // $rdvDate = $form->get('rdvDate')->getData()->format('Y-m-d');
-            // $rdvTime = $form->get('rdvTime')->getData()->format('H:i:s');
-            // $rdvDateHour = $rdvDate . ' ' . $rdvTime;
+            $rdvDate = $form->get('rdvDate')->getData()->format('Y-m-d');
+            $rdvTime = $form->get('rdvTime')->getData()->format('H:i:s');
+            $rdvDateHour = $rdvDate . ' ' . $rdvTime;
 
-            // $dateTime = new DateTime($rdvDateHour);
-
-            // $appelSAV->setRdvDateTime($dateTime);
+            $dateTime = new DateTime($rdvDateHour);
 
             // dd($dateTime);
 

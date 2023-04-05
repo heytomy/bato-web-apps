@@ -4,7 +4,9 @@ namespace App\Controller;
 
 use App\Entity\AppsUtilisateur;
 use App\Entity\ClientDef;
+use App\Repository\AppelsRepository;
 use App\Repository\AppsUtilisateurRepository;
+use App\Repository\CalendrierRepository;
 use App\Repository\ClientDefRepository;
 use App\Repository\ContratRepository;
 use App\Repository\DefAppsUtilisateurRepository;
@@ -23,11 +25,18 @@ class TestController extends AbstractController
 {
     #[IsGranted('ROLE_ADMIN')]
     #[Route('/test/{id}', name: 'app_test_1', methods: ['POST', 'GET'])]
-    public function user(AppsUtilisateur $user, RolesRepository $rolesRepository, ContratRepository $contratRepository, EntityManagerInterface $em, ClientDefRepository $clientDefRepository): Response
+    public function user(
+        AppsUtilisateur $user, 
+        RolesRepository $rolesRepository,
+        ContratRepository $contratRepository, 
+        AppelsRepository $appelsRepository,
+        CalendrierRepository $calendrierRepository,
+        ClientDefRepository $clientDefRepository
+        ): Response
     {
-        $client = $clientDefRepository->findOneBy(['id' => 6]);
+        $calendriers = $calendrierRepository ->findAll();
         // $test = $contratRepository->find("00001");
-        dd($client->getContrats()[0]->getId());
+        dd($calendriers);
         // $this->denyAccessUnlessGranted('ROLE_ADMIN');
         return $this->render('test/test.html.twig', [
             'controller_name' => 'TestController',

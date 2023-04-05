@@ -90,11 +90,6 @@ class Calendrier
 
     public function setAppels(?Appels $appels): self
     {
-        // unset the owning side of the relation if necessary
-        if ($appels === null && $this->appels !== null) {
-            $this->appels->setRdv(null);
-        }
-
         // set the owning side of the relation if necessary
         if ($appels !== null && $appels->getRdv() !== $this) {
             $appels->setRdv($this);

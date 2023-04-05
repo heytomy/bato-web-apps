@@ -8,9 +8,9 @@ use App\Form\AppelsType;
 use App\Entity\TicketUrgents;
 use App\Repository\AppelsRepository;
 use App\Repository\ClientDefRepository;
-use App\Controller\CalendrierController;
 use App\Entity\Calendrier;
-use App\Repository\CalendrierRepository;
+use App\Repository\CommentairesAppelsRepository;
+use App\Repository\RepCommentairesAppelsRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use App\Repository\TicketUrgentsRepository;
 use Symfony\Component\HttpFoundation\Request;
@@ -127,5 +127,19 @@ class AppelsController extends AbstractController
         ];
     
         return new JsonResponse($data);
+    }
+
+    #[Route('/appels/{id}', name: 'app_appels_show')]
+    public function show(
+        Appels $appel, 
+        CommentairesAppelsRepository $commentairesAppelsRepository, 
+        Request $request, EntityManagerInterface $em, 
+        RepCommentairesAppelsRepository $repCommentairesAppelsRepository,
+        ): Response
+    {
+        $user = $this->getUser() ?? null;
+        return $this->render('appels/show.html.twig',[
+            
+        ]);
     }
 }

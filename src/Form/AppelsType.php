@@ -176,7 +176,41 @@ class AppelsType extends AbstractType
                     'class' => 'form-control timepicker',
                 ],
             ])
-            
+            ->add('rdvDateFin', DateType::class, [
+                'mapped' => false,
+                'required' => false,
+                'label' => 'Date fin du rendez-vous',
+                'widget' => 'single_text',
+                'format' => 'dd-MM-yyyy',
+                'attr' => [
+                    'class' => 'form-control datepicker',
+                    'placeholder' => 'Selectionnez une date de RDV',
+                ],
+                'html5' => false,
+            ])
+            ->add('rdvTimeFin', TimeType::class, [
+                'mapped' => false,
+                'required' => false,
+                'label' => 'Heure du rendez-vous',
+                'widget' => 'single_text',
+                'attr' => [
+                    'class' => 'form-control timepicker',
+                ],
+            ])
+            ->add('allDay', CheckboxType::class, [
+                'mapped' => false,
+                'required' => false,
+                'label' => 'Toute la journée ?',
+                'attr' => [
+                    'class' => 'form-check-input',
+                    'data-urgent-ticket' => 'true',
+                    'id' => 'allDayCheckbox'
+                ],
+                'label_attr' => [
+                    'class' => 'form-check-label',
+                    'for' => 'allDayCheckbox'
+                ]
+            ])
             ->add('isUrgent', CheckboxType::class, [
                 'required' => false,
                 'label' => 'Rendez-vous urgent ?',
@@ -189,7 +223,8 @@ class AppelsType extends AbstractType
                     'class' => 'form-check-label',
                     'for' => 'isUrgentCheckbox'
                 ]
-            ]);
+            ])
+            ;
             
     }
 

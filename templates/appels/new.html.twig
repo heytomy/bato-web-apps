@@ -31,10 +31,20 @@
 		<div class="col">{{ form_row(form.description) }}</div>
 	</div>
 
+	<div class="row mb-4 mt-4 form-check">
+		<div class="col">{{ form_row(form.allDay) }}</div>
+	</div> 
+
 	<div class="row mt-3">
 		<div class="col-md-6">{{ form_row(form.rdvDate) }}</div>
 		<div class="col-md-6">{{ form_row(form.rdvTime) }}</div>
+	</div>
+
+	<div class="row mt-3">
+		<div class="col-md-6">{{ form_row(form.rdvDateFin) }}</div>
+		<div class="col-md-6">{{ form_row(form.rdvTimeFin) }}</div>
 	</div>   
+   
 
 	<div class="row mb-4 mt-4 form-check">
 		<div class="col">{{ form_row(form.isUrgent) }}</div>

@@ -9,6 +9,7 @@ use App\Entity\TicketUrgents;
 use App\Repository\AppelsRepository;
 use App\Repository\ClientDefRepository;
 use App\Controller\CalendrierController;
+use App\Entity\Calendrier;
 use App\Repository\CalendrierRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use App\Repository\TicketUrgentsRepository;
@@ -40,6 +41,7 @@ class AppelsController extends AbstractController
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
     
         $appel = new Appels();
+        $rdv = new Calendrier();
         $form = $this->createForm(AppelsType::class, $appel);
     
         $form->handleRequest($request);
@@ -49,12 +51,35 @@ class AppelsController extends AbstractController
             $rdvTime = $form->get('rdvTime')->getData()->format('H:i:s');
             $rdvDateHour = $rdvDate . ' ' . $rdvTime;
 
-            $dateTime = new DateTime($rdvDateHour);
+            $rdvDateFin = $form->get('rdvDateFin')->getData();
+            $rdvTimeFin = $form->get('rdvTimeFin')->getData();
+            if ($rdvDateFin && $rdvTimeFin) {
+                $rdvDateFin = $form->get('rdvDateFin')->getData()->format('Y-m-d') ?? null;
+                $rdvTimeFin = $form->get('rdvTimeFin')->getData()->format('H:i:s') ?? null;
+                $rdvDateHourFin = $rdvDateFin . ' ' . $rdvTimeFin;
+            } else {
+                $rdvDateHourFin = null;
+            }
 
-            // dd($appel);
+            $allDay = $form->get('allDay')->getData();
+            
+
+            $dateTime = new DateTime($rdvDateHour);
+            $dateTimeFin = new DateTime($rdvDateHourFin) ?? null;
+
+            $rdv
+                ->setDateDebut($dateTime)
+                ->setDateFin($dateTimeFin)
+                ->setAllDay($allDay)
+                ->setTitre($appel->getNom())
+                ;
+            $appel->setRdv($rdv);
 
             $em->persist($appel);
             $em->flush($appel);
+
+            $em->persist($rdv);
+            $em->flush($rdv);
     
             if ($form->get('isUrgent')->getData()) {
 

@@ -2,36 +2,65 @@ import 'bootstrap';
 
 const $ = require('jquery');
 
-var clientField = document.getElementById('appels_sav_client');
+var clientField = document.getElementById('appels_ClientList');
 
 clientField.addEventListener('change', function() {
 
     var clientId = clientField.value;
 
+    if (!clientId) { // check if clientId is empty or null
+        // Set the Contrats select to null and make it readonly
+        $('#appels_CodeContrat').val('').prop('readonly', true);
+
+        // Clear all other fields
+        $('#appels_CodeClient').val('');
+        $('#appels_Nom').val('');
+        $('#appels_Adr').val('');
+        $('#appels_CP').val('');
+        $('#appels_Ville').val('');
+        $('#appels_Tel').val('');
+        $('#appels_Email').val('');
+        
+        // Remove all options from the Contrats select
+        $('#appels_CodeContrat').find('option').remove();
+        // Add a disabled placeholder option to the Contrats select
+        $('#appels_CodeContrat').append($('<option>', {
+            value: '',
+            text: 'Choisissez le client pour voir les contrats',
+            disabled: true,
+            selected: true
+        }));
+        return; // exit the function early
+    }
+
+    // If clientId is not empty or null, continue with the ajax call
     $.ajax({
         url: '/get-client-and-contrats-info/' + clientId,
         method: 'GET',
         success: function(response) {
-            $('#appels_sav_Client').val(response.codeclient);
-            $('#appels_sav_Nom').val(response.nom);
-            $('#appels_sav_Adr').val(response.adr);
-            $('#appels_sav_CP').val(response.cp);
-            $('#appels_sav_Ville').val(response.ville);
-            $('#appels_sav_Tel').val(response.tel);
-            $('#appels_sav_Email').val(response.email);
-    
+            // enable the Contrats select
+            $('#appels_CodeContrat').prop('readonly', false);
+
+            $('#appels_CodeClient').val(response.codeclient);
+            $('#appels_Nom').val(response.nom);
+            $('#appels_Adr').val(response.adr);
+            $('#appels_CP').val(response.cp);
+            $('#appels_Ville').val(response.ville);
+            $('#appels_Tel').val(response.tel);
+            $('#appels_Email').val(response.email);
+
             // Remove all options from the Contrats select
-            $('#appels_sav_Contrats').find('option').remove();
-    
+            $('#appels_CodeContrat').find('option').remove();
+
             // Add a placeholder option to the Contrats select
-            $('#appels_sav_Contrats').append($('<option>', {
+            $('#appels_CodeContrat').append($('<option>', {
                 value: '',
                 text: 'Choisissez le contrat'
             }));
-    
+
             // Add all the client's contrat options to the Contrats select
             $.each(response.contrats, function(index, contrat) {
-                $('#appels_sav_Contrats').append($('<option>', {
+                $('#appels_CodeContrat').append($('<option>', {
                     value: contrat.codecontrat,
                     text: contrat.codecontrat
                 }));
@@ -53,3 +82,4 @@ clientField.addEventListener('change', function() {
     });
     
 });
+

@@ -2,7 +2,7 @@ import 'bootstrap';
 
 const $ = require('jquery');
 
-var clientField = document.getElementById('appels_sav_client');
+var clientField = document.getElementById('appels_ClientList');
 
 clientField.addEventListener('change', function() {
 
@@ -12,26 +12,26 @@ clientField.addEventListener('change', function() {
         url: '/get-client-and-contrats-info/' + clientId,
         method: 'GET',
         success: function(response) {
-            $('#appels_sav_Client').val(response.codeclient);
-            $('#appels_sav_Nom').val(response.nom);
-            $('#appels_sav_Adr').val(response.adr);
-            $('#appels_sav_CP').val(response.cp);
-            $('#appels_sav_Ville').val(response.ville);
-            $('#appels_sav_Tel').val(response.tel);
-            $('#appels_sav_Email').val(response.email);
+            $('#appels_CodeClient').val(response.codeclient);
+            $('#appels_Nom').val(response.nom);
+            $('#appels_Adr').val(response.adr);
+            $('#appels_CP').val(response.cp);
+            $('#appels_Ville').val(response.ville);
+            $('#appels_Tel').val(response.tel);
+            $('#appels_Email').val(response.email);
     
             // Remove all options from the Contrats select
-            $('#appels_sav_Contrats').find('option').remove();
+            $('#appels_CodeContrat').find('option').remove();
     
             // Add a placeholder option to the Contrats select
-            $('#appels_sav_Contrats').append($('<option>', {
+            $('#appels_CodeContrat').append($('<option>', {
                 value: '',
                 text: 'Choisissez le contrat'
             }));
     
             // Add all the client's contrat options to the Contrats select
             $.each(response.contrats, function(index, contrat) {
-                $('#appels_sav_Contrats').append($('<option>', {
+                $('#appels_CodeContrat').append($('<option>', {
                     value: contrat.codecontrat,
                     text: contrat.codecontrat
                 }));

@@ -27,7 +27,7 @@ class CommentairesSAV
     #[ORM\Column(name: 'Commentaire_SAV', type: Types::TEXT, nullable: true)]
     private ?string $commentaire_SAV = null;
 
-    #[ORM\Column(name: 'Date_Com', type: Types::DATE_MUTABLE, nullable: true)]
+    #[ORM\Column(name: 'Date_Com', type: Types::DATETIME_MUTABLE, nullable: true)]
     private ?\DateTimeInterface $date_com = null;
 
     #[ORM\ManyToOne(inversedBy: 'commentairesSAVs')]

@@ -21,10 +21,6 @@ class TicketUrgents
     #[ORM\JoinColumn(referencedColumnName:'id', nullable: true)]
     private ?Appels $AppelsUrgents = null;
 
-    #[ORM\ManyToOne(inversedBy: 'ticketUrgents')]
-    #[ORM\JoinColumn(referencedColumnName:'id', nullable: true)]
-    private ?AppelsSAV $AppelsSAV = null;
-
     #[ORM\Column]
     private ?int $status = null;
 
@@ -42,18 +38,6 @@ class TicketUrgents
     public function setAppelsUrgents(?Appels $AppelsUrgents): self
     {
         $this->AppelsUrgents = $AppelsUrgents;
-
-        return $this;
-    }
-
-    public function getAppelsSAV(): ?AppelsSAV
-    {
-        return $this->AppelsSAV;
-    }
-
-    public function setAppelsSAV(?AppelsSAV $AppelsSAV): self
-    {
-        $this->AppelsSAV = $AppelsSAV;
 
         return $this;
     }

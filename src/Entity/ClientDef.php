@@ -37,16 +37,12 @@ class ClientDef
     #[ORM\OneToMany(mappedBy: 'CodeClient', targetEntity: Contrat::class)]
     private Collection $contrats;
 
-    #[ORM\OneToMany(mappedBy: 'client', targetEntity: AppelsSAV::class)]
-    private Collection $appelsSAVs;
-
     #[ORM\OneToMany(mappedBy: 'CodeClient', targetEntity: Appels::class)]
     private Collection $appels;
 
     public function __construct()
     {
         $this->contrats = new ArrayCollection();
-        $this->appelsSAVs = new ArrayCollection();
         $this->appels = new ArrayCollection();
     }
 
@@ -151,36 +147,6 @@ class ClientDef
             // set the owning side to null (unless already changed)
             if ($contrat->getCodeClient() === $this) {
                 $contrat->setCodeClient(null);
-            }
-        }
-
-        return $this;
-    }
-
-    /**
-     * @return Collection<int, AppelsSAV>
-     */
-    public function getAppelsSAVs(): Collection
-    {
-        return $this->appelsSAVs;
-    }
-
-    public function addAppelsSAV(AppelsSAV $appelsSAV): self
-    {
-        if (!$this->appelsSAVs->contains($appelsSAV)) {
-            $this->appelsSAVs->add($appelsSAV);
-            $appelsSAV->setClient($this);
-        }
-
-        return $this;
-    }
-
-    public function removeAppelsSAV(AppelsSAV $appelsSAV): self
-    {
-        if ($this->appelsSAVs->removeElement($appelsSAV)) {
-            // set the owning side to null (unless already changed)
-            if ($appelsSAV->getClient() === $this) {
-                $appelsSAV->setClient(null);
             }
         }
 

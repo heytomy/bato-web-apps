@@ -13,7 +13,16 @@
 {% endblock %}
 
 {% block list %}
-    <div class="client-container border rounded container bg-light p-2"></div>
+<div class="client-container border rounded container bg-light p-2">
+    {% for appels in appels %}
+	<div class="row border border-light rounded bg-client m-2 p-2 client">
+		<h1>{{ appels.Nom}}</h1>
+		<div>Code du contrat: {{appels.codeContrat}}</div>
+		<div>Code du client: {{appels.codeClient}}</div>
+	</div>
+{% endfor %}
+</div>
+
 {% endblock %}
 
 {% block content %}

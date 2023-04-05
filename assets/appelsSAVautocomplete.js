@@ -8,10 +8,39 @@ clientField.addEventListener('change', function() {
 
     var clientId = clientField.value;
 
+    if (!clientId) { // check if clientId is empty or null
+        // Set the Contrats select to null and disable it
+        $('#appels_CodeContrat').val('').prop('disabled', true);
+        
+        // Clear all other fields
+        $('#appels_CodeClient').val('');
+        $('#appels_Nom').val('');
+        $('#appels_Adr').val('');
+        $('#appels_CP').val('');
+        $('#appels_Ville').val('');
+        $('#appels_Tel').val('');
+        $('#appels_Email').val('');
+        
+        // Remove all options from the Contrats select
+        $('#appels_CodeContrat').find('option').remove();
+        // Add a disabled placeholder option to the Contrats select
+        $('#appels_CodeContrat').append($('<option>', {
+            value: '',
+            text: 'Choisissez le client pour voir les contrats',
+            disabled: true,
+            selected: true
+        }));
+        return; // exit the function early
+    }
+
+    // If clientId is not empty or null, continue with the ajax call
     $.ajax({
         url: '/get-client-and-contrats-info/' + clientId,
         method: 'GET',
         success: function(response) {
+            // enable the Contrats select
+            $('#appels_CodeContrat').prop('disabled', false);
+
             $('#appels_CodeClient').val(response.codeclient);
             $('#appels_Nom').val(response.nom);
             $('#appels_Adr').val(response.adr);
@@ -19,16 +48,16 @@ clientField.addEventListener('change', function() {
             $('#appels_Ville').val(response.ville);
             $('#appels_Tel').val(response.tel);
             $('#appels_Email').val(response.email);
-    
+
             // Remove all options from the Contrats select
             $('#appels_CodeContrat').find('option').remove();
-    
+
             // Add a placeholder option to the Contrats select
             $('#appels_CodeContrat').append($('<option>', {
                 value: '',
                 text: 'Choisissez le contrat'
             }));
-    
+
             // Add all the client's contrat options to the Contrats select
             $.each(response.contrats, function(index, contrat) {
                 $('#appels_CodeContrat').append($('<option>', {
@@ -53,3 +82,4 @@ clientField.addEventListener('change', function() {
     });
     
 });
+

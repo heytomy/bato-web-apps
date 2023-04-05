@@ -57,8 +57,8 @@ class AppelsType extends AbstractType
                 'choices' => $this->clientDefRepository->findByClientWithContrats(),
                 'label' => 'Client SAV',
                 'choice_label' => function (ClientDef $client) {
-                    return $client->getNom()
-                    . ' ' . $client->getContrats()[0]->getId() . ' ' . $client->getId();
+                    return $client->getNom();
+                    // . ' ' . $client->getContrats()[0]->getId() . ' ' . $client->getId();
                 },
                 'placeholder' => 'Choisissez le client',
                 'attr' => [
@@ -76,17 +76,21 @@ class AppelsType extends AbstractType
             ])
             ->add('CodeContrat', EntityType::class, [
                 'required' => true,
+                'disabled' => true,
+                'placeholder' => 'Choisissez le client pour voir les contrats',
                 'class' => Contrat::class,
                 'label' => 'Contrats',
                 'attr' => [
                     'class' => 'form-control',
                     'id' => 'contrats-field'
                 ],
+                'empty_data' => null, 
            ])
             ->add('CodeClient', EntityType::class, [
                 'mapped' => false,
                 'required' => true,
                 'class' => ClientDef::class,
+                'placeholder' => 'Code Client',
                 'label' => 'Code Client',
                 'attr' => [
                     'disabled' => true,

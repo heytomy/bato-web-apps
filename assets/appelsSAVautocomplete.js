@@ -9,9 +9,9 @@ clientField.addEventListener('change', function() {
     var clientId = clientField.value;
 
     if (!clientId) { // check if clientId is empty or null
-        // Set the Contrats select to null and disable it
-        $('#appels_CodeContrat').val('').prop('disabled', true);
-        
+        // Set the Contrats select to null and make it readonly
+        $('#appels_CodeContrat').val('').prop('readonly', true);
+
         // Clear all other fields
         $('#appels_CodeClient').val('');
         $('#appels_Nom').val('');
@@ -39,7 +39,7 @@ clientField.addEventListener('change', function() {
         method: 'GET',
         success: function(response) {
             // enable the Contrats select
-            $('#appels_CodeContrat').prop('disabled', false);
+            $('#appels_CodeContrat').prop('readonly', false);
 
             $('#appels_CodeClient').val(response.codeclient);
             $('#appels_Nom').val(response.nom);

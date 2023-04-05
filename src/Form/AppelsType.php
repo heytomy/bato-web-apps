@@ -2,9 +2,9 @@
 
 namespace App\Form;
 
+use App\Entity\Appels;
 use App\Entity\Contrat;
 use App\Entity\ClientDef;
-use App\Entity\Appels;
 use App\Entity\DefAppsUtilisateur;
 use App\Repository\ClientDefRepository;
 use Symfony\Component\Form\AbstractType;
@@ -13,6 +13,7 @@ use App\Repository\DefAppsUtilisateurRepository;
 use Eckinox\TinymceBundle\Form\Type\TinymceType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
+use Symfony\Component\Validator\Constraints\NotBlank;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Form\Extension\Core\Type\TelType;
 use Symfony\Component\Form\Extension\Core\Type\DateType;
@@ -76,27 +77,25 @@ class AppelsType extends AbstractType
             ])
             ->add('CodeContrat', EntityType::class, [
                 'required' => true,
-                'disabled' => true,
                 'placeholder' => 'Choisissez le client pour voir les contrats',
                 'class' => Contrat::class,
-                'label' => 'Contrats',
+                'label' => 'Code Contrat',
                 'attr' => [
                     'class' => 'form-control',
-                    'id' => 'contrats-field'
+                    'id' => 'contrats-field',
+                    'readonly' => true,
                 ],
-                'empty_data' => null, 
            ])
             ->add('CodeClient', EntityType::class, [
-                'mapped' => false,
                 'required' => true,
                 'class' => ClientDef::class,
                 'placeholder' => 'Code Client',
                 'label' => 'Code Client',
                 'attr' => [
-                    'disabled' => true,
                     'placeholder' => 'Code Client',
                     'class' => 'form-control',
-                    'id' => 'client-field'
+                    'id' => 'client-field',
+                    'readonly' => true,
                 ],
                 'choice_label' => 'id'
             ])

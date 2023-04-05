@@ -138,8 +138,13 @@ class AppelsController extends AbstractController
         ): Response
     {
         $user = $this->getUser() ?? null;
+        $comments = $commentairesAppelsRepository->findBy(['codeAppels' => $appel->getId()]);
+
         return $this->render('appels/show.html.twig',[
-            
+            'appel'             =>  $appel,
+            'comments'          =>  $comments,
+            'restCommentaires'  =>  null,
+
         ]);
     }
 }

@@ -7,6 +7,7 @@ use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: CalendrierRepository::class)]
+#[ORM\Table(name: 'RDV_Calendrier')]
 class Calendrier
 {
     #[ORM\Id]
@@ -25,6 +26,9 @@ class Calendrier
 
     #[ORM\Column]
     private ?bool $allDay = null;
+
+    #[ORM\OneToOne(mappedBy: 'rdv', cascade: ['persist', 'remove'])]
+    private ?Appels $appels = null;
 
     public function getId(): ?int
     {
@@ -75,6 +79,28 @@ class Calendrier
     public function setAllDay(bool $allDay): self
     {
         $this->allDay = $allDay;
+
+        return $this;
+    }
+
+    public function getAppels(): ?Appels
+    {
+        return $this->appels;
+    }
+
+    public function setAppels(?Appels $appels): self
+    {
+        // unset the owning side of the relation if necessary
+        if ($appels === null && $this->appels !== null) {
+            $this->appels->setRdv(null);
+        }
+
+        // set the owning side of the relation if necessary
+        if ($appels !== null && $appels->getRdv() !== $this) {
+            $appels->setRdv($this);
+        }
+
+        $this->appels = $appels;
 
         return $this;
     }

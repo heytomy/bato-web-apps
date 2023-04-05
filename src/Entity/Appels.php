@@ -39,14 +39,8 @@ class Appels
     #[ORM\Column(type: Types::TEXT)]
     private ?string $description = null;
 
-    #[ORM\Column(name:'rdv_DateHour', type: Types::DATETIME_MUTABLE)]
-    private ?\DateTimeInterface $rdvDateTime = null;
-
     #[ORM\Column(nullable: true)]
     private ?bool $isUrgent = null;
-
-    #[ORM\OneToMany(mappedBy: 'AppelsUrgents', targetEntity: TicketUrgents::class)]
-    private Collection $ticketUrgents;
 
     #[ORM\ManyToOne(targetEntity: DefAppsUtilisateur::class)]
     #[ORM\JoinColumn(name:"ID_Utilisateur", referencedColumnName:"ID_Utilisateur", nullable:false)]
@@ -56,10 +50,13 @@ class Appels
     #[ORM\JoinColumn(name:"CodeClient", referencedColumnName:"Code", nullable:true)]
     private ?ClientDef $CodeClient = null;
 
-    public function __construct()
-    {
-        $this->ticketUrgents = new ArrayCollection();
-    }
+    #[ORM\ManyToOne(inversedBy: 'appels')]
+    #[ORM\JoinColumn(name:"CodeContrat", referencedColumnName:"Code", nullable:true)]
+    private ?Contrat $CodeContrat = null;
+
+    #[ORM\OneToOne(inversedBy: 'appels', cascade: ['persist', 'remove'])]
+    #[ORM\JoinColumn(name:"ID_rdv", referencedColumnName:"id", nullable:true)]
+    private ?Calendrier $rdv = null;
 
     public function getId(): ?int
     {
@@ -163,18 +160,6 @@ class Appels
         return $this;
     }
 
-    public function getRdvDateTime(): ?\DateTimeInterface
-    {
-        return $this->rdvDateTime;
-    }
-
-    public function setRdvDateTime(\DateTimeInterface $rdvDateTime): self
-    {
-        $this->rdvDateTime = $rdvDateTime;
-
-        return $this;
-    }
-
     public function isUrgent(): ?bool
     {
         return $this->isUrgent;
@@ -187,36 +172,6 @@ class Appels
         return $this;
     }
 
-    /**
-     * @return Collection<int, TicketUrgents>
-     */
-    public function getTicketUrgents(): Collection
-    {
-        return $this->ticketUrgents;
-    }
-
-    public function addTicketUrgent(TicketUrgents $ticketUrgent): self
-    {
-        if (!$this->ticketUrgents->contains($ticketUrgent)) {
-            $this->ticketUrgents->add($ticketUrgent);
-            $ticketUrgent->setAppelsUrgents($this);
-        }
-
-        return $this;
-    }
-
-    public function removeTicketUrgent(TicketUrgents $ticketUrgent): self
-    {
-        if ($this->ticketUrgents->removeElement($ticketUrgent)) {
-            // set the owning side to null (unless already changed)
-            if ($ticketUrgent->getAppelsUrgents() === $this) {
-                $ticketUrgent->setAppelsUrgents(null);
-            }
-        }
-
-        return $this;
-    }
-
     public function getCodeClient(): ?ClientDef
     {
         return $this->CodeClient;
@@ -225,6 +180,30 @@ class Appels
     public function setCodeClient(?ClientDef $CodeClient): self
     {
         $this->CodeClient = $CodeClient;
+
+        return $this;
+    }
+
+    public function getCodeContrat(): ?Contrat
+    {
+        return $this->CodeContrat;
+    }
+
+    public function setCodeContrat(?Contrat $CodeContrat): self
+    {
+        $this->CodeContrat = $CodeContrat;
+
+        return $this;
+    }
+
+    public function getRdv(): ?Calendrier
+    {
+        return $this->rdv;
+    }
+
+    public function setRdv(?Calendrier $rdv): self
+    {
+        $this->rdv = $rdv;
 
         return $this;
     }

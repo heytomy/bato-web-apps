@@ -36,7 +36,7 @@
                                                     >
                                                         <i class="fas fa-reply fa-xs"></i><span class="small"> Répondre</span>
                                                     </button>
-                                                    {{ include('commentaireSAV/_delete_comment_form.html.twig') }}
+                                                    {{ include('commentaireAppels/_delete_comment_form.html.twig') }}
                                                 </div>
                                                 <div class="collapse" id="repondre-{{comment.id}}">
                                                     <div id="form-container-{{comment.id}}"></div>
@@ -60,7 +60,7 @@
                                                                     </p>
                                                                 </div>
                                                                 <div class="p-2 d-flex flex-start flex-row-reverse">
-                                                                    {{ include('commentaireSAV/_delete_reply_form.html.twig') }}
+                                                                    {{ include('commentaireAppels/_delete_reply_form.html.twig') }}
                                                                 </div>
                                                             </div>
                                                         </div>
@@ -124,8 +124,8 @@
 
                 // Reset form values and data
                 form.reset();
-                form.querySelector('#rep_commentaires_sav_parentid').value = commentId;
-                form.querySelector('#rep_commentaires_sav_contenu').value = '';
+                form.querySelector('#rep_commentaires_appels_parentid').value = commentId;
+                form.querySelector('#rep_commentaires_appels_contenu').value = '';
 
             });
         });

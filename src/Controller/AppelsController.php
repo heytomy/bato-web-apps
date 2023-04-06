@@ -26,7 +26,10 @@ class AppelsController extends AbstractController
     #[Route('/appels', name: 'app_appels')]
     public function index(AppelsRepository $appelsRepository): Response
     {
-        $appels = $appelsRepository->findAll();
+        $appels = $appelsRepository->createQueryBuilder('a')
+            ->orderBy('a.rdv', 'DESC')
+            ->getQuery()
+            ->getResult();
 
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
         return $this->render('appels/index.html.twig', [

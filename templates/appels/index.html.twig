@@ -21,8 +21,8 @@
 				<div class="d-flex justify-content-between">
 					<h1>{{appel.getRdv().titre}}</h1>
 					<div class="d-flex flex-column align-items-end">
-						<h5>{{appel.getRdv().dateDebut | date('d/m/Y')}}</h5>
-						<h5>{{appel.getRdv().dateDebut | date('h:i')}}</h5>
+						<h5>Le {{appel.getRdv().dateDebut | date('d/m/Y')}}</h5>
+						<h5>à {{appel.getRdv().dateDebut | date('h:i')}}</h5>
 					</div>
 				</div>
 				<div>Code Contrat:
@@ -46,30 +46,36 @@
 						</div>
 						<div class="modal-body">
 							<div class="row">
+
 								<div class="col-md-6">
-									<p>
-										<strong>Code Contrat:</strong>
 										{% if appel.CodeContrat %}
+										<strong>Code Contrat:</strong>
 											{{appel.CodeContrat.getId()}}
 										{% endif %}
-									</p>
-									<p>
-										<strong>Code Client:</strong>
 										{% if appel.CodeClient %}
+										<strong>Code Client:</strong>
 											{{appel.CodeClient.getId()}}
 										{% endif %}
-									</p>
+								</div>
+
+								<div class="col-md-6">
 									<p>
 										<strong>Nom:</strong>
-										{{ appel.CodeClient }}</p>
-								</div>
-								<div class="col-md-6">
+										{{ appel.CodeClient }}
+									</p>
+
+									<p>
+										<strong>Téléphone:</strong>
+										{{ appel.Tel }}
+									</p>
 									<p>
 										<strong>Adresse:</strong>
 									</p>
 									<p>{{appel.Adr}}<br>{{appel.CP}}
-										{{appel.Ville}}</p>
+										{{appel.Ville}}
+									</p>
 								</div>
+
 
 								<div class="col-md-6">
 									<p>
@@ -77,6 +83,14 @@
 									</p>
 									<p>Le {{appel.getRdv().dateDebut | date('d/m/Y')}} à {{appel.getRdv().dateDebut | date('h:i')}}</p>
 								</div>
+
+								<div class="col-md-6">
+									<p>
+										<strong>Rendez-vous urgent ? </strong>
+									</p>
+									<p>{{ appel.isUrgent ? 'Oui' : 'Non' }}</p>
+								</div>
+
 							</div>
 						</div>
 						<div class="modal-footer">

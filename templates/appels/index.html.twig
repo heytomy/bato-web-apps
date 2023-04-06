@@ -25,14 +25,8 @@
 						<h5>{{appel.getRdv().dateDebut | date('h:i')}}</h5>
 					</div>
 				</div>
-				{% if appel.CodeContrat %}
-					<div>Code Contrat:
-						{{appel.codeContrat}}</div>
-				{% endif %}
-				{% if appel.CodeClient %}
-					<div>Code Client:
-						{{appel.codeClient.getId()}}</div>
-				{% endif %}
+				<div>Code Contrat: {% if appel.CodeContrat %}{{appel.CodeContrat.getId()}}{% endif %}</div>
+				<div>Code Client: {% if appel.CodeClient %}{{appel.CodeClient.getId()}}{% endif %}</div>
 			</div>
 		{% endfor %}
 	</div>

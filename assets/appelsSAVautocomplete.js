@@ -30,15 +30,13 @@ clientField.addEventListener('change', function() {
             disabled: true,
             selected: true
         }));
-        return; // exit the function early
+        return; 
     }
 
-    // If clientId is not empty or null, continue with the ajax call
     $.ajax({
         url: '/get-client-and-contrats-info/' + clientId,
         method: 'GET',
         success: function(response) {
-            // enable the Contrats select
             $('#appels_CodeContrat').prop('readonly', false);
 
             $('#appels_CodeClient').val(response.codeclient);
@@ -49,16 +47,13 @@ clientField.addEventListener('change', function() {
             $('#appels_Tel').val(response.tel);
             $('#appels_Email').val(response.email);
 
-            // Remove all options from the Contrats select
             $('#appels_CodeContrat').find('option').remove();
 
-            // Add a placeholder option to the Contrats select
             $('#appels_CodeContrat').append($('<option>', {
                 value: '',
                 text: 'Choisissez le contrat'
             }));
 
-            // Add all the client's contrat options to the Contrats select
             $.each(response.contrats, function(index, contrat) {
                 $('#appels_CodeContrat').append($('<option>', {
                     value: contrat.codecontrat,

@@ -1,6 +1,8 @@
 {% extends '_inc/listPage.html.twig' %}
 
-{% block back_button %}{{ path('app_dashboard') }}{% endblock %}
+{% block back_button %}
+	{{ path('app_dashboard') }}
+{% endblock %}
 
 {% block title %}Hello AppelsController!
 {% endblock %}
@@ -13,23 +15,38 @@
 {% endblock %}
 
 {% block list %}
-<div class="client-container border rounded container bg-light p-2">
-    {% for appels in appels %}
-	<div class="row border border-light rounded bg-client m-2 p-2 client">
-		<h1>{{ appels.Nom}}</h1>
-		<div>Code du contrat: {{appels.codeContrat}}</div>
-		<div>Code du client: {{appels.codeClient}}</div>
+	<div class="client-container border rounded container bg-light p-2">
+		{% for appel in appels %}
+			<div class="row border border-light rounded bg-client m-2 p-2 client">
+				<div class="d-flex justify-content-between">
+					<h1>{{appel.getRdv().titre}}</h1>
+					<div class="d-flex flex-column align-items-end">
+						<h5>{{appel.getRdv().dateDebut | date('d/m/Y')}}</h5>
+						<h5>{{appel.getRdv().dateDebut | date('h:i')}}</h5>
+					</div>
+				</div>
+				{% if appel.CodeContrat %}
+					<div>Code Contrat:
+						{{appel.codeContrat}}</div>
+				{% endif %}
+				{% if appel.CodeClient %}
+					<div>Code Client:
+						{{appel.codeClient.getId()}}</div>
+				{% endif %}
+			</div>
+		{% endfor %}
 	</div>
-{% endfor %}
-</div>
 
 {% endblock %}
 
 {% block content %}
-    <button class="btn btn-primary back-to-top"><i class="fa-solid fa-angles-up"></i> Retour en haut</button>
-    {% include '_inc/chargementAnimation.html.twig' %}
+	<button class="btn btn-primary back-to-top">
+		<i class="fa-solid fa-angles-up"></i>
+		Retour en haut</button>
+	{% include '_inc/chargementAnimation.html.twig' %}
 {% endblock %}
 
 {% block javascripts %}
-    {{ parent() }}
+	{{ parent() }}
 {% endblock %}
+

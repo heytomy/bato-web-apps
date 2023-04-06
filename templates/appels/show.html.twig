@@ -33,7 +33,7 @@
                                 <div class="card-body p-4 bg-client">
                                     <div class="row">
                                         <div class="col">
-                                            {{ appel.description }}
+                                            {{ appel.description|raw }}
                                         </div>
                                     </div>
                                 </div>
@@ -49,7 +49,7 @@
         </h3>
         
         <div class="row border border-light rounded m-2 p-2">
-            {% include 'commentaire/comment.html.twig' %}
+            {% include 'commentaireAppels/comment.html.twig' %}
         </div>
     </div>
 {% endblock %}

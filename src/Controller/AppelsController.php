@@ -10,7 +10,9 @@ use App\Repository\AppelsRepository;
 use App\Repository\ClientDefRepository;
 use App\Entity\Calendrier;
 use App\Entity\CommentairesAppels;
+use App\Entity\RepCommentairesAppels;
 use App\Form\CommentairesAppelsType;
+use App\Form\RepCommentairesAppelsType;
 use App\Repository\CommentairesAppelsRepository;
 use App\Repository\RepCommentairesAppelsRepository;
 use Doctrine\ORM\EntityManagerInterface;
@@ -161,10 +163,48 @@ class AppelsController extends AbstractController
                 ->setOwner($user->getIDUtilisateur())
                 ;
             if ($appel->getCodeClient()) {
-                $comment->setCodeClient($appel->getCodeClient());
+                $comment->setCodeClient($appel->getCodeClient()->getId());
             }
             $em->persist($comment);
             $em->flush();
+
+            return $this->redirectToRoute('app_appels_show', ['id' => $appel->getId()]);
+        }
+
+        /**
+         * Partie Réponses
+         */
+        // On récupère toutes les réponses liées à ce contrat
+        $replies = $repCommentairesAppelsRepository->findByAppel($appel->getId()) ?? null;
+
+        // On crée le formulaires pour les réponses
+        $reply = new RepCommentairesAppels();
+        $replyForm = $this->createForm(RepCommentairesAppelsType::class, $reply);
+        $replyForm->handleRequest($request);
+ 
+        if ($replyForm->isSubmitted() && $replyForm->isValid()) {
+            $reply
+                ->setDateCom(new DateTime())
+                ->setNom($nom)
+                ->setOwner($user->getIDUtilisateur())
+                ;
+
+            // On récupère le contenu du champ parentid
+            $parentid = $replyForm->get('parentid')->getData();
+
+            // On va chercher le commentaire correspondant
+            $parent = $commentairesAppelsRepository->find($parentid);
+
+            // On définit le parent
+            $reply->setParent($parent);
+
+            if ($appel->getCodeClient()) {
+                $reply->setCodeClient($appel->getCodeClient()->getId());
+            }
+            
+            $em->persist($reply);
+            $em->flush();
+            return $this->redirectToRoute('app_appels_show', ['id' => $appel->getId()]);
         }
 
         return $this->render('appels/show.html.twig',[
@@ -172,8 +212,8 @@ class AppelsController extends AbstractController
             'comments'          =>  $comments,
             'restCommentaires'  =>  null,
             'commentForm'       =>  $commentForm,
-            'replyForm'         =>  null,
-            'replies'           =>  null,
+            'replyForm'         =>  $replyForm,
+            'replies'           =>  $replies,
         ]);
     }
 }

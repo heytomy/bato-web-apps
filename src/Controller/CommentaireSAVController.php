@@ -11,7 +11,7 @@ use Symfony\Component\Routing\Annotation\Route;
 use App\Repository\RepCommentairesSAVRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
-#[Route('/comment')]
+#[Route('/sav/comment')]
 class CommentaireSAVController extends AbstractController
 {
     #[Route('/{id}', name: 'app_sav_commentaire_delete', methods: ['POST'])]

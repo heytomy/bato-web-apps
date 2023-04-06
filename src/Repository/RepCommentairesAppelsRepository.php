@@ -38,6 +38,21 @@ class RepCommentairesAppelsRepository extends ServiceEntityRepository
             $this->getEntityManager()->flush();
         }
     }
+    /**
+    * Cette fonction cherche les Réponses Appels pour un appel particulier
+    * @param int $appel l'id de l'appel
+    * @return RepCommentairesAppels[] Returns an array of RepCommentairesAppels objects
+    */
+   public function findByAppel(int $appel): array
+   {
+       return $this->createQueryBuilder('reply')
+           ->innerJoin('reply.parent', 'comment')
+           ->andWhere('comment.codeAppels = :appel')
+           ->setParameter('appel', $appel)
+           ->getQuery()
+           ->getResult()
+       ;
+   }
 
 //    /**
 //     * @return RepCommentairesAppels[] Returns an array of RepCommentairesAppels objects

@@ -144,7 +144,9 @@ class AppelsController extends AbstractController
             'appel'             =>  $appel,
             'comments'          =>  $comments,
             'restCommentaires'  =>  null,
-
+            'commentForm'       =>  null,
+            'replyForm'         =>  null,
+            'replies'           =>  null,
         ]);
     }
 }

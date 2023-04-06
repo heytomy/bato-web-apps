@@ -20,7 +20,7 @@
                                                         </p>
                                                     </div>
                                                     <p class="small mb-0 ">
-                                                        <span class="commentContent">{{ comment.getCommentaireSAV() }}</span>
+                                                        <span class="commentContent">{{ comment.getContenu() }}</span>
                                                     </p>
                                                 </div>
                                                 <div class="p-2 d-flex flex-start flex-row-reverse">
@@ -56,7 +56,7 @@
                                                                         </p>
                                                                     </div>
                                                                     <p class="small mb-0">
-                                                                        {{ reply.getCommentaireSAV }}
+                                                                        {{ reply.getContenu }}
                                                                     </p>
                                                                 </div>
                                                                 <div class="p-2 d-flex flex-start flex-row-reverse">
@@ -72,26 +72,28 @@
                                     <hr>
                                 {# no comments #}
                                 {% else %}
-                                    <p>il n'y a pas des commentaires pour ce contrat SAV</p>
+                                    <p>il n'y a pas des commentaires ici</p>
                                 {% endif %}
                                 <hr>
                                 {% if app.user %}
-                                    <div class="d-flex flex-start mt-4">
-                                        <div style="width: 65px; height:65px; font-size: 2em; color: #479F9F;"></div>
-                                        <div class="flex-grow-1 flex-shrink-1">
-                                            <div class="p-2">
-                                                <div class="d-flex justify-content-between align-items-center">
-                                                    {{ form_start(commentForm, {'attr': {'class': 'd-flex flex-column col p-2'}}) }}
-                                                        {{ form_widget(commentForm.commentaire_SAV) }}
-                                                        {{ form_errors(commentForm.commentaire_SAV) }}
-                                                        <div class="d-flex flex-row-reverse">
-                                                            <button class="btn btn-primary mt-2" type="submit"> Envoyer </button>
-                                                        </div>
-                                                    {{ form_end(commentForm) }}
+                                    {% if commentForm %}
+                                        <div class="d-flex flex-start mt-4">
+                                            <div style="width: 65px; height:65px; font-size: 2em; color: #479F9F;"></div>
+                                            <div class="flex-grow-1 flex-shrink-1">
+                                                <div class="p-2">
+                                                    <div class="d-flex justify-content-between align-items-center">
+                                                        {{ form_start(commentForm, {'attr': {'class': 'd-flex flex-column col p-2'}}) }}
+                                                            {{ form_widget(commentForm.contenu) }}
+                                                            {{ form_errors(commentForm.contenu) }}
+                                                            <div class="d-flex flex-row-reverse">
+                                                                <button class="btn btn-primary mt-2" type="submit"> Envoyer </button>
+                                                            </div>
+                                                        {{ form_end(commentForm) }}
+                                                    </div>
                                                 </div>
                                             </div>
                                         </div>
-                                    </div>
+                                    {% endif %}
                                 {% endif %}
                             </div>
                         </div>
@@ -102,28 +104,30 @@
     </div>
 </section>
 
-<script>
-    document.querySelectorAll('[data-reply]').forEach(function(button) {
-        button.addEventListener('click', function(event) {
-            event.preventDefault();
-            var commentId = button.getAttribute('data-id');
-            var formHtml = '{{ form(replyForm, {'attr': {'class': 'd-flex flex-column col p-2'}}) }}';
-            formHtml = formHtml.replace(/__parentId__/g, commentId);
-            var formContainer = document.querySelector('#form-container-' + commentId);
-            formContainer.innerHTML = formHtml;
+{% if comments %}
+    <script>
+        document.querySelectorAll('[data-reply]').forEach(function(button) {
+            button.addEventListener('click', function(event) {
+                event.preventDefault();
+                var commentId = button.getAttribute('data-id');
+                var formHtml = '{{ form(replyForm, {'attr': {'class': 'd-flex flex-column col p-2'}}) }}';
+                formHtml = formHtml.replace(/__parentId__/g, commentId);
+                var formContainer = document.querySelector('#form-container-' + commentId);
+                formContainer.innerHTML = formHtml;
 
-            // creating submit button
-            var form = formContainer.querySelector('form');
-            const buttonElement = document.createElement('div');
-            buttonElement.classList.add('d-flex', 'flex-row-reverse');
-            buttonElement.innerHTML = `<button class="btn btn-primary m-2" type="submit"> Envoyer </button>`;
-            form.appendChild(buttonElement);
+                // creating submit button
+                var form = formContainer.querySelector('form');
+                const buttonElement = document.createElement('div');
+                buttonElement.classList.add('d-flex', 'flex-row-reverse');
+                buttonElement.innerHTML = `<button class="btn btn-primary m-2" type="submit"> Envoyer </button>`;
+                form.appendChild(buttonElement);
 
-            // Reset form values and data
-            form.reset();
-            form.querySelector('#rep_commentaires_sav_parentid').value = commentId;
-            form.querySelector('#rep_commentaires_sav_commentaire_SAV').value = '';
+                // Reset form values and data
+                form.reset();
+                form.querySelector('#rep_commentaires_sav_parentid').value = commentId;
+                form.querySelector('#rep_commentaires_sav_commentaire_SAV').value = '';
 
+            });
         });
-    });
-</script>
+    </script>
+{% endif %}

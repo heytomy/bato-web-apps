@@ -1,0 +1,55 @@
+{% extends '_inc/listPage.html.twig' %}
+
+{% block title %}Appels{% endblock %}
+
+{% block back_button %}
+    {{ path('app_sav') }}
+{% endblock %}
+
+{% block list %}
+    <div class="border rounded container bg-light p-2">
+        <div class="row border border-light rounded bg-client m-2 p-2"> 
+            <div class="d-flex justify-content-between">
+                <h1>{{appel.getRdv().titre}}</h1>
+                <div class="d-flex flex-column align-items-end">
+                    <h5>{{appel.getRdv().dateDebut | date('d/m/Y')}}</h5>
+                    <h5>{{appel.getRdv().dateDebut | date('h:i')}}</h5>
+                </div>
+            </div>
+            {% if appel.CodeContrat %}  <div>Code du contrat: {{appel.CodeContrat}}</div>   {% endif %}
+            {% if appel.CodeClient %}  <div>Code du contrat: {{appel.CodeClient}}</div>   {% endif %}    
+        </div>
+
+        <h3 class="row border border-light rounded m-2 p-2">
+            <strong>Description :</strong>
+        </h3>
+
+        <div class="row border border-light rounded m-2 p-2">
+            <section class="gradient-custom justify-content-center">
+                <div class="container justify-content-center">
+                    <div class="row d-flex justify-content-center">
+                        <div class="col-md-12">
+                            <div class="card">
+                                <div class="card-body p-4 bg-client">
+                                    <div class="row">
+                                        <div class="col">
+                                            {{ appel.description }}
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </div>
+
+        <h3 class="row border border-light rounded m-2 p-2">
+            <strong>Commentaires :</strong>
+        </h3>
+        
+        <div class="row border border-light rounded m-2 p-2">
+            {% include 'commentaire/comment.html.twig' %}
+        </div>
+    </div>
+{% endblock %}

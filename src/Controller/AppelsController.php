@@ -9,6 +9,8 @@ use App\Entity\TicketUrgents;
 use App\Repository\AppelsRepository;
 use App\Repository\ClientDefRepository;
 use App\Entity\Calendrier;
+use App\Entity\CommentairesAppels;
+use App\Form\CommentairesAppelsType;
 use App\Repository\CommentairesAppelsRepository;
 use App\Repository\RepCommentairesAppelsRepository;
 use Doctrine\ORM\EntityManagerInterface;
@@ -139,12 +141,34 @@ class AppelsController extends AbstractController
     {
         $user = $this->getUser() ?? null;
         $comments = $commentairesAppelsRepository->findBy(['codeAppels' => $appel->getId()]);
+        $nom = $user->getIdUtilisateur()->getNom() ." ". $user->getIdUtilisateur()->getPrenom();
+
+        /**
+         * Partie commentaires
+         */
+        // On crée le formulaires pour les commentaires
+        $comment = new CommentairesAppels();
+        $commentForm = $this->createForm(CommentairesAppelsType::class, $comment);
+        $commentForm->handleRequest($request);
+        if ($commentForm->isSubmitted() && $commentForm->isValid()) {
+            $comment
+                ->setDateCom(new DateTime())
+                ->setNom($nom)
+                ->setCodeAppels($appel->getId())
+                ->setOwner($user->getIDUtilisateur())
+                ;
+            if ($appel->getCodeClient()) {
+                $comment->setCodeClient($appel->getCodeClient());
+            }
+            $em->persist($comment);
+            $em->flush();
+        }
 
         return $this->render('appels/show.html.twig',[
             'appel'             =>  $appel,
             'comments'          =>  $comments,
             'restCommentaires'  =>  null,
-            'commentForm'       =>  null,
+            'commentForm'       =>  $commentForm,
             'replyForm'         =>  null,
             'replies'           =>  null,
         ]);

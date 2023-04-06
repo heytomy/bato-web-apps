@@ -25,7 +25,7 @@ class CommentairesSAV
         maxMessage: 'Il ne faut pas passer de {{ limit }} caractères',
     )]
     #[ORM\Column(name: 'Commentaire_SAV', type: Types::TEXT, nullable: true)]
-    private ?string $commentaire_SAV = null;
+    private ?string $contenu = null;
 
     #[ORM\Column(name: 'Date_Com', type: Types::DATETIME_MUTABLE, nullable: true)]
     private ?\DateTimeInterface $date_com = null;
@@ -57,14 +57,14 @@ class CommentairesSAV
         return $this->id;
     }
 
-    public function getCommentaireSAV(): ?string
+    public function getContenu(): ?string
     {
-        return $this->commentaire_SAV;
+        return $this->contenu;
     }
 
-    public function setCommentaireSAV(?string $Commentaire_SAV): self
+    public function setContenu(?string $contenu): self
     {
-        $this->commentaire_SAV = $Commentaire_SAV;
+        $this->contenu = $contenu;
 
         return $this;
     }

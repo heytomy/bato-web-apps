@@ -193,7 +193,10 @@ class AppelsType extends AbstractType
                 'required' => true,
                 'label' => 'Description',
                 'attr' => [
-                    "toolbar" => "bold italic underline | bullist numlist",
+                    'selector' => 'textarea',
+                    'toolbar' => 'undo redo | h2 bold italic underline title | copy cut paste',
+                    'menubar' => 'false',                
+                    'contextmenu' => 'false',
                     'placeholder' => 'Décrivez le problème rencontré par le client',
                 ],
                 'constraints' => [
@@ -229,27 +232,10 @@ class AppelsType extends AbstractType
                 ],
             ])            
 
-            ->add('rdvDateFin', HiddenType::class, [
+            ->add('rdvDateTimeFin', HiddenType::class, [
                 'mapped' => false,
                 'required' => false,
-                'label' => 'Date fin du rendez-vous',
-                // 'widget' => 'single_text',
-                // 'format' => 'dd-MM-yyyy',
-                'attr' => [
-                    'class' => 'form-control datepicker',
-                    'placeholder' => 'Selectionnez une date de RDV',
-                ],
-                // 'html5' => false,
-            ])
-
-            ->add('rdvTimeFin', HiddenType::class, [
-                'mapped' => false,
-                'required' => false,
-                'label' => 'Heure de fin du rendez-vous',
-                // 'widget' => 'single_text',
-                'attr' => [
-                    'class' => 'form-control timepicker',
-                ],
+                'label' => 'Date et heure de fin du rendez-vous',
             ])
 
             ->add('allDay', CheckboxType::class, [

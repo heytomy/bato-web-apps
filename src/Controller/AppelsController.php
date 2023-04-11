@@ -56,30 +56,25 @@ class AppelsController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             $rdvDateTime = $form->get('rdvDateTime')->getData()->format('Y-m-d H:i:s');
 
-            $rdvDateFin = $form->get('rdvDateFin')->getData();
-            $rdvTimeFin = $form->get('rdvTimeFin')->getData();
+            $rdvDateTimeFin= $form->get('rdvDateTimeFin')->getData();
 
-            if ($rdvDateFin && $rdvTimeFin) {
-                $rdvDateFin = $form->get('rdvDateFin')->getData()->format('Y-m-d') ?? null;
-                $rdvTimeFin = $form->get('rdvTimeFin')->getData()->format('H:i:s') ?? null;
-                $rdvDateHourFin = $rdvDateFin . ' ' . $rdvTimeFin;
+            if ($rdvDateTimeFin) {
+                $rdvDateTimeFin = $form->get('rdvDateTimeFin')->getData()->format('Y-m-d H:i:s') ?? null;
             } else {
-                $rdvDateHourFin = null;
+                $rdvDateTimeFin = null;
             }
 
             $allDay = $form->get('allDay')->getData();
             
 
             $dateTime = new DateTime($rdvDateTime);
-            $dateTimeFin = new DateTime($rdvDateHourFin) ?? null;
+            $dateTimeFin = new DateTime($rdvDateTimeFin) ?? null;
 
             $rdv
                 ->setDateDebut($dateTime)
                 ->setDateFin($dateTimeFin)
                 ->setAllDay($allDay)
-                ->setTitre($appel->getNom() 
-                // . '  ' . $appel->getDescription()
-                )
+                ->setTitre($appel->getNom())
                 ;
             $appel->setRdv($rdv);
 

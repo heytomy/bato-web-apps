@@ -22,7 +22,7 @@
 					<h1>{{appel.getRdv().titre|raw}}</h1>
 					<div class="d-flex flex-column align-items-end">
 						<h5>Le {{appel.getRdv().dateDebut | date('d/m/Y')}}</h5>
-						<h5>à {{appel.getRdv().dateDebut | date('h:i')}}</h5>
+						<h5>à {{appel.getRdv().dateDebut | date('H:i')}}</h5>
 					</div>
 				</div>
 				<div>Code Contrat:
@@ -81,7 +81,7 @@
 									<p>
 										<strong>Date de rendez-vous:</strong>
 									</p>
-									<p>Le {{appel.getRdv().dateDebut | date('d/m/Y')}} à {{appel.getRdv().dateDebut | date('h:i')}}</p>
+									<p>Le {{appel.getRdv().dateDebut | date('d/m/Y')}} à {{appel.getRdv().dateDebut | date('H:i')}}</p>
 								</div>
 
 								<div class="col-md-6">

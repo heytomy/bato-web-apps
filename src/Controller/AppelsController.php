@@ -65,7 +65,7 @@ class AppelsController extends AbstractController
             $rdvHeureFin = clone $rdvDateTime;
 
             if ($allDay) {
-                $rdvHeureFin->setTime(20, 0);
+                $rdvHeureFin = null;
             } else {
                 $rdvHeureFin->add($HoursInterval);
             }
@@ -78,8 +78,6 @@ class AppelsController extends AbstractController
                 ;
             
             $appel->setRdv($rdv);
-
-            dd($appel);
 
             $em->persist($appel);
             $em->flush($appel);

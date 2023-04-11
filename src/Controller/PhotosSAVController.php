@@ -9,7 +9,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
-#[Route('/photo')]
+#[Route('/sav/photo')]
 class PhotosSAVController extends AbstractController
 {
     #[Route('/{id}', name: 'app_sav_photo_delete', methods: ['POST'])]

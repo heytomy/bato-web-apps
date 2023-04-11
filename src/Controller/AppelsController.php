@@ -14,6 +14,9 @@ use App\Repository\AppelsRepository;
 use App\Entity\RepCommentairesAppels;
 use App\Form\RepCommentairesAppelsType;
 use App\Repository\ClientDefRepository;
+use App\Repository\CommentairesAppelsRepository;
+use App\Repository\PhotosAppelsRepository;
+use App\Repository\RepCommentairesAppelsRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use App\Repository\TicketUrgentsRepository;
 use Symfony\Component\HttpFoundation\Request;
@@ -103,6 +106,7 @@ class AppelsController extends AbstractController
     
         return $this->render('appels/new.html.twig', [
             'form' => $form->createView(),
+            'current_page' => 'app_appels',
         ]);
     }
     
@@ -140,6 +144,7 @@ class AppelsController extends AbstractController
         CommentairesAppelsRepository $commentairesAppelsRepository, 
         Request $request, EntityManagerInterface $em, 
         RepCommentairesAppelsRepository $repCommentairesAppelsRepository,
+        PhotosAppelsRepository $photosAppelsRepository,
         ): Response
     {
         $user = $this->getUser() ?? null;
@@ -205,6 +210,11 @@ class AppelsController extends AbstractController
             return $this->redirectToRoute('app_appels_show', ['id' => $appel->getId()]);
         }
 
+        /**
+         * partie photos
+         */
+        $photos = $photosAppelsRepository->findBy(['idAppel' => $appel->getId()]) ?? null;
+
         return $this->render('appels/show.html.twig',[
             'appel'             =>  $appel,
             'comments'          =>  $comments,
@@ -212,6 +222,8 @@ class AppelsController extends AbstractController
             'commentForm'       =>  $commentForm,
             'replyForm'         =>  $replyForm,
             'replies'           =>  $replies,
+            'photos'            =>  $photos,
+            'current_page'      =>  'app_appels',
         ]);
     }
 }

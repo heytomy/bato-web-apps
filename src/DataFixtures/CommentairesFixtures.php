@@ -32,7 +32,7 @@ class CommentairesFixtures extends Fixture implements DependentFixtureInterface
             for ($i=0; $i < 2; $i++) { 
                 $comment = new CommentairesSAV;
                 $comment
-                    ->setCommentaireSAV($faker->paragraphs(3, true))
+                    ->setContenu($faker->paragraphs(3, true))
                     ->setCodeContrat($contrat)
                     ->setCodeClient($contrat->getCodeClient()->getId())
                     ->setNom($contrat->getCodeClient()->getNom())
@@ -48,7 +48,7 @@ class CommentairesFixtures extends Fixture implements DependentFixtureInterface
                     ->setDateCom(new DateTime())
                     ->setCodeClient($contrat->getCodeClient()->getId())
                     ->setOwner($user->getIDUtilisateur())
-                    ->setCommentaireSAV($faker->paragraphs(3, true))
+                    ->setContenu($faker->paragraphs(3, true))
                     ;
                 $manager->persist($reply);
             }

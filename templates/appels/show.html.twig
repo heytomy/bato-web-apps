@@ -45,6 +45,18 @@
         </div>
 
         <h3 class="row border border-light rounded m-2 p-2">
+            <strong>Gallerie Photos :</strong>
+        </h3>
+        
+        <div class="row border border-light rounded m-2 p-2">
+            {% if photos %}
+                {% include 'photoAppels/photo.html.twig' %}
+            {% else %}
+                
+            {% endif %}
+        </div>
+
+        <h3 class="row border border-light rounded m-2 p-2">
             <strong>Commentaires :</strong>
         </h3>
         

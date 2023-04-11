@@ -3,24 +3,25 @@
 namespace App\Controller;
 
 use DateTime;
+use DateInterval;
 use App\Entity\Appels;
 use App\Form\AppelsType;
-use App\Entity\TicketUrgents;
-use App\Repository\AppelsRepository;
-use App\Repository\ClientDefRepository;
 use App\Entity\Calendrier;
+use App\Entity\TicketUrgents;
 use App\Entity\CommentairesAppels;
-use App\Entity\RepCommentairesAppels;
 use App\Form\CommentairesAppelsType;
+use App\Repository\AppelsRepository;
+use App\Entity\RepCommentairesAppels;
 use App\Form\RepCommentairesAppelsType;
-use App\Repository\CommentairesAppelsRepository;
-use App\Repository\RepCommentairesAppelsRepository;
+use App\Repository\ClientDefRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use App\Repository\TicketUrgentsRepository;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use App\Repository\CommentairesAppelsRepository;
 use Symfony\Component\HttpFoundation\JsonResponse;
+use App\Repository\RepCommentairesAppelsRepository;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
@@ -55,30 +56,29 @@ class AppelsController extends AbstractController
     
         if ($form->isSubmitted() && $form->isValid()) {
             $rdvDateTime = $form->get('rdvDateTime')->getData()->format('Y-m-d H:i:s');
-
-            $rdvDateTimeFin= $form->get('rdvDateTimeFin')->getData();
-
-            if ($rdvDateTimeFin) {
-                $rdvDateTimeFin = $form->get('rdvDateTimeFin')->getData()->format('Y-m-d H:i:s') ?? null;
-            } else {
-                $rdvDateTimeFin = null;
-            }
-
+            
             $allDay = $form->get('allDay')->getData();
             
+            $rdvDateTime = new DateTime($rdvDateTime);
+            $HoursInterval = new DateInterval('PT2H');
+            $rdvHeureFin = clone $rdvDateTime;
 
-            $dateTime = new DateTime($rdvDateTime);
-            $dateTimeFin = new DateTime($rdvDateTimeFin) ?? null;
-
+            if ($allDay) {
+                $rdvHeureFin->setTime(20, 0);
+            } else {
+                $rdvHeureFin->add($HoursInterval);
+            }
+            
             $rdv
-                ->setDateDebut($dateTime)
-                ->setDateFin($dateTimeFin)
+                ->setDateDebut($rdvDateTime)
+                ->setDateFin($rdvHeureFin)
                 ->setAllDay($allDay)
                 ->setTitre($appel->getNom())
                 ;
+            
             $appel->setRdv($rdv);
 
-            // dd($appel);
+            dd($appel);
 
             $em->persist($appel);
             $em->flush($appel);

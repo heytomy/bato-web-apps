@@ -54,12 +54,11 @@ class AppelsController extends AbstractController
         $form->handleRequest($request);
     
         if ($form->isSubmitted() && $form->isValid()) {
-            $rdvDate = $form->get('rdvDate')->getData()->format('Y-m-d');
-            $rdvTime = $form->get('rdvTime')->getData()->format('H:i:s');
-            $rdvDateHour = $rdvDate . ' ' . $rdvTime;
+            $rdvDateTime = $form->get('rdvDateTime')->getData()->format('Y-m-d H:i:s');
 
             $rdvDateFin = $form->get('rdvDateFin')->getData();
             $rdvTimeFin = $form->get('rdvTimeFin')->getData();
+
             if ($rdvDateFin && $rdvTimeFin) {
                 $rdvDateFin = $form->get('rdvDateFin')->getData()->format('Y-m-d') ?? null;
                 $rdvTimeFin = $form->get('rdvTimeFin')->getData()->format('H:i:s') ?? null;
@@ -71,16 +70,20 @@ class AppelsController extends AbstractController
             $allDay = $form->get('allDay')->getData();
             
 
-            $dateTime = new DateTime($rdvDateHour);
+            $dateTime = new DateTime($rdvDateTime);
             $dateTimeFin = new DateTime($rdvDateHourFin) ?? null;
 
             $rdv
                 ->setDateDebut($dateTime)
                 ->setDateFin($dateTimeFin)
                 ->setAllDay($allDay)
-                ->setTitre($appel->getNom())
+                ->setTitre($appel->getNom() 
+                // . '  ' . $appel->getDescription()
+                )
                 ;
             $appel->setRdv($rdv);
+
+            // dd($appel);
 
             $em->persist($appel);
             $em->flush($appel);
@@ -100,7 +103,7 @@ class AppelsController extends AbstractController
                 $em->flush($ticketUrgent);
             }
     
-            return $this->redirectToRoute('app_appels_new');
+            return $this->redirectToRoute('app_appels');
         }
     
         return $this->render('appels/new.html.twig', [

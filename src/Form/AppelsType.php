@@ -2,44 +2,63 @@
 
 namespace App\Form;
 
+use DateTime;
 use App\Entity\Appels;
+use DateTimeInterface;
 use App\Entity\Contrat;
 use App\Entity\ClientDef;
 use App\Entity\DefAppsUtilisateur;
 use App\Repository\ClientDefRepository;
 use Symfony\Component\Form\AbstractType;
+use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\Routing\RouterInterface;
 use App\Repository\DefAppsUtilisateurRepository;
 use Eckinox\TinymceBundle\Form\Type\TinymceType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
+use Symfony\Component\Validator\Constraints\Email;
+use Symfony\Component\Validator\Constraints\Regex;
+use Symfony\Component\Validator\Constraints\Length;
+use Symfony\Component\Validator\Constraints\Callback;
+use Symfony\Component\Validator\Constraints\LessThan;
 use Symfony\Component\Validator\Constraints\NotBlank;
 use Symfony\Component\OptionsResolver\OptionsResolver;
+use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Component\Form\Extension\Core\Type\TelType;
 use Symfony\Component\Form\Extension\Core\Type\DateType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\Extension\Core\Type\TimeType;
+use Symfony\Component\Validator\Constraints\GreaterThan;
 use Symfony\Component\Form\Extension\Core\Type\EmailType;
 use Symfony\Component\Form\Extension\Core\Type\HiddenType;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
+use Symfony\Component\Form\Extension\Core\Type\DateTimeType;
+use Symfony\Component\Form\Extension\Validator\ValidatorExtension;
+use Symfony\Component\Validator\Context\ExecutionContextInterface;
+
 
 class AppelsType extends AbstractType
 {
     private $clientDefRepository;
     private $roles;
     private $router;
+    private $security;
 
-    public function __construct(ClientDefRepository $clientDefRepository, DefAppsUtilisateurRepository $roles, RouterInterface $router )
+    public function __construct(ClientDefRepository $clientDefRepository, DefAppsUtilisateurRepository $roles, RouterInterface $router, Security $security)
     {
         $this->clientDefRepository = $clientDefRepository;
         $this->roles = $roles;
         $this->router = $router;
+        $this->security = $security;
     }
 
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
+        $user = $this->security->getUser();
+
         $builder
             ->add('ID_Utilisateur', EntityType::class, [
+                'required' => true,
                 'class' => DefAppsUtilisateur::class,
                 'choices' => $this->roles->findByRoleTech('ROLE_TECH_SAV'),
                 'label' => 'Technicien',
@@ -49,24 +68,31 @@ class AppelsType extends AbstractType
                 'placeholder' => 'Choisissez un technicien',
                 'attr' => [
                     'class' => 'form-select'
+                ],
+                'constraints' => [
+                    new Callback(function ($value, ExecutionContextInterface $context) use ($user) {
+                        if (!$user || !$this->security->isGranted('ROLE_TECH_SAV')) {
+                            $context->buildViolation('Seul les utilisateurs possèdant le rôle ROLE_TECH_SAV peuvent être choisi.')
+                                ->addViolation();
+                        }
+                    }),
+                    new NotBlank(['message' => 'Veuillez sélectionner un technicien'])
                 ]
             ])
             ->add('ClientList', EntityType::class, [
                 'mapped' => false,
-                'required' => true,
                 'class' => ClientDef::class,
                 'choices' => $this->clientDefRepository->findByClientWithContrats(),
                 'label' => 'Client SAV',
                 'choice_label' => function (ClientDef $client) {
                     return $client->getNom();
-                    // . ' ' . $client->getContrats()[0]->getId() . ' ' . $client->getId();
                 },
                 'placeholder' => 'Choisissez le client',
                 'attr' => [
                     'class' => 'form-select',
                     'data-contrats-url' => $this->router->generate('get_client_and_contrats_info', ['id' => '__clientId__']),
-                ]
-            ])            
+                ],
+            ])           
             ->add('Nom', HiddenType::class, [
                 'required' => true,
                 'label' => 'Nom',
@@ -76,7 +102,6 @@ class AppelsType extends AbstractType
                 ]
             ])
             ->add('CodeContrat', EntityType::class, [
-                'required' => true,
                 'placeholder' => 'Choisissez le client pour voir les contrats',
                 'class' => Contrat::class,
                 'label' => 'Code Contrat',
@@ -85,9 +110,8 @@ class AppelsType extends AbstractType
                     'id' => 'contrats-field',
                     'readonly' => 'readonly',
                 ],
-           ])
+            ])
             ->add('CodeClient', EntityType::class, [
-                'required' => true,
                 'class' => ClientDef::class,
                 'placeholder' => 'Code Client',
                 'label' => 'Code Client',
@@ -97,7 +121,7 @@ class AppelsType extends AbstractType
                     'id' => 'client-field',
                     'readonly' => 'readonly',
                 ],
-                'choice_label' => 'id'
+                'choice_label' => 'id',
             ])
             ->add('Adr', TextType::class, [
                 'required' => true,
@@ -106,7 +130,11 @@ class AppelsType extends AbstractType
                 'attr' => [
                     'placeholder' => 'Adresse du client',
                     'class' => 'form-control'
-                ]
+                ],
+                'constraints' => [
+                    new NotBlank(['message' => 'Veuillez saisir une adresse']),
+                    new Length(['max' => 255, 'maxMessage' => 'L\'adresse ne doit pas dépasser {{ limit }} caractères']),
+                ],
             ])
             ->add('CP', TextType::class, [
                 'required' => true,
@@ -115,7 +143,11 @@ class AppelsType extends AbstractType
                 'attr' => [
                     'placeholder' => 'Code postal',
                     'class' => 'form-control'
-                ]
+                ],
+                'constraints' => [
+                    new NotBlank(['message' => 'Veuillez saisir un code postal']),
+                    new Regex(['pattern' => '/^\d{5}$/i', 'message' => 'Le code postal doit être composé de 5 chiffres']),
+                ],
             ])
             ->add('Ville', TextType::class, [
                 'required' => true,
@@ -125,7 +157,11 @@ class AppelsType extends AbstractType
                     'fieldset' => false,
                     'placeholder' => 'Ville',
                     'class' => 'form-control'
-                ]
+                ],
+                'constraints' => [
+                    new NotBlank(['message' => 'Veuillez saisir une ville']),
+                    new Length(['max' => 2000, 'maxMessage' => 'La ville ne doit pas dépasser {{ limit }} caractères']),
+                ],
             ])
             ->add('Tel', TelType::class, [
                 'required' => true,
@@ -134,10 +170,12 @@ class AppelsType extends AbstractType
                 'attr' => [
                     'placeholder' => 'Numéro de téléphone',
                     'class' => 'form-control',
-                    // 'pattern' => '\d+',
-                ]
+                ],
+                'constraints' => [
+                    new NotBlank(['message' => 'Veuillez saisir un numéro de téléphone']),
+                    new Regex(['pattern' => '/^0[1-9]([-. ]?\d{2}){4}$/', 'message' => 'Veuillez saisir un numéro de téléphone valide']),
+                ],
             ])
-
             ->add('Email', EmailType::class, [
                 'required' => true,
                 'label' => 'Adresse email',
@@ -145,7 +183,11 @@ class AppelsType extends AbstractType
                 'attr' => [
                     'placeholder' => 'Entrez votre adresse email',
                     'class' => 'form-control',
-                                    ]
+                ],
+                'constraints' => [
+                    new NotBlank(['message' => 'Veuillez entrer l\'adresse email du client.']),
+                    new Email(['message' => 'L\'adresse email "{{ value }}" n\'est pas valide.'])
+                ]
             ])
             ->add('description', TinymceType::class, [
                 'required' => true,
@@ -153,57 +195,70 @@ class AppelsType extends AbstractType
                 'attr' => [
                     "toolbar" => "bold italic underline | bullist numlist",
                     'placeholder' => 'Décrivez le problème rencontré par le client',
+                ],
+                'constraints' => [
+                    new NotBlank(['message' => 'Veuillez entrer une description du problème rencontré par le client.']),
                 ]
             ])
-            ->add('rdvDate', DateType::class, [
+
+            ->add('rdvDateTime', DateTimeType::class, [
                 'mapped' => false,
                 'required' => true,
-                'label' => 'Date du rendez-vous',
+                'label' => 'Date et heure du rendez-vous',
                 'widget' => 'single_text',
-                'format' => 'dd-MM-yyyy',
+                // 'format' => 'dd-MM-yyyy HH:mm',
                 'attr' => [
-                    'class' => 'form-control datepicker',
-                    'placeholder' => 'Selectionnez une date de RDV',
+                    'class' => 'form-control datetimepicker',
+                    'placeholder' => 'Sélectionnez une date et heure de RDV',
                 ],
-                'html5' => false,
-            ])
-            ->add('rdvTime', TimeType::class, [
-                'mapped' => false,
-                'required' => true,
-                'label' => 'Heure du rendez-vous',
-                'widget' => 'single_text',
-                'attr' => [
-                    'class' => 'form-control timepicker',
+                'html5' => true,
+                'constraints' => [
+                    new Assert\NotBlank(),
+                    new Assert\GreaterThanOrEqual([
+                        'value' => 'today',
+                        'message' => 'Un rendez-vous ne peut pas être placé à une date antérieure !',
+                    ]),
+                    new Assert\Callback(function ($dateTime, ExecutionContextInterface $context) {
+                        $time = $dateTime->format('H:i');
+                        if ($time < '07:00' || $time > '20:00') {
+                            $context->buildViolation('L\'heure de rendez-vous doit être comprise entre 7:00 et 20:00')
+                                ->atPath('rdvDateTime')
+                                ->addViolation();
+                        }
+                    })
                 ],
-            ])
-            ->add('rdvDateFin', DateType::class, [
+            ])            
+
+            ->add('rdvDateFin', HiddenType::class, [
                 'mapped' => false,
                 'required' => false,
                 'label' => 'Date fin du rendez-vous',
-                'widget' => 'single_text',
-                'format' => 'dd-MM-yyyy',
+                // 'widget' => 'single_text',
+                // 'format' => 'dd-MM-yyyy',
                 'attr' => [
                     'class' => 'form-control datepicker',
                     'placeholder' => 'Selectionnez une date de RDV',
                 ],
-                'html5' => false,
+                // 'html5' => false,
             ])
-            ->add('rdvTimeFin', TimeType::class, [
+
+            ->add('rdvTimeFin', HiddenType::class, [
                 'mapped' => false,
                 'required' => false,
-                'label' => 'Heure du rendez-vous',
-                'widget' => 'single_text',
+                'label' => 'Heure de fin du rendez-vous',
+                // 'widget' => 'single_text',
                 'attr' => [
                     'class' => 'form-control timepicker',
                 ],
             ])
+
             ->add('allDay', CheckboxType::class, [
                 'mapped' => false,
                 'required' => false,
                 'label' => 'Toute la journée ?',
                 'attr' => [
                     'class' => 'form-check-input',
-                    'data-urgent-ticket' => 'true',
+                    'data-all-day' => 'true',
                     'id' => 'allDayCheckbox'
                 ],
                 'label_attr' => [
@@ -211,6 +266,7 @@ class AppelsType extends AbstractType
                     'for' => 'allDayCheckbox'
                 ]
             ])
+
             ->add('isUrgent', CheckboxType::class, [
                 'required' => false,
                 'label' => 'Rendez-vous urgent ?',
@@ -223,9 +279,7 @@ class AppelsType extends AbstractType
                     'class' => 'form-check-label',
                     'for' => 'isUrgentCheckbox'
                 ]
-            ])
-            ;
-            
+                ]);    
     }
 
     public function configureOptions(OptionsResolver $resolver): void

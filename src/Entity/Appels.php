@@ -58,6 +58,14 @@ class Appels
     #[ORM\JoinColumn(name:"ID_rdv", referencedColumnName:"id", nullable:true)]
     private ?Calendrier $rdv = null;
 
+    #[ORM\OneToMany(mappedBy: 'idAppel', targetEntity: PhotosAppels::class)]
+    private Collection $photos;
+
+    public function __construct()
+    {
+        $this->photos = new ArrayCollection();
+    }
+
     public function getId(): ?int
     {
         return $this->id;
@@ -204,6 +212,36 @@ class Appels
     public function setRdv(?Calendrier $rdv): self
     {
         $this->rdv = $rdv;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, PhotosAppels>
+     */
+    public function getPhotos(): Collection
+    {
+        return $this->photos;
+    }
+
+    public function addPhoto(PhotosAppels $photo): self
+    {
+        if (!$this->photos->contains($photo)) {
+            $this->photos->add($photo);
+            $photo->setIdAppel($this);
+        }
+
+        return $this;
+    }
+
+    public function removePhoto(PhotosAppels $photo): self
+    {
+        if ($this->photos->removeElement($photo)) {
+            // set the owning side to null (unless already changed)
+            if ($photo->getIdAppel() === $this) {
+                $photo->setIdAppel(null);
+            }
+        }
 
         return $this;
     }

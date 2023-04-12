@@ -56,12 +56,15 @@ class AppelsController extends AbstractController
         $form->handleRequest($request);
     
         if ($form->isSubmitted() && $form->isValid()) {
-            $rdvDateTime = $form->get('rdvDateTime')->getData()->format('Y-m-d H:i:s');
             
+            $rdvDateTime = $form->get('rdvDateTime')->getData()->format('Y-m-d H:i:s');
+            $rdvDateTimeFin = $form->get('rdvDateTimeFin')->getData()->format('Y-m-d H:i:s');
+
             $allDay = $form->get('allDay')->getData();
             
             $rdvDateTime = new DateTime($rdvDateTime);
-            $HoursInterval = new DateInterval('PT2H');
+            // $rdvDateTimeFin = new DateTime($rdvDateTimeFin);
+            $HoursInterval = new DateInterval('PT1H');
             $rdvHeureFin = clone $rdvDateTime;
 
             if ($allDay) {
@@ -85,12 +88,13 @@ class AppelsController extends AbstractController
             $em->persist($rdv);
             $em->flush($rdv);
     
-            if ($form->get('isUrgent')->getData()) {
+            if ($form->get('isUrgent')->getData() && $form->get('status')->getData()) {
 
+                // dd($form->getData());
                 $ticketUrgent = new TicketUrgents();
                 $ticketUrgent
                     ->setAppelsUrgents($appel)
-                    ->setStatus(0)
+                    ->setStatus(intval($form->get('status')->getData()))
                 ;
     
                 $em->persist($ticketUrgent);

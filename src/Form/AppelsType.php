@@ -2,14 +2,14 @@
 
 namespace App\Form;
 
-use DateTime;
 use App\Entity\Appels;
-use DateTimeInterface;
 use App\Entity\Contrat;
 use App\Entity\ClientDef;
+use App\Entity\TicketUrgents;
 use App\Entity\DefAppsUtilisateur;
 use App\Repository\ClientDefRepository;
 use Symfony\Component\Form\AbstractType;
+use App\Repository\TicketUrgentsRepository;
 use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\Routing\RouterInterface;
 use App\Repository\DefAppsUtilisateurRepository;
@@ -20,20 +20,17 @@ use Symfony\Component\Validator\Constraints\Email;
 use Symfony\Component\Validator\Constraints\Regex;
 use Symfony\Component\Validator\Constraints\Length;
 use Symfony\Component\Validator\Constraints\Callback;
-use Symfony\Component\Validator\Constraints\LessThan;
 use Symfony\Component\Validator\Constraints\NotBlank;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Component\Form\Extension\Core\Type\TelType;
-use Symfony\Component\Form\Extension\Core\Type\DateType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
-use Symfony\Component\Form\Extension\Core\Type\TimeType;
-use Symfony\Component\Validator\Constraints\GreaterThan;
+use EasyCorp\Bundle\EasyAdminBundle\Orm\EntityRepository;
 use Symfony\Component\Form\Extension\Core\Type\EmailType;
-use Symfony\Component\Form\Extension\Core\Type\HiddenType;
+use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\Form\Extension\Core\Type\DateTimeType;
-use Symfony\Component\Form\Extension\Validator\ValidatorExtension;
+use Symfony\Component\Validator\Constraints\Choice;
 use Symfony\Component\Validator\Context\ExecutionContextInterface;
 
 
@@ -79,10 +76,26 @@ class AppelsType extends AbstractType
                     new NotBlank(['message' => 'Veuillez sélectionner un technicien'])
                 ]
             ])
+            // ->add('ClientList', EntityType::class, [
+            //     'mapped' => false,
+            //     'class' => ClientDef::class,
+            //     'choices' => $this->clientDefRepository->findByClientWithContrats(),
+            //     'label' => 'Client SAV',
+            //     'choice_label' => function (ClientDef $client) {
+            //         return $client->getNom();
+            //     },
+            //     'placeholder' => 'Choisissez le client',
+            //     'attr' => [
+            //         'class' => 'form-select',
+            //         'data-contrats-url' => $this->router->generate('get_client_and_contrats_info', ['id' => '__clientId__']),
+            //     ],
+            // ])
+            
             ->add('ClientList', EntityType::class, [
+                'required' => false,
                 'mapped' => false,
                 'class' => ClientDef::class,
-                'choices' => $this->clientDefRepository->findByClientWithContrats(),
+                'choices' => $this->clientDefRepository->findAll(),
                 'label' => 'Client SAV',
                 'choice_label' => function (ClientDef $client) {
                     return $client->getNom();
@@ -92,8 +105,9 @@ class AppelsType extends AbstractType
                     'class' => 'form-select',
                     'data-contrats-url' => $this->router->generate('get_client_and_contrats_info', ['id' => '__clientId__']),
                 ],
-            ])           
-            ->add('Nom', HiddenType::class, [
+            ]) 
+
+            ->add('Nom', TextType::class, [
                 'required' => true,
                 'label' => 'Nom',
                 'attr' => [
@@ -102,6 +116,7 @@ class AppelsType extends AbstractType
                 ]
             ])
             ->add('CodeContrat', EntityType::class, [
+                'required' => false,
                 'placeholder' => 'Choisissez le client pour voir les contrats',
                 'class' => Contrat::class,
                 'label' => 'Code Contrat',
@@ -112,6 +127,7 @@ class AppelsType extends AbstractType
                 ],
             ])
             ->add('CodeClient', EntityType::class, [
+                'required' => false,
                 'class' => ClientDef::class,
                 'placeholder' => 'Code Client',
                 'label' => 'Code Client',
@@ -207,7 +223,7 @@ class AppelsType extends AbstractType
             ->add('rdvDateTime', DateTimeType::class, [
                 'mapped' => false,
                 'required' => true,
-                'label' => 'Date et heure du rendez-vous',
+                'label' => 'Date et heure du rendez-vous :',
                 'widget' => 'single_text',
                 // 'format' => 'dd-MM-yyyy HH:mm',
                 'attr' => [
@@ -230,13 +246,26 @@ class AppelsType extends AbstractType
                         }
                     })
                 ],
-            ])            
+            ]) 
 
-            ->add('rdvDateTimeFin', HiddenType::class, [
+            ->add('rdvDateTimeFin', DateTimeType::class, [
                 'mapped' => false,
                 'required' => false,
-                'label' => 'Date et heure de fin du rendez-vous',
-            ])
+                'label' => 'Fin de rendez-vous prévu :',
+                'widget' => 'single_text',
+                // 'format' => 'dd-MM-yyyy HH:mm',
+                'attr' => [
+                    'class' => 'form-control datetimepicker',
+                    'placeholder' => 'Sélectionnez une date et heure de fin de RDV',
+                ],
+                'html5' => true,
+                'constraints' => [
+                    new Assert\GreaterThanOrEqual([
+                        'value' => 'now',
+                        'message' => 'Un rendez-vous ne peut pas être placé à une date antérieure !',
+                    ]),
+                ],
+            ])    
 
             ->add('allDay', CheckboxType::class, [
                 'mapped' => false,
@@ -259,12 +288,25 @@ class AppelsType extends AbstractType
                 'attr' => [
                     'class' => 'form-check-input',
                     'data-urgent-ticket' => 'true',
-                    'id' => 'isUrgentCheckbox'
                 ],
                 'label_attr' => [
                     'class' => 'form-check-label',
-                    'for' => 'isUrgentCheckbox'
                 ]
+                ])
+
+            ->add('status', ChoiceType::class, [
+                'mapped' => false,
+                'required' => false,
+                'placeholder' => 'Niveau d\'urgence',
+                'label' => false,
+                'choices' => [
+                    'Faible' => 'low',
+                    'Moyen'  => 'medium',
+                    'Elevé'  => 'high',
+                ],
+                'attr' => [
+                    'class' => 'form-control urgency-select d-none',
+                ],
                 ]);    
     }
 

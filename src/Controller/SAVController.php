@@ -54,7 +54,6 @@ class SAVController extends AbstractController
         $comments = $commentairesSAVRepository->findBy(['codeContrat' => $contrat->getId()]);
         $user = $this->getUser() ?? null;
         $nom = $user->getIdUtilisateur()->getNom() ." ". $user->getIdUtilisateur()->getPrenom();
-        
         /**
          * Partie commentaires
          */

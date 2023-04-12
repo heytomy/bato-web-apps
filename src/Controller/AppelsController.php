@@ -56,14 +56,13 @@ class AppelsController extends AbstractController
         $form->handleRequest($request);
     
         if ($form->isSubmitted() && $form->isValid()) {
-            
+
             $rdvDateTime = $form->get('rdvDateTime')->getData()->format('Y-m-d H:i:s');
             $rdvDateTimeFin = $form->get('rdvDateTimeFin')->getData()->format('Y-m-d H:i:s');
-
             $allDay = $form->get('allDay')->getData();
             
             $rdvDateTime = new DateTime($rdvDateTime);
-            // $rdvDateTimeFin = new DateTime($rdvDateTimeFin);
+            $rdvDateTimeFin = new DateTime($rdvDateTimeFin);
             $HoursInterval = new DateInterval('PT1H');
             $rdvHeureFin = clone $rdvDateTime;
 
@@ -100,6 +99,11 @@ class AppelsController extends AbstractController
                 $em->persist($ticketUrgent);
                 $em->flush($ticketUrgent);
             }
+
+            $this->addFlash(
+                'success',
+                'Rendez-vous enregistré avec succès !'
+            );
     
             return $this->redirectToRoute('app_appels');
         }

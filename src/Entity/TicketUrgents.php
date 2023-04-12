@@ -62,6 +62,5 @@ class TicketUrgents
         $this->status = $status;
 
         return $this;
-    }
-
+    }   
 }

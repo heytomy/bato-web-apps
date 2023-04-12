@@ -4,7 +4,7 @@
 	{{ path('app_dashboard') }}
 {% endblock %}
 
-{% block title %}Hello AppelsController!
+{% block title %}Bato - Liste des appels
 {% endblock %}
 
 {% block new_button %}
@@ -19,10 +19,10 @@
 		{% for appel in appels %}
 			<div class="row border border-light rounded bg-client m-2 p-2 client" data-bs-toggle="modal" data-bs-target="#appelModal{{appel.id}}">
 				<div class="d-flex justify-content-between">
-					<h1>{{appel.getRdv().titre}}</h1>
+					<h1>{{appel.getRdv().titre|raw}}</h1>
 					<div class="d-flex flex-column align-items-end">
-						<h5>{{appel.getRdv().dateDebut | date('d/m/Y')}}</h5>
-						<h5>{{appel.getRdv().dateDebut | date('h:i')}}</h5>
+						<h5>Le {{appel.getRdv().dateDebut | date('d/m/Y')}}</h5>
+						<h5>à {{appel.getRdv().dateDebut | date('H:i')}}</h5>
 					</div>
 				</div>
 				<div>Code Contrat:
@@ -41,42 +41,56 @@
 				<div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
 					<div class="modal-content">
 						<div class="modal-header">
-							<h5 class="modal-title" id="appelModal{{appel.id}}Label">{{appel.getRdv().titre}}</h5>
+							<h5 class="modal-title" id="appelModal{{appel.id}}Label">{{appel.getRdv().titre|raw}}</h5>
 							<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
 						</div>
 						<div class="modal-body">
 							<div class="row">
+
 								<div class="col-md-6">
-									<p>
-										<strong>Code Contrat:</strong>
 										{% if appel.CodeContrat %}
+										<strong>Code Contrat:</strong>
 											{{appel.CodeContrat.getId()}}
 										{% endif %}
-									</p>
-									<p>
-										<strong>Code Client:</strong>
 										{% if appel.CodeClient %}
+										<strong>Code Client:</strong>
 											{{appel.CodeClient.getId()}}
 										{% endif %}
-									</p>
+								</div>
+
+								<div class="col-md-6">
 									<p>
 										<strong>Nom:</strong>
-										{{ appel.CodeClient }}</p>
-								</div>
-								<div class="col-md-6">
+										{{ appel.CodeClient }}
+									</p>
+
+									<p>
+										<strong>Téléphone:</strong>
+										{{ appel.Tel }}
+									</p>
 									<p>
 										<strong>Adresse:</strong>
 									</p>
 									<p>{{appel.Adr}}<br>{{appel.CP}}
-										{{appel.Ville}}</p>
+										{{appel.Ville}}
+									</p>
 								</div>
+
 
 								<div class="col-md-6">
 									<p>
 										<strong>Date de rendez-vous:</strong>
 									</p>
-									<p>Le {{appel.getRdv().dateDebut | date('d/m/Y')}} à {{appel.getRdv().dateDebut | date('h:i')}}</p>
+									<p>Le {{appel.getRdv().dateDebut | date('d/m/Y')}} à {{appel.getRdv().dateDebut | date('H:i')}}</p>
 								</div>
+
+								<div class="col-md-6">
+									<p>
+										<strong>Rendez-vous urgent ? </strong>
+									</p>
+									<p>{{ appel.isUrgent ? 'Oui' : 'Non' }}</p>
+								</div>
+
 							</div>
 						</div>
 						<div class="modal-footer">

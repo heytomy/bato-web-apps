@@ -3,25 +3,26 @@
 namespace App\Controller;
 
 use DateTime;
+use DateInterval;
 use App\Entity\Appels;
 use App\Form\AppelsType;
-use App\Entity\TicketUrgents;
-use App\Repository\AppelsRepository;
-use App\Repository\ClientDefRepository;
 use App\Entity\Calendrier;
+use App\Entity\TicketUrgents;
 use App\Entity\CommentairesAppels;
-use App\Entity\RepCommentairesAppels;
 use App\Form\CommentairesAppelsType;
+use App\Repository\AppelsRepository;
+use App\Entity\RepCommentairesAppels;
 use App\Form\RepCommentairesAppelsType;
-use App\Repository\CommentairesAppelsRepository;
+use App\Repository\ClientDefRepository;
 use App\Repository\PhotosAppelsRepository;
-use App\Repository\RepCommentairesAppelsRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use App\Repository\TicketUrgentsRepository;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use App\Repository\CommentairesAppelsRepository;
 use Symfony\Component\HttpFoundation\JsonResponse;
+use App\Repository\RepCommentairesAppelsRepository;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
@@ -55,33 +56,30 @@ class AppelsController extends AbstractController
         $form->handleRequest($request);
     
         if ($form->isSubmitted() && $form->isValid()) {
-            $rdvDate = $form->get('rdvDate')->getData()->format('Y-m-d');
-            $rdvTime = $form->get('rdvTime')->getData()->format('H:i:s');
-            $rdvDateHour = $rdvDate . ' ' . $rdvTime;
-
-            $rdvDateFin = $form->get('rdvDateFin')->getData();
-            $rdvTimeFin = $form->get('rdvTimeFin')->getData();
-            if ($rdvDateFin && $rdvTimeFin) {
-                $rdvDateFin = $form->get('rdvDateFin')->getData()->format('Y-m-d') ?? null;
-                $rdvTimeFin = $form->get('rdvTimeFin')->getData()->format('H:i:s') ?? null;
-                $rdvDateHourFin = $rdvDateFin . ' ' . $rdvTimeFin;
-            } else {
-                $rdvDateHourFin = null;
-            }
-
+            $rdvDateTime = $form->get('rdvDateTime')->getData()->format('Y-m-d H:i:s');
+            
             $allDay = $form->get('allDay')->getData();
             
+            $rdvDateTime = new DateTime($rdvDateTime);
+            $HoursInterval = new DateInterval('PT2H');
+            $rdvHeureFin = clone $rdvDateTime;
 
-            $dateTime = new DateTime($rdvDateHour);
-            $dateTimeFin = new DateTime($rdvDateHourFin) ?? null;
-
+            if ($allDay) {
+                $rdvHeureFin->setTime(20, 0);
+            } else {
+                $rdvHeureFin->add($HoursInterval);
+            }
+            
             $rdv
-                ->setDateDebut($dateTime)
-                ->setDateFin($dateTimeFin)
+                ->setDateDebut($rdvDateTime)
+                ->setDateFin($rdvHeureFin)
                 ->setAllDay($allDay)
                 ->setTitre($appel->getNom())
                 ;
+            
             $appel->setRdv($rdv);
+
+            dd($appel);
 
             $em->persist($appel);
             $em->flush($appel);
@@ -101,7 +99,7 @@ class AppelsController extends AbstractController
                 $em->flush($ticketUrgent);
             }
     
-            return $this->redirectToRoute('app_appels_new');
+            return $this->redirectToRoute('app_appels');
         }
     
         return $this->render('appels/new.html.twig', [

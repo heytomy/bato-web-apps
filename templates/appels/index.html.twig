@@ -15,7 +15,15 @@
 {% endblock %}
 
 {% block list %}
-	<div class="client-container border rounded container bg-light p-2">
+
+{% for message in app.flashes('success') %}
+    <div class="alert alert-success alert-dismissible fade show mt-5" role="alert">
+        {{ message }}
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+{% endfor %}
+
+	<div class="client-container border rounded container bg-light p-2 mt-3">
 		{% for appel in appels %}
 			<div class="row border border-light rounded bg-client m-2 p-2 client" data-bs-toggle="modal" data-bs-target="#appelModal{{appel.id}}">
 				<div class="d-flex justify-content-between">

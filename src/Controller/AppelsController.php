@@ -45,37 +45,43 @@ class AppelsController extends AbstractController
     }
 
     #[Route('/appels/new', name: 'app_appels_new')]
-    public function new(Request $request, EntityManagerInterface $em, TicketUrgentsRepository $ticketUrgent): Response
-    {
-        //TODO: Bar de filtre pour la recherche de client
+public function new(Request $request, EntityManagerInterface $em, TicketUrgentsRepository $ticketUrgent): Response
+{
+    //TODO: Bar de filtre pour la recherche de client
 
-        $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
-    
-        $appel = new Appels();
-        $rdv = new Calendrier();
-        $form = $this->createForm(AppelsType::class, $appel);
-    
-        $form->handleRequest($request);
-    
-        if ($form->isSubmitted() && $form->isValid()) {
+    $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
 
-            $rdvDateTime = $form->get('rdvDateTime')->getData()->format('Y-m-d H:i:s');
-            $rdvDateTimeFin = $form->get('rdvDateTimeFin')->getData();
-            
-            if ($rdvDateTimeFin !== null) {
-                $rdvDateTimeFin = $rdvDateTimeFin->format('Y-m-d H:i:s');
-            } elseif ($form->get('allDay')->getData()) {
-                $rdvDateTimeFin = null;
-            } else {
-                $rdvDateTimeFin = (new DateTime($rdvDateTime))->modify('+1 hour')->format('Y-m-d H:i:s');
-            }
-            
+    $appel = new Appels();
+    $rdv = new Calendrier();
+    $form = $this->createForm(AppelsType::class, $appel);
+
+    $form->handleRequest($request);
+
+    if ($form->isSubmitted() && $form->isValid()) {
+
+        $rdvDateTime = $form->get('rdvDateTime')->getData()->format('Y-m-d H:i:s');
+        $rdvDateTimeFin = $form->get('rdvDateTimeFin')->getData();
+
+        if ($rdvDateTimeFin !== null) {
+            $rdvDateTimeFin = $rdvDateTimeFin->format('Y-m-d H:i:s');
+        } elseif ($form->get('allDay')->getData()) {
+            $rdvDateTimeFin = null;
+        } else {
+            $rdvDateTimeFin = (new DateTime($rdvDateTime))->modify('+1 hour')->format('Y-m-d H:i:s');
+        }
+
+        if ($rdvDateTimeFin !== null && new DateTime($rdvDateTime) > new DateTime($rdvDateTimeFin)) {
+            $this->addFlash(
+                'error',
+                'La date et heure de fin doit être postérieure à la date et heure de début.'
+            );
+        } else {
             $rdv
                 ->setDateDebut(new DateTime($rdvDateTime))
                 ->setDateFin($rdvDateTimeFin !== null ? new DateTime($rdvDateTimeFin) : null)
                 ->setAllDay($form->get('allDay')->getData())
                 ->setTitre($appel->getNom());
-            
+
             $appel->setRdv($rdv);
 
             $em->persist($appel);
@@ -83,7 +89,7 @@ class AppelsController extends AbstractController
 
             $em->persist($rdv);
             $em->flush($rdv);
-    
+
             if ($form->get('isUrgent')->getData() && $form->get('status')->getData()) {
 
                 // dd($form->getData());
@@ -92,7 +98,7 @@ class AppelsController extends AbstractController
                     ->setAppelsUrgents($appel)
                     ->setStatus(intval($form->get('status')->getData()))
                 ;
-    
+
                 $em->persist($ticketUrgent);
                 $em->flush($ticketUrgent);
             }
@@ -101,15 +107,17 @@ class AppelsController extends AbstractController
                 'success',
                 'Rendez-vous enregistré avec succès !'
             );
-    
+
             return $this->redirectToRoute('app_appels');
         }
-    
-        return $this->render('appels/new.html.twig', [
-            'form' => $form->createView(),
-            'current_page' => 'app_appels',
-        ]);
     }
+
+    return $this->render('appels/new.html.twig', [
+        'form' => $form->createView(),
+        'current_page' => 'app_appels',
+    ]);
+}
+
     
 
     #[IsGranted('ROLE_ADMIN')]

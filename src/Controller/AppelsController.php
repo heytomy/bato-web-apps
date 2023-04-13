@@ -47,8 +47,6 @@ class AppelsController extends AbstractController
     #[Route('/appels/new', name: 'app_appels_new')]
     public function new(Request $request, EntityManagerInterface $em, TicketUrgentsRepository $ticketUrgent): Response
     {
-
-        //TODO: Boutton tout effacer dans le formulaire
         //TODO: Bar de filtre pour la recherche de client
 
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
@@ -62,26 +60,21 @@ class AppelsController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
 
             $rdvDateTime = $form->get('rdvDateTime')->getData()->format('Y-m-d H:i:s');
-            $rdvDateTimeFin = $form->get('rdvDateTimeFin')->getData()->format('Y-m-d H:i:s');
-            $allDay = $form->get('allDay')->getData();
+            $rdvDateTimeFin = $form->get('rdvDateTimeFin')->getData();
             
-            $rdvDateTime = new DateTime($rdvDateTime);
-            $rdvDateTimeFin = new DateTime($rdvDateTimeFin);
-            $HoursInterval = new DateInterval('PT1H');
-            $rdvHeureFin = clone $rdvDateTime;
-
-            if ($allDay) {
-                $rdvHeureFin = null;
+            if ($rdvDateTimeFin !== null) {
+                $rdvDateTimeFin = $rdvDateTimeFin->format('Y-m-d H:i:s');
+            } elseif ($form->get('allDay')->getData()) {
+                $rdvDateTimeFin = null;
             } else {
-                $rdvHeureFin;
+                $rdvDateTimeFin = (new DateTime($rdvDateTime))->modify('+1 hour')->format('Y-m-d H:i:s');
             }
             
             $rdv
-                ->setDateDebut($rdvDateTime)
-                ->setDateFin($rdvHeureFin)
-                ->setAllDay($allDay)
-                ->setTitre($appel->getNom())
-                ;
+                ->setDateDebut(new DateTime($rdvDateTime))
+                ->setDateFin($rdvDateTimeFin !== null ? new DateTime($rdvDateTimeFin) : null)
+                ->setAllDay($form->get('allDay')->getData())
+                ->setTitre($appel->getNom());
             
             $appel->setRdv($rdv);
 

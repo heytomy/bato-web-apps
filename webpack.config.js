@@ -22,7 +22,7 @@ Encore
      */
     .addEntry('app',            './assets/app.js')
     .addEntry('infiniteScroll', './assets/infiniteScroll.js')
-    .addEntry('appelsSAV', './assets/appelsSAVautocomplete.js')
+    .addEntry('appelsAutocomplete', './assets/appelsAutocomplete.js')
     .addEntry('calendrier', './assets/calendrier/index.js')
     .addEntry('calendrierDashboard', './assets/calendrier/calendrierDashboard.js')
     .addEntry('test', './assets/calendrier/test.js')

@@ -177,8 +177,12 @@ $(document).on('DOMContentLoaded', function() {
         } else {
           // If the checkbox is unchecked, show the ClientList field and hide the CodeClient and CodeContrat fields
           $("#appels_ClientList").show();
+          $('label[for="appels_ClientList"]').show();
           $("#appels_CodeClient").show();
+          $('label[for="appels_CodeClient"]').show();
           $("#appels_CodeContrat").show();
+          $('label[for="appels_CodeContrat"]').show();
+
         }
       });
 

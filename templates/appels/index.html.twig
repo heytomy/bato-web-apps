@@ -21,18 +21,24 @@
 				<div class="d-flex justify-content-between">
 					<h1>{{appel.getRdv().titre|raw}}</h1>
 					<div class="d-flex flex-column align-items-end">
-						<h5>Le {{appel.getRdv().dateDebut | date('d/m/Y')}}</h5>
-						<h5>à {{appel.getRdv().dateDebut | date('H:i')}}</h5>
+						<h5>Le
+							{{appel.getRdv().dateDebut | date('d/m/Y')}}</h5>
+						<h5>à
+							{{appel.getRdv().dateDebut | date('H:i')}}</h5>
 					</div>
 				</div>
-				<div>Code Contrat:
-					{% if appel.CodeContrat %}
+				<div>{% if appel.CodeContrat %}
+					Code Contrat:
 						{{appel.CodeContrat.getId()}}
+						{% else %}
+						<p>N'a pas de contrat d'entretien</p>
 					{% endif %}
 				</div>
-				<div>Code Client:
-					{% if appel.CodeClient %}
+				<div>{% if appel.CodeClient %}
+					Code Client:					
 						{{appel.CodeClient.getId()}}
+						{% else %}
+						<p>Nouveau client !</p>
 					{% endif %}
 				</div>
 			</div>
@@ -48,20 +54,25 @@
 							<div class="row">
 
 								<div class="col-md-6">
-										{% if appel.CodeContrat %}
+									{% if appel.CodeContrat %}
 										<strong>Code Contrat:</strong>
-											{{appel.CodeContrat.getId()}}
-										{% endif %}
-										{% if appel.CodeClient %}
+										{{appel.CodeContrat.getId()}}
+									{% endif %}
+									{% if appel.CodeClient %}
 										<strong>Code Client:</strong>
-											{{appel.CodeClient.getId()}}
-										{% endif %}
+										{{appel.CodeClient.getId()}}
+									{% endif %}
 								</div>
 
 								<div class="col-md-6">
 									<p>
 										<strong>Nom:</strong>
-										{{ appel.CodeClient }}
+										{% if appel.CodeClient %}
+											{{ appel.CodeClient }}
+										{% else %}
+											{{ appel.getRdv().titre }}
+										{% endif %}
+
 									</p>
 
 									<p>
@@ -81,12 +92,16 @@
 									<p>
 										<strong>Date de rendez-vous:</strong>
 									</p>
-									<p>Le {{appel.getRdv().dateDebut | date('d/m/Y')}} à {{appel.getRdv().dateDebut | date('H:i')}}</p>
+									<p>Le
+										{{appel.getRdv().dateDebut | date('d/m/Y')}}
+										à
+										{{appel.getRdv().dateDebut | date('H:i')}}</p>
 								</div>
 
 								<div class="col-md-6">
 									<p>
-										<strong>Rendez-vous urgent ? </strong>
+										<strong>Rendez-vous urgent ?
+										</strong>
 									</p>
 									<p>{{ appel.isUrgent ? 'Oui' : 'Non' }}</p>
 								</div>

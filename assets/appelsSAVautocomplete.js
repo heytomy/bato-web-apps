@@ -2,6 +2,19 @@ import 'bootstrap';
 
 const $ = require('jquery');
 
+const isUrgent = document.getElementById('appels_isUrgent');
+const status = document.getElementById('appels_status');
+
+isUrgent.addEventListener('change', function() {
+    if (this.checked) {
+        status.classList.remove('d-none');
+        select.required = true;
+    } else {
+        status.classList.add('d-none');
+        select.required = false;
+    }
+});
+
 var clientField = document.getElementById('appels_ClientList');
 
 clientField.addEventListener('change', function() {
@@ -82,4 +95,5 @@ clientField.addEventListener('change', function() {
     });
     
 });
+
 

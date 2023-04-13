@@ -12,8 +12,8 @@
             <div class="d-flex justify-content-between">
                 <h1>{{appel.getRdv().titre}}</h1>
                 <div class="d-flex flex-column align-items-end">
-                    <h5>{{appel.getRdv().dateDebut | date('d/m/Y')}}</h5>
-                    <h5>{{appel.getRdv().dateDebut | date('h:i')}}</h5>
+                    <h5>Le {{appel.getRdv().dateDebut | date('d/m/Y')}}</h5>
+                    <h5>à {{appel.getRdv().dateDebut | date('h:i')}}</h5>
                 </div>
             </div>
             {% if appel.CodeContrat %}  <div>Code du contrat: {{appel.CodeContrat}}</div>   {% endif %}

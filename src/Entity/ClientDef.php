@@ -40,10 +40,18 @@ class ClientDef
     #[ORM\OneToMany(mappedBy: 'CodeClient', targetEntity: Appels::class)]
     private Collection $appels;
 
+    #[ORM\OneToMany(mappedBy: 'codeClient', targetEntity: DevisARealiser::class)]
+    private Collection $devisARealisers;
+
+    #[ORM\OneToMany(mappedBy: 'codeClient', targetEntity: ChantierApps::class)]
+    private Collection $chantierApps;
+
     public function __construct()
     {
         $this->contrats = new ArrayCollection();
         $this->appels = new ArrayCollection();
+        $this->devisARealisers = new ArrayCollection();
+        $this->chantierApps = new ArrayCollection();
     }
 
     public function getId(): ?string
@@ -183,6 +191,66 @@ class ClientDef
             // set the owning side to null (unless already changed)
             if ($appel->getCodeClient() === $this) {
                 $appel->setCodeClient(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, DevisARealiser>
+     */
+    public function getDevisARealisers(): Collection
+    {
+        return $this->devisARealisers;
+    }
+
+    public function addDevisARealiser(DevisARealiser $devisARealiser): self
+    {
+        if (!$this->devisARealisers->contains($devisARealiser)) {
+            $this->devisARealisers->add($devisARealiser);
+            $devisARealiser->setCodeClient($this);
+        }
+
+        return $this;
+    }
+
+    public function removeDevisARealiser(DevisARealiser $devisARealiser): self
+    {
+        if ($this->devisARealisers->removeElement($devisARealiser)) {
+            // set the owning side to null (unless already changed)
+            if ($devisARealiser->getCodeClient() === $this) {
+                $devisARealiser->setCodeClient(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, ChantierApps>
+     */
+    public function getChantierApps(): Collection
+    {
+        return $this->chantierApps;
+    }
+
+    public function addChantierApp(ChantierApps $chantierApp): self
+    {
+        if (!$this->chantierApps->contains($chantierApp)) {
+            $this->chantierApps->add($chantierApp);
+            $chantierApp->setCodeClient($this);
+        }
+
+        return $this;
+    }
+
+    public function removeChantierApp(ChantierApps $chantierApp): self
+    {
+        if ($this->chantierApps->removeElement($chantierApp)) {
+            // set the owning side to null (unless already changed)
+            if ($chantierApp->getCodeClient() === $this) {
+                $chantierApp->setCodeClient(null);
             }
         }
 

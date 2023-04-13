@@ -31,6 +31,9 @@ class Contrat
     #[ORM\OneToMany(mappedBy: 'CodeContrat', targetEntity: Appels::class)]
     private Collection $appels;
 
+    #[ORM\Column(name: 'Libelle', length: 80)]
+    private ?string $libelle = null;
+
     public function __construct()
     {
         $this->commentairesSAVs = new ArrayCollection();
@@ -158,6 +161,18 @@ class Contrat
                 $appel->setCodeContrat(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getLibelle(): ?string
+    {
+        return $this->libelle;
+    }
+
+    public function setLibelle(string $libelle): self
+    {
+        $this->libelle = $libelle;
 
         return $this;
     }

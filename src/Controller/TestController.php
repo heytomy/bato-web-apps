@@ -34,9 +34,10 @@ class TestController extends AbstractController
         ClientDefRepository $clientDefRepository
         ): Response
     {
+        $contrat = $contratRepository->findOneBy(['libelle' => 'Gaz condensation']);
         $calendriers = $calendrierRepository ->findAll();
         // $test = $contratRepository->find("00001");
-        dd($calendriers);
+        dd($contrat->getLibelle());
         // $this->denyAccessUnlessGranted('ROLE_ADMIN');
         return $this->render('test/test.html.twig', [
             'controller_name' => 'TestController',

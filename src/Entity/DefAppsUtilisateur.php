@@ -73,6 +73,12 @@ class DefAppsUtilisateur
     #[ORM\OneToMany(mappedBy: 'owner', targetEntity: RepCommentairesAppels::class)]
     private Collection $repCommentairesAppels;
 
+    #[ORM\OneToMany(mappedBy: 'owner', targetEntity: CommentairesChantier::class)]
+    private Collection $commentairesChantiers;
+
+    #[ORM\OneToMany(mappedBy: 'owner', targetEntity: RepCommentairesChantier::class)]
+    private Collection $repCommentairesChantiers;
+
     public function __construct()
     {
         $this->comptes = new ArrayCollection();
@@ -80,6 +86,8 @@ class DefAppsUtilisateur
         $this->repCommentairesSAVs = new ArrayCollection();
         $this->commentairesAppels = new ArrayCollection();
         $this->repCommentairesAppels = new ArrayCollection();
+        $this->commentairesChantiers = new ArrayCollection();
+        $this->repCommentairesChantiers = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -332,6 +340,66 @@ class DefAppsUtilisateur
             // set the owning side to null (unless already changed)
             if ($repCommentairesAppel->getOwner() === $this) {
                 $repCommentairesAppel->setOwner(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, CommentairesChantier>
+     */
+    public function getCommentairesChantiers(): Collection
+    {
+        return $this->commentairesChantiers;
+    }
+
+    public function addCommentairesChantier(CommentairesChantier $commentairesChantier): self
+    {
+        if (!$this->commentairesChantiers->contains($commentairesChantier)) {
+            $this->commentairesChantiers->add($commentairesChantier);
+            $commentairesChantier->setOwner($this);
+        }
+
+        return $this;
+    }
+
+    public function removeCommentairesChantier(CommentairesChantier $commentairesChantier): self
+    {
+        if ($this->commentairesChantiers->removeElement($commentairesChantier)) {
+            // set the owning side to null (unless already changed)
+            if ($commentairesChantier->getOwner() === $this) {
+                $commentairesChantier->setOwner(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, RepCommentairesChantier>
+     */
+    public function getRepCommentairesChantiers(): Collection
+    {
+        return $this->repCommentairesChantiers;
+    }
+
+    public function addRepCommentairesChantier(RepCommentairesChantier $repCommentairesChantier): self
+    {
+        if (!$this->repCommentairesChantiers->contains($repCommentairesChantier)) {
+            $this->repCommentairesChantiers->add($repCommentairesChantier);
+            $repCommentairesChantier->setOwner($this);
+        }
+
+        return $this;
+    }
+
+    public function removeRepCommentairesChantier(RepCommentairesChantier $repCommentairesChantier): self
+    {
+        if ($this->repCommentairesChantiers->removeElement($repCommentairesChantier)) {
+            // set the owning side to null (unless already changed)
+            if ($repCommentairesChantier->getOwner() === $this) {
+                $repCommentairesChantier->setOwner(null);
             }
         }
 

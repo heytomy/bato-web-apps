@@ -14,7 +14,7 @@ class CommentairesSAV
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
-    #[ORM\Column(name: 'ID_Commentaire', length: 8)]
+    #[ORM\Column(name: 'ID_Commentaire')]
     private ?int $id = null;
 
     #[Assert\NotBlank(message: 'Veuillez ajouter un commentaire')]
@@ -31,7 +31,7 @@ class CommentairesSAV
     private ?\DateTimeInterface $date_com = null;
 
     #[ORM\ManyToOne(inversedBy: 'commentairesSAVs')]
-    #[ORM\JoinColumn(name: 'Code', referencedColumnName: 'Code', nullable: false)]
+    #[ORM\JoinColumn(name: 'Code', referencedColumnName: 'Code', nullable: true)]
     private ?Contrat $codeContrat = null;
 
     #[ORM\Column(name: 'Nom', length: 30, nullable: true)]

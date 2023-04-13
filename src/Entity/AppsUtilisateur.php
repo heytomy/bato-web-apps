@@ -45,7 +45,7 @@ class AppsUtilisateur implements UserInterface, PasswordAuthenticatedUserInterfa
     #[ORM\ManyToMany(targetEntity: Roles::class, inversedBy: 'appsUtilisateurs')]
     private collection $roles;
 
-    #[ORM\Column(type: 'boolean')]
+    #[ORM\Column(type: 'boolean', nullable: true)]
     private $isVerified = false;
 
     #[ORM\Column(name: 'colorCode',length: 7, nullable: true)]

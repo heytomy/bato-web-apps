@@ -43,7 +43,7 @@ class Appels
     private ?bool $isUrgent = null;
 
     #[ORM\ManyToOne(targetEntity: DefAppsUtilisateur::class)]
-    #[ORM\JoinColumn(name:"ID_Utilisateur", referencedColumnName:"ID_Utilisateur", nullable:false)]
+    #[ORM\JoinColumn(name:"ID_Utilisateur", referencedColumnName:"ID_Utilisateur", nullable:true)]
     private $ID_Utilisateur;
 
     #[ORM\ManyToOne(inversedBy: 'appels')]

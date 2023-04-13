@@ -54,6 +54,20 @@ class AppelsType extends AbstractType
         $user = $this->security->getUser();
 
         $builder
+            ->add('isNewClient', CheckboxType::class, [
+                'required' => false,
+                'mapped' => false,
+                'label' => 'Nouveau Client ?',
+                'attr' => [
+                    'class' => 'form-check-input',
+                    'data-urgent-ticket' => 'true',
+                    'id' => 'isNewClient',
+                ],
+                'label_attr' => [
+                    'for' => 'isNewClient'
+                ]
+
+                ])
             ->add('ID_Utilisateur', EntityType::class, [
                 'required' => true,
                 'class' => DefAppsUtilisateur::class,
@@ -76,6 +90,7 @@ class AppelsType extends AbstractType
                     new NotBlank(['message' => 'Veuillez sélectionner un technicien'])
                 ]
             ])
+            // Champs séléctionnant uniquement les clients ayant un contrat d'entretion
             // ->add('ClientList', EntityType::class, [
             //     'mapped' => false,
             //     'class' => ClientDef::class,
@@ -260,12 +275,16 @@ class AppelsType extends AbstractType
                 ],
                 'html5' => true,
                 'constraints' => [
-                    new Assert\GreaterThanOrEqual([
-                        'value' => 'now',
-                        'message' => 'Un rendez-vous ne peut pas être placé à une date antérieure !',
-                    ]),
+                    new Assert\Callback(function ($dateTime, ExecutionContextInterface $context) {
+                        $time = $dateTime->format('H:i');
+                        if ($time < '07:00' || $time > '20:00') {
+                            $context->buildViolation('L\'heure de rendez-vous doit être comprise entre 7:00 et 20:00')
+                                ->atPath('rdvDateTime')
+                                ->addViolation();
+                        }
+                    })
                 ],
-            ])    
+            ]) 
 
             ->add('allDay', CheckboxType::class, [
                 'mapped' => false,

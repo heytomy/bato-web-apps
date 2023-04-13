@@ -6,12 +6,14 @@ const isUrgent = document.getElementById('appels_isUrgent');
 const status = document.getElementById('appels_status');
 
 isUrgent.addEventListener('change', function() {
+    const select = status.querySelector('select'); // get the select element inside the status div
     if (this.checked) {
         status.classList.remove('d-none');
         select.required = true;
     } else {
         status.classList.add('d-none');
         select.required = false;
+        select.value = ''; // reset the value of the select element to empty string
     }
 });
 
@@ -20,6 +22,27 @@ var clientField = document.getElementById('appels_ClientList');
 clientField.addEventListener('change', function() {
 
     var clientId = clientField.value;
+
+    $('#clear-fields-btn').on("click", function() {
+        $('#appels_ClientList').val('')
+        $('#appels_CodeContrat').val('').prop('readonly', true);
+        $('#appels_CodeClient').val('').prop('readonly', true);
+        $('#appels_Nom').val('');
+        $('#appels_Adr').val('');
+        $('#appels_CP').val('');
+        $('#appels_Ville').val('');
+        $('#appels_Tel').val('');
+        $('#appels_Email').val('');
+        $('#appels_Description').val('');
+
+        $('#appels_rdvDateTime').val('');
+        $('#appels_rdvDateTimeFin').val('');
+        $('#appels_allDay').prop('checked', false);
+        $('#appels_isUrgent').prop('checked', false);
+        $('#appels_status').addClass('d-none');
+        $('#appels_status select').prop('required', false).val('');
+
+    });
 
     if (!clientId) { // check if clientId is empty or null
         // Set the Contrats select to null and make it readonly
@@ -117,6 +140,7 @@ clientField.addEventListener('change', function() {
         }
     });
 });
+
 
 
 

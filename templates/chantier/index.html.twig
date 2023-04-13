@@ -1,12 +1,12 @@
 {% extends '_inc/listPage.html.twig' %}
 
-{% block title %}SAV{% endblock %}
+{% block title %}Chantier{% endblock %}
 
 {% block back_button %}
     {{ path('app_dashboard') }}
 {% endblock %}
 
-{% block search %}
+{# {% block search %}
     {{ form_start(searchForm, {'attr': {'class': 'd-flex justify-content-end col p-2', 'id': 'search-form'}}) }}
         <div class="">
             {{ form_row(searchForm.nom) }}
@@ -15,7 +15,7 @@
             {{ form_row(searchForm.submit) }}
         </div>
     {{ form_end(searchForm) }}
-{% endblock %}
+{% endblock %} #}
 
 {% block list %}
     <div class="client-container border rounded container bg-light p-2"></div>
@@ -28,5 +28,5 @@
 
 {% block javascripts %}
     {{ parent() }}
-    {{ encore_entry_script_tags('infiniteScrollSAV') }}
+    {{ encore_entry_script_tags('infiniteScrollChantier') }}
 {% endblock %}

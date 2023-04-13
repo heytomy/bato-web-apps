@@ -5,6 +5,7 @@ namespace App\Controller\Ajax;
 use DateTime;
 use App\Entity\Calendrier;
 use App\Repository\CalendrierRepository;
+use App\Repository\ChantierAppsRepository;
 use App\Repository\ContratRepository;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -15,12 +16,12 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 class AjaxController extends AbstractController
 {
     /** 
-     * Cette fonction reçoit une requette AJAX du fichier: assets/infiniteScroll.js
+     * Cette fonction reçoit une requette AJAX du fichier: assets/infiniteScrollSAV.js
      * Elle cherche un certain nombre des clients selon les 2 variable $limit et $offset
      * Enfin, elle envoit ces clients comme une réponse JSON
      */
     #[Route('/ajax/sav', name: 'app_ajax_sav' , methods:['POST'])]
-    public function getClients(Request $request, ContratRepository $contratRepository)
+    public function getClientsSAV(Request $request, ContratRepository $contratRepository)
     {
         $data = json_decode($request->getContent(), true);
         $offset = $data['offset'] ?? 0;
@@ -36,8 +37,25 @@ class AjaxController extends AbstractController
         ]);
     }
 
+    #[Route('/ajax/chantier', name: 'app_ajax_chantier' , methods:['POST'])]
+    public function getClientsChantier(Request $request, ChantierAppsRepository $chantierAppsRepository)
+    {
+        $data = json_decode($request->getContent(), true);
+        $offset = $data['offset'] ?? 0;
+        $limit = $data['limit'] ?? 10;
+
+        $clients = $chantierAppsRepository->findByLimit($offset, $limit);
+        $clients = $chantierAppsRepository->collectionToArray($clients);
+        $total = $chantierAppsRepository->getCountClients();
+
+        return $this->json([
+            'clients' => $clients,
+            'total' => $total,
+        ]);
+    }
+
     /** 
-     * Cette fonction reçoit une requette AJAX du fichier: assets/infiniteScroll.js
+     * Cette fonction reçoit une requette AJAX du fichier: assets/infiniteScrollSAV.js
      * Elle cherche les clients par le nom envoyée par l'ajax $nom
      * Enfin, elle envoit ces clients comme une réponse JSON
      */

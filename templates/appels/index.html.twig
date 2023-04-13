@@ -102,8 +102,10 @@
 										{{appel.getRdv().dateDebut | date('d/m/Y')}}
 										à
 										{{appel.getRdv().dateDebut | date('H:i')}}
-
-										{{appel.getRdv().dateFin | date('H:i')}}
+									</p>
+									<p>	
+										Fin prévu le
+										{{appel.getRdv().dateFin | date('d/m/Y H:i')}}
 									</p>
 								</div>
 

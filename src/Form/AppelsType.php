@@ -54,6 +54,20 @@ class AppelsType extends AbstractType
         $user = $this->security->getUser();
 
         $builder
+            ->add('isNewClient', CheckboxType::class, [
+                'required' => false,
+                'mapped' => false,
+                'label' => 'Nouveau Client ?',
+                'attr' => [
+                    'class' => 'form-check-input',
+                    'data-urgent-ticket' => 'true',
+                    'id' => 'isNewClient',
+                ],
+                'label_attr' => [
+                    'for' => 'isNewClient'
+                ]
+
+                ])
             ->add('ID_Utilisateur', EntityType::class, [
                 'required' => true,
                 'class' => DefAppsUtilisateur::class,
@@ -76,6 +90,7 @@ class AppelsType extends AbstractType
                     new NotBlank(['message' => 'Veuillez sélectionner un technicien'])
                 ]
             ])
+            // Champs séléctionnant uniquement les clients ayant un contrat d'entretion
             // ->add('ClientList', EntityType::class, [
             //     'mapped' => false,
             //     'class' => ClientDef::class,

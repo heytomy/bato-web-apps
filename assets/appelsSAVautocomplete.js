@@ -141,6 +141,50 @@ clientField.addEventListener('change', function() {
     });
 });
 
+$(document).on('DOMContentLoaded', function() {
+  // Set the CodeClient select to null and make it readonly
+  $("#appels_CodeContrat").find("option").remove();
+  $("#appels_CodeClient").find("option").remove();
+
+  // Add the empty option to the Contrats select
+  $("#appels_CodeContrat").append(
+    $("<option>", {
+      value: "",
+      text: "Choisissez le contrat",
+      selected: true,
+    })
+  );
+
+  // Add the empty option to the CodeClient select
+  $("#appels_CodeClient").append(
+    $("<option>", {
+      value: "",
+      text: "Choisissez le client",
+      selected: true,
+    })
+  );
+
+  // Attach a change event listener to the isNewClient checkbox
+    $("#appels_isNewClient").on("change", function () {
+        if ($(this).is(":checked")) {
+          // If the checkbox is checked, hide the ClientList, CodeClient, and CodeContrat fields
+          $("#appels_ClientList").hide();
+          $('label[for="appels_ClientList"]').hide();
+          $("#appels_CodeClient").hide();
+          $('label[for="appels_CodeClient"]').hide();
+          $("#appels_CodeContrat").hide();
+          $('label[for="appels_CodeContrat"]').hide();
+        } else {
+          // If the checkbox is unchecked, show the ClientList field and hide the CodeClient and CodeContrat fields
+          $("#appels_ClientList").show();
+          $("#appels_CodeClient").show();
+          $("#appels_CodeContrat").show();
+        }
+      });
+
+});
+
+
 
 
 

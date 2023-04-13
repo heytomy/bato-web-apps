@@ -125,6 +125,7 @@ class AppelsType extends AbstractType
                     'id' => 'contrats-field',
                     'readonly' => 'readonly',
                 ],
+                'choice_label' => 'libelle',
             ])
             ->add('CodeClient', EntityType::class, [
                 'required' => false,
@@ -132,7 +133,6 @@ class AppelsType extends AbstractType
                 'placeholder' => 'Code Client',
                 'label' => 'Code Client',
                 'attr' => [
-                    'placeholder' => 'Code Client',
                     'class' => 'form-control',
                     'id' => 'client-field',
                     'readonly' => 'readonly',

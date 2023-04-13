@@ -73,7 +73,7 @@ class AppelsController extends AbstractController
             if ($allDay) {
                 $rdvHeureFin = null;
             } else {
-                $rdvHeureFin->add($HoursInterval);
+                $rdvHeureFin;
             }
             
             $rdv

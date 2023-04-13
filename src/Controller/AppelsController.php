@@ -47,6 +47,10 @@ class AppelsController extends AbstractController
     #[Route('/appels/new', name: 'app_appels_new')]
     public function new(Request $request, EntityManagerInterface $em, TicketUrgentsRepository $ticketUrgent): Response
     {
+
+        //TODO: Boutton tout effacer dans le formulaire
+        //TODO: Bar de filtre pour la recherche de client
+
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
     
         $appel = new Appels();

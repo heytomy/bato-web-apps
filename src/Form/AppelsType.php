@@ -96,7 +96,7 @@ class AppelsType extends AbstractType
                 'mapped' => false,
                 'class' => ClientDef::class,
                 'choices' => $this->clientDefRepository->findAll(),
-                'label' => 'Client SAV',
+                'label' => 'Clients',
                 'choice_label' => function (ClientDef $client) {
                     return $client->getNom();
                 },

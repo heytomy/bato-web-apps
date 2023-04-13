@@ -31,14 +31,14 @@
 					Code Contrat:
 						{{appel.CodeContrat.getId()}}
 						{% else %}
-						<p>N'a pas de contrat d'entretien</p>
+					N'a pas de contrat d'entretien
 					{% endif %}
 				</div>
 				<div>{% if appel.CodeClient %}
 					Code Client:					
 						{{appel.CodeClient.getId()}}
 						{% else %}
-						<p>Nouveau client !</p>
+					<strong style="color: #B60E0E;">Nouveau client !</strong>
 					{% endif %}
 				</div>
 			</div>
@@ -57,11 +57,16 @@
 									{% if appel.CodeContrat %}
 										<strong>Code Contrat:</strong>
 										{{appel.CodeContrat.getId()}}
+									{% else %}
+										<p>N'a pas de contrat d'entretien</p>
 									{% endif %}
 									{% if appel.CodeClient %}
 										<strong>Code Client:</strong>
 										{{appel.CodeClient.getId()}}
+									{% else %}
+										<strong style="color: #B60E0E;">Nouveau client !</strong>
 									{% endif %}
+
 								</div>
 
 								<div class="col-md-6">
@@ -92,10 +97,14 @@
 									<p>
 										<strong>Date de rendez-vous:</strong>
 									</p>
-									<p>Le
+									<p>
+										Le
 										{{appel.getRdv().dateDebut | date('d/m/Y')}}
 										à
-										{{appel.getRdv().dateDebut | date('H:i')}}</p>
+										{{appel.getRdv().dateDebut | date('H:i')}}
+
+										{{appel.getRdv().dateFin | date('H:i')}}
+									</p>
 								</div>
 
 								<div class="col-md-6">

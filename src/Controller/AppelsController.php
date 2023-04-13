@@ -47,6 +47,10 @@ class AppelsController extends AbstractController
     #[Route('/appels/new', name: 'app_appels_new')]
     public function new(Request $request, EntityManagerInterface $em, TicketUrgentsRepository $ticketUrgent): Response
     {
+
+        //TODO: Boutton tout effacer dans le formulaire
+        //TODO: Bar de filtre pour la recherche de client
+
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
     
         $appel = new Appels();
@@ -56,14 +60,13 @@ class AppelsController extends AbstractController
         $form->handleRequest($request);
     
         if ($form->isSubmitted() && $form->isValid()) {
-            
+
             $rdvDateTime = $form->get('rdvDateTime')->getData()->format('Y-m-d H:i:s');
             $rdvDateTimeFin = $form->get('rdvDateTimeFin')->getData()->format('Y-m-d H:i:s');
-
             $allDay = $form->get('allDay')->getData();
             
             $rdvDateTime = new DateTime($rdvDateTime);
-            // $rdvDateTimeFin = new DateTime($rdvDateTimeFin);
+            $rdvDateTimeFin = new DateTime($rdvDateTimeFin);
             $HoursInterval = new DateInterval('PT1H');
             $rdvHeureFin = clone $rdvDateTime;
 
@@ -100,6 +103,11 @@ class AppelsController extends AbstractController
                 $em->persist($ticketUrgent);
                 $em->flush($ticketUrgent);
             }
+
+            $this->addFlash(
+                'success',
+                'Rendez-vous enregistré avec succès !'
+            );
     
             return $this->redirectToRoute('app_appels');
         }

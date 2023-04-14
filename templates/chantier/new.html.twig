@@ -1,0 +1,16 @@
+{% extends '_inc/listPage.html.twig' %}
+
+{% block title %}Nouveau Chantier{% endblock %}
+
+{% block back_button %}{{ path('app_chantier') }}{% endblock %}
+
+{% block list %}
+    <h1 class="text-center font-weight-bold" style="font-size: 3em;">Nouveau Chantier</h1>
+
+    {{ form_start(form) }}
+        {{ form_widget(form) }}
+        <button class="btn">{{ button_label|default('Save') }}</button>
+    {{ form_end(form) }}
+
+    
+{% endblock %}

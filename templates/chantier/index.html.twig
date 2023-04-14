@@ -6,6 +6,13 @@
     {{ path('app_dashboard') }}
 {% endblock %}
 
+{% block new_button %}
+	<a class="btn btn-primary" href="{{ path('app_chantier_new') }}">
+		<i class="fa-solid fa-chevron-right"></i>
+		Nouveau chantier
+	</a>
+{% endblock %}
+
 {# {% block search %}
     {{ form_start(searchForm, {'attr': {'class': 'd-flex justify-content-end col p-2', 'id': 'search-form'}}) }}
         <div class="">

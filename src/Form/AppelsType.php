@@ -164,7 +164,7 @@ class AppelsType extends AbstractType
                 ],
                 'constraints' => [
                     new NotBlank(['message' => 'Veuillez saisir une adresse']),
-                    new Length(['max' => 255, 'maxMessage' => 'L\'adresse ne doit pas dépasser {{ limit }} caractères']),
+                    new Length(['max' => 50, 'maxMessage' => 'L\'adresse ne doit pas dépasser {{ limit }} caractères']),
                 ],
             ])
             ->add('CP', TextType::class, [
@@ -191,7 +191,7 @@ class AppelsType extends AbstractType
                 ],
                 'constraints' => [
                     new NotBlank(['message' => 'Veuillez saisir une ville']),
-                    new Length(['max' => 2000, 'maxMessage' => 'La ville ne doit pas dépasser {{ limit }} caractères']),
+                    new Length(['max' => 25, 'maxMessage' => 'La ville ne doit pas dépasser {{ limit }} caractères']),
                 ],
             ])
             ->add('Tel', TelType::class, [

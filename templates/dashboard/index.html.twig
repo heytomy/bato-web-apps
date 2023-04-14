@@ -7,14 +7,23 @@
     <!-- Main container -->
     <div class="container">
         <!-- Informations Clients -->
-        <div class="row border border-light rounded bg-light m-2 p-2">
-        {% if app.user %}
-            <h1 class="display-3">Hello, {{ app.user.getIDUtilisateur.nom }} {{ app.user.getIDUtilisateur.prenom }} !</h1>
+        <div class="row border border-light rounded bg-light m-2 p-1">
+    {% if app.user %}
+        <h1 class="display-3">Bonjour {{ app.user.getIDUtilisateur.prenom }}!</h1>
 
-            <p>Donec id elit non mi porta gravida at eget metus. Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum nibh, ut fermentum massa justo sit amet risus. Etiam porta sem malesuada magna mollis euismod. Donec sed odio dui.</p>
-            <p><a class="btn btn-primary btn-lg" href="#" role="button">Learn more »</a></p>
-        </div>
-		{% endif %}
+        <p>Voici un petit récapitulatif :</p>
+        <ul class="" style="margin-left: 2rem;">
+            <li>Il y a X nouveaux devis.</li>
+            {% if newAppels|length > 0 %}
+                <li>{{ countNewAppels }} nouveaux rendez-vous enregistrés.</li>
+            {% else %}
+                <li>Aucun nouveau rendez-vous enregistré.</li>
+            {% endif %}
+        </ul>
+    {% endif %}
+</div>
+
+
         <div class="row border border-light rounded bg-light m-2 p-2">
             <h1 class="display-3">Calendrier</h1>
             <div class="row">

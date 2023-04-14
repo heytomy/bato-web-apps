@@ -61,6 +61,9 @@ class Appels
     #[ORM\OneToMany(mappedBy: 'idAppel', targetEntity: PhotosAppels::class)]
     private Collection $photos;
 
+    #[ORM\Column]
+    private ?\DateTimeImmutable $createdAt = null;
+
     public function __construct()
     {
         $this->photos = new ArrayCollection();
@@ -242,6 +245,18 @@ class Appels
                 $photo->setIdAppel(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getCreatedAt(): ?\DateTimeImmutable
+    {
+        return $this->createdAt;
+    }
+
+    public function setCreatedAt(\DateTimeImmutable $createdAt): self
+    {
+        $this->createdAt = $createdAt;
 
         return $this;
     }

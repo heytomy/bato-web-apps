@@ -274,16 +274,6 @@ class AppelsType extends AbstractType
                     'placeholder' => 'Sélectionnez une date et heure de fin de RDV',
                 ],
                 'html5' => true,
-                'constraints' => [
-                    new Assert\Callback(function ($dateTime, ExecutionContextInterface $context) {
-                        $time = $dateTime->format('H:i');
-                        if ($time < '07:00' || $time > '20:00') {
-                            $context->buildViolation('L\'heure de rendez-vous doit être comprise entre 7:00 et 20:00')
-                                ->atPath('rdvDateTime')
-                                ->addViolation();
-                        }
-                    })
-                ],
             ]) 
 
             ->add('allDay', CheckboxType::class, [

@@ -3,7 +3,6 @@
 namespace App\Controller;
 
 use DateTime;
-use DateInterval;
 use App\Entity\Appels;
 use App\Form\AppelsType;
 use App\Entity\Calendrier;
@@ -82,7 +81,9 @@ public function new(Request $request, EntityManagerInterface $em, TicketUrgentsR
                 ->setAllDay($form->get('allDay')->getData())
                 ->setTitre($appel->getNom());
 
-            $appel->setRdv($rdv);
+            $appel
+                ->setRdv($rdv)
+                ->setCreatedAt(new \DateTimeImmutable());
 
             $em->persist($appel);
             $em->flush($appel);
@@ -96,7 +97,7 @@ public function new(Request $request, EntityManagerInterface $em, TicketUrgentsR
                 $ticketUrgent = new TicketUrgents();
                 $ticketUrgent
                     ->setAppelsUrgents($appel)
-                    ->setStatus(intval($form->get('status')->getData()))
+                    ->setStatus()
                 ;
 
                 $em->persist($ticketUrgent);

@@ -309,9 +309,9 @@ class AppelsType extends AbstractType
                 'placeholder' => 'Niveau d\'urgence',
                 'label' => false,
                 'choices' => [
-                    'Faible' => 'low',
-                    'Moyen'  => 'medium',
-                    'Elevé'  => 'high',
+                    'Faible' => 0,
+                    'Moyen'  => 1,
+                    'Elevé'  => 2,
                 ],
                 'attr' => [
                     'class' => 'form-control urgency-select d-none',

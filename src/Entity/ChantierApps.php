@@ -16,7 +16,7 @@ class ChantierApps
     #[ORM\Column(name: 'Id')]
     private ?int $id = null;
 
-    #[ORM\Column(name: 'Libellé', length: 50, nullable: true)]
+    #[ORM\Column(name: 'Libelle', length: 50, nullable: true)]
     private ?string $libelle = null;
 
     #[ORM\Column(name: 'Description', type: Types::TEXT)]

@@ -39,6 +39,64 @@ class ChantierAppsRepository extends ServiceEntityRepository
         }
     }
 
+    public function getCountClients()
+    {
+        $qb = $this->createQueryBuilder('c');
+
+        $qb->select(
+            $qb->expr()->count(x: 'c.id')
+        )
+        ;
+
+        return $qb->getQuery()->getSingleScalarResult();
+    }
+
+    /**
+     * Cette fonction existe pour faire un query pour prendre un certain nombre de clients. 
+     * @param ?int $offset Définit un décalage pour les données prises. C'est 0 par défaut
+     * @param int $limit Fixe une certaine limite au nombre de données prises. C'est 10 par défaut
+     * @return Collection Renvoie une collection des clients
+     */
+    public function findByLimit(?int $offset = 0, int $limit = 10)
+    {
+        $qb = $this->createQueryBuilder('c');
+
+        $qb->select()
+            ->setFirstResult($offset)
+            ->setMaxResults($limit)
+        ;
+
+        return $qb->getQuery()->getResult();
+    }
+
+    /**
+     * Cette fonction existe pour transformer une collection à un array JSON
+     * @param array $clients c'est la variable de la liste des clients
+     * @return array Renvoie une liste des clients transformer en array JSON
+     */
+    public function collectionToArray(array $clients)
+    {
+        $data = [];
+
+        foreach ($clients as $key => $client) {
+            $data[] = [
+                'codeChantier'          =>  $client->getId(),
+                'libelle'               =>  $client->getLibelle(),
+                'codeClient'            =>  $client->getCodeClient()->getId(),
+                'nom'                   =>  $client->getCodeClient()->getNom(),
+                'adr'                   =>  $client->getAdresse(),
+                'cp'                    =>  $client->getCP(),
+                'ville'                 =>  $client->getVille(),
+                'tel'                   =>  $client->getCodeClient()->getTel(),
+                'dateDebut'             =>  $client->getDateDebut(),
+                'dateFin'               =>  $client->getDateFin(),
+                'statut'                =>  $client->getStatut()->getStatut(),
+            ];
+        }
+        
+        return $data;
+    }
+
 //    /**
 //     * @return ChantierApps[] Returns an array of ChantierApps objects
 //     */

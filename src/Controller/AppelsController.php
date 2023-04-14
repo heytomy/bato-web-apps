@@ -93,11 +93,12 @@ public function new(Request $request, EntityManagerInterface $em, TicketUrgentsR
 
             if ($form->get('isUrgent')->getData() && $form->get('status')->getData()) {
 
-                // dd($form->getData());
+                $status = $form->get('status')->getData();
+
                 $ticketUrgent = new TicketUrgents();
                 $ticketUrgent
                     ->setAppelsUrgents($appel)
-                    ->setStatus()
+                    ->setStatus($status)
                 ;
 
                 $em->persist($ticketUrgent);

@@ -21,7 +21,8 @@ Encore
      * and one CSS file (e.g. app.css) if your JavaScript imports CSS.
      */
     .addEntry('app',            './assets/app.js')
-    .addEntry('infiniteScroll', './assets/infiniteScroll.js')
+    .addEntry('infiniteScrollSAV', './assets/infiniteScrollSAV.js')
+    .addEntry('infiniteScrollChantier', './assets/infiniteScrollChantier.js')
     .addEntry('appelsAutocomplete', './assets/appelsAutocomplete.js')
     .addEntry('calendrier', './assets/calendrier/index.js')
     .addEntry('calendrierDashboard', './assets/calendrier/calendrierDashboard.js')

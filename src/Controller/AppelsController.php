@@ -132,6 +132,7 @@ public function new(Request $request, EntityManagerInterface $em, TicketUrgentsR
         foreach ($client->getContrats() as $contrat) {
             $contrats[] = [
                 'codecontrat' => $contrat->getId(),
+                'libelle' => $contrat->getLibelle(),
             ];
         }
     

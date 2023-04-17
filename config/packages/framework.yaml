@@ -12,7 +12,7 @@ framework:
         save_path: '%kernel.project_dir%/var/sessions/%kernel.environment%'
         cookie_secure: 'auto'
         cookie_samesite: 'lax'
-        gc_max_lifetime: 3600
+        gc_maxlifetime: 3600
         gc_divisor: 100
         gc_probability: 1
         cookie_lifetime: 0

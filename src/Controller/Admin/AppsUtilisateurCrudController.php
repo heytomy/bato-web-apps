@@ -39,6 +39,7 @@ class AppsUtilisateurCrudController extends AbstractCrudController
     {
         $fields = [
             IdField::new('id')->hideOnForm(),
+            TextField::new('ID_Utilisateur'),
             TextField::new('Nom_utilisateur'),
             ArrayField::new('roles'),
             BooleanField::new('is_verified'),

@@ -62,6 +62,7 @@ class ChantierAppsRepository extends ServiceEntityRepository
         $qb = $this->createQueryBuilder('c');
 
         $qb->select()
+            ->orderBy('c.id', 'DESC')
             ->setFirstResult($offset)
             ->setMaxResults($limit)
         ;

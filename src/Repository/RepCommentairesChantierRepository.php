@@ -39,6 +39,17 @@ class RepCommentairesChantierRepository extends ServiceEntityRepository
         }
     }
 
+    public function findByChantier(int $chantier): array
+   {
+       return $this->createQueryBuilder('reply')
+           ->innerJoin('reply.parent', 'comment')
+           ->andWhere('comment.codeChantier = :chantier')
+           ->setParameter('chantier', $chantier)
+           ->getQuery()
+           ->getResult()
+       ;
+   }
+
 //    /**
 //     * @return RepCommentairesChantier[] Returns an array of RepCommentairesChantier objects
 //     */

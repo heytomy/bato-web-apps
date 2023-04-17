@@ -1,27 +1,21 @@
 {% extends '_inc/listPage.html.twig' %}
 
-{% block title %}Appels{% endblock %}
+{% block title %}Chantier{% endblock %}
 
 {% block back_button %}
-    {{ path('app_appels') }}
+    {{ path('app_chantier') }}
 {% endblock %}
 
 {% block list %}
     <div class="border rounded container bg-light p-2">
         <div class="row border border-light rounded bg-client m-2 p-2"> 
             <div class="d-flex justify-content-between">
-                <h1>{{appel.getRdv().titre}}</h1>
+                <h1>{{chantier.getCodeClient().nom}}</h1>
                 <div class="d-flex flex-column align-items-end">
-                    <h5>Le {{appel.getRdv().dateDebut | date('d/m/Y')}}</h5>
-                    <h5>à {{appel.getRdv().dateDebut | date('h:i')}}</h5>
-                    {% if appel.getRdv().dateFin %}
-                        <h5>Le {{appel.getRdv().dateFin | date('d/m/Y')}}</h5>
-                        <h5>à {{appel.getRdv().dateFin | date('h:i')}}</h5> 
-                    {% endif %}
+                    <h5>Le {{chantier.dateDebut | date('d/m/Y')}}</h5>
+                    <h5>à {{chantier.dateDebut | date('h:i')}}</h5>
                 </div>
             </div>
-            {% if appel.CodeContrat %}  <div>Code du contrat: {{appel.CodeContrat}}</div>   {% endif %}
-            {% if appel.CodeClient %}  <div>Code du contrat: {{appel.CodeClient}}</div>   {% endif %}    
         </div>
 
         <h3 class="row border border-light rounded m-2 p-2">
@@ -37,7 +31,7 @@
                                 <div class="card-body p-4 bg-client">
                                     <div class="row">
                                         <div class="col">
-                                            {{ appel.description|raw }}
+                                            {{ chantier.description|raw }}
                                         </div>
                                     </div>
                                 </div>
@@ -65,7 +59,7 @@
         </h3>
         
         <div class="row border border-light rounded m-2 p-2">
-            {% include 'commentaireAppels/comment.html.twig' %}
+            {% include 'commentaireChantier/comment.html.twig' %}
         </div>
     </div>
 {% endblock %}

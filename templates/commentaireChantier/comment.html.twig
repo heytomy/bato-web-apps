@@ -1,0 +1,133 @@
+<section class="gradient-custom justify-content-center">
+    <div class="container justify-content-center">
+        <div class="row d-flex justify-content-center">
+            <div class="col-md-12">
+                <div class="card">
+                    <div class="card-body p-4 bg-client">
+                        <div class="row">
+                            <div class="col">
+                                {% if comments %}
+                                    {% for comment in comments %}
+                                        <div class="d-flex flex-start mt-4">
+                                            <i class="fa-solid fa-user rounded-circle shadow-1-strong me-3" style="width: 65px; height:65px; font-size: 2em; color: #479F9F;"></i>
+                                            <div class="flex-grow-1 flex-shrink-1">
+                                                <div class="p-2 border rounded bg-comment">
+                                                    <div class="d-flex justify-content-between align-items-center">
+                                                        <p class="mb-1">
+                                                            <span class="commentAuthor">{{ comment.owner.nom }} {{ comment.owner.prenom }}</span>
+                                                            
+                                                            <span class="small">- {{ comment.getDateCom() | date('Y-m-d h:i') }}</span>
+                                                        </p>
+                                                    </div>
+                                                    <p class="small mb-0 ">
+                                                        <span class="commentContent">{{ comment.getContenu() }}</span>
+                                                    </p>
+                                                </div>
+                                                <div class="p-2 d-flex flex-start flex-row-reverse">
+                                                    <button 
+                                                        class="btn btn-primary p-2 m-2"
+                                                        data-bs-toggle="collapse" 
+                                                        data-bs-target="#repondre-{{comment.id}}" 
+                                                        aria-expanded="false" 
+                                                        aria-controls="repondre-{{comment.id}}"
+                                                        style="text-decoration: none;"
+                                                        data-id="{{comment.id}}"
+                                                        data-reply
+                                                    >
+                                                        <i class="fas fa-reply fa-xs"></i><span class="small"> Répondre</span>
+                                                    </button>
+                                                    {{ include('commentaireChantier/_delete_comment_form.html.twig') }}
+                                                </div>
+                                                <div class="collapse" id="repondre-{{comment.id}}">
+                                                    <div id="form-container-{{comment.id}}"></div>
+                                                </div>
+                                                {# replies #}
+                                                {% if replies %}
+                                                    {% for reply in comment.replies %}
+                                                        <div class="d-flex flex-start mt-4">
+                                                            <i class="fa-solid fa-comments rounded-circle shadow-1-strong me-3" style="width: 65px; height:65px; font-size: 2em; color: #0091BE;"></i>
+                                                            <div class="flex-grow-1 flex-shrink-1">
+                                                                <div class="p-2 border rounded bg-reply">
+                                                                    <div class="d-flex justify-content-between align-items-center">
+                                                                        <p class="mb-1">
+                                                                            <span class="commentAuthor">{{ reply.nom }}</span>
+                                                                    
+                                                                            <span class="small">- {{ reply.getDateCom() | date('Y-m-d h:i') }}</span>
+                                                                        </p>
+                                                                    </div>
+                                                                    <p class="small mb-0">
+                                                                        {{ reply.getContenu }}
+                                                                    </p>
+                                                                </div>
+                                                                <div class="p-2 d-flex flex-start flex-row-reverse">
+                                                                    {{ include('commentaireChantier/_delete_reply_form.html.twig') }}
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    {% endfor %}
+                                                {% endif %}
+                                            </div>
+                                        </div>
+                                    {% endfor %}
+                                    <hr>
+                                {# no comments #}
+                                {% else %}
+                                    <p>il n'y a pas des commentaires ici</p>
+                                {% endif %}
+                                <hr>
+                                {% if app.user %}
+                                    {% if commentForm %}
+                                        <div class="d-flex flex-start mt-4">
+                                            <div style="width: 65px; height:65px; font-size: 2em; color: #479F9F;"></div>
+                                            <div class="flex-grow-1 flex-shrink-1">
+                                                <div class="p-2">
+                                                    <div class="d-flex justify-content-between align-items-center">
+                                                        {{ form_start(commentForm, {'attr': {'class': 'd-flex flex-column col p-2'}}) }}
+                                                            {{ form_widget(commentForm.contenu) }}
+                                                            {{ form_errors(commentForm.contenu) }}
+                                                            <div class="d-flex flex-row-reverse">
+                                                                <button class="btn btn-primary mt-2" type="submit"> Envoyer </button>
+                                                            </div>
+                                                        {{ form_end(commentForm) }}
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    {% endif %}
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+{% if comments %}
+    <script>
+        document.querySelectorAll('[data-reply]').forEach(function(button) {
+            button.addEventListener('click', function(event) {
+                event.preventDefault();
+                var commentId = button.getAttribute('data-id');
+                var formHtml = '{{ form(replyForm, {'attr': {'class': 'd-flex flex-column col p-2'}}) }}';
+                formHtml = formHtml.replace(/__parentId__/g, commentId);
+                var formContainer = document.querySelector('#form-container-' + commentId);
+                formContainer.innerHTML = formHtml;
+
+                // creating submit button
+                var form = formContainer.querySelector('form');
+                const buttonElement = document.createElement('div');
+                buttonElement.classList.add('d-flex', 'flex-row-reverse');
+                buttonElement.innerHTML = `<button class="btn btn-primary m-2" type="submit"> Envoyer </button>`;
+                form.appendChild(buttonElement);
+
+                // Reset form values and data
+                form.reset();
+                form.querySelector('#rep_commentaires_chantier_parentid').value = commentId;
+                form.querySelector('#rep_commentaires_chantier_contenu').value = '';
+
+            });
+        });
+    </script>
+{% endif %}

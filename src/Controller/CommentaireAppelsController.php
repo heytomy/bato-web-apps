@@ -39,6 +39,6 @@ class CommentaireAppelsController extends AbstractController
             $repCommentairesAppelsRepository->remove($reply, true);
         }
 
-        return $this->redirectToRoute('app_sav_contrat', ['id' => $reply->getParent()->getCodeAppels()]);
+        return $this->redirectToRoute('app_appels_show', ['id' => $reply->getParent()->getCodeAppels()]);
     }
 }

@@ -43,7 +43,7 @@ class AppelsController extends AbstractController
         ]);
     }
 
-    #[Route('/appels/new', name: 'app_appels_new')]
+#[Route('/appels/new', name: 'app_appels_new')]
 public function new(Request $request, EntityManagerInterface $em, TicketUrgentsRepository $ticketUrgent): Response
 {
     //TODO: Bar de filtre pour la recherche de client

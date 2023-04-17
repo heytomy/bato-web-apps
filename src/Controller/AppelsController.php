@@ -61,6 +61,8 @@ public function new(Request $request, EntityManagerInterface $em, TicketUrgentsR
         $rdvDateTime = $form->get('rdvDateTime')->getData()->format('Y-m-d H:i:s');
         $rdvDateTimeFin = $form->get('rdvDateTimeFin')->getData();
 
+        $cleanDescription = strip_tags($form->get('description')->getData());
+        
         if ($rdvDateTimeFin !== null) {
             $rdvDateTimeFin = $rdvDateTimeFin->format('Y-m-d H:i:s');
         } elseif ($form->get('allDay')->getData()) {
@@ -83,6 +85,7 @@ public function new(Request $request, EntityManagerInterface $em, TicketUrgentsR
 
             $appel
                 ->setRdv($rdv)
+                ->setDescription($cleanDescription)
                 ->setCreatedAt(new \DateTimeImmutable());
 
             $em->persist($appel);

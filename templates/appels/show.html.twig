@@ -17,7 +17,7 @@
                 </div>
             </div>
             {% if appel.CodeContrat %}  <div>Code du contrat: {{appel.CodeContrat}} - {{appel.CodeContrat.libelle}}</div>   {% endif %}
-            {% if appel.CodeClient %}  <div>Code du contrat: {{appel.CodeClient}}</div>   {% endif %}    
+            {% if appel.CodeClient %}  <div>Code du client: {{appel.CodeClient.getId()}}</div>   {% endif %}    
         </div>
 
         <h3 class="row border border-light rounded m-2 p-2">

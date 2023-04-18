@@ -31,10 +31,7 @@ class AppelsController extends AbstractController
     #[Route('/appels', name: 'app_appels')]
     public function index(AppelsRepository $appelsRepository): Response
     {
-        $appels = $appelsRepository->createQueryBuilder('a')
-            ->orderBy('a.rdv', 'DESC')
-            ->getQuery()
-            ->getResult();
+        $appels = $appelsRepository->findBy(criteria: [] ,orderBy: ['id' => 'DESC']);
 
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
         return $this->render('appels/index.html.twig', [
@@ -43,24 +40,24 @@ class AppelsController extends AbstractController
         ]);
     }
 
-#[Route('/appels/new', name: 'app_appels_new')]
-public function new(Request $request, EntityManagerInterface $em, TicketUrgentsRepository $ticketUrgent): Response
-{
-    //TODO: Bar de filtre pour la recherche de client
 
-    $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
+    #[Route('/appels/new', name: 'app_appels_new')]
+    public function new(Request $request, EntityManagerInterface $em, TicketUrgentsRepository $ticketUrgent): Response
+    {
+        //TODO: Bar de filtre pour la recherche de client
 
-    $appel = new Appels();
-    $rdv = new Calendrier();
-    $form = $this->createForm(AppelsType::class, $appel);
+        $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
 
-    $form->handleRequest($request);
+        $appel = new Appels();
+        $rdv = new Calendrier();
+        $form = $this->createForm(AppelsType::class, $appel);
 
-    if ($form->isSubmitted() && $form->isValid()) {
+        $form->handleRequest($request);
 
-        $rdvDateTime = $form->get('rdvDateTime')->getData()->format('Y-m-d H:i:s');
-        $rdvDateTimeFin = $form->get('rdvDateTimeFin')->getData();
+        if ($form->isSubmitted() && $form->isValid()) {
 
+            $rdvDateTime = $form->get('rdvDateTime')->getData()->format('Y-m-d H:i:s');
+            $rdvDateTimeFin = $form->get('rdvDateTimeFin')->getData();
         $cleanDescription = strip_tags($form->get('description')->getData());
         
         if ($rdvDateTimeFin !== null) {
@@ -71,57 +68,57 @@ public function new(Request $request, EntityManagerInterface $em, TicketUrgentsR
             $rdvDateTimeFin = (new DateTime($rdvDateTime))->modify('+1 hour')->format('Y-m-d H:i:s');
         }
 
-        if ($rdvDateTimeFin !== null && new DateTime($rdvDateTime) > new DateTime($rdvDateTimeFin)) {
-            $this->addFlash(
-                'error',
-                'La date et heure de fin doit être postérieure à la date et heure de début.'
-            );
-        } else {
-            $rdv
-                ->setDateDebut(new DateTime($rdvDateTime))
-                ->setDateFin($rdvDateTimeFin !== null ? new DateTime($rdvDateTimeFin) : null)
-                ->setAllDay($form->get('allDay')->getData())
-                ->setTitre($appel->getNom());
+            if ($rdvDateTimeFin !== null && new DateTime($rdvDateTime) > new DateTime($rdvDateTimeFin)) {
+                $this->addFlash(
+                    'error',
+                    'La date et heure de fin doit être postérieure à la date et heure de début.'
+                );
+            } else {
+                $rdv
+                    ->setDateDebut(new DateTime($rdvDateTime))
+                    ->setDateFin($rdvDateTimeFin !== null ? new DateTime($rdvDateTimeFin) : null)
+                    ->setAllDay($form->get('allDay')->getData())
+                    ->setTitre($appel->getNom());
 
             $appel
                 ->setRdv($rdv)
                 ->setDescription($cleanDescription)
                 ->setCreatedAt(new \DateTimeImmutable());
 
-            $em->persist($appel);
-            $em->flush($appel);
+                $em->persist($appel);
+                $em->flush($appel);
 
-            $em->persist($rdv);
-            $em->flush($rdv);
+                $em->persist($rdv);
+                $em->flush($rdv);
 
-            if ($form->get('isUrgent')->getData() && $form->get('status')->getData()) {
+                if ($form->get('isUrgent')->getData() && $form->get('status')->getData()) {
 
-                $status = $form->get('status')->getData();
+                    $status = $form->get('status')->getData();
 
-                $ticketUrgent = new TicketUrgents();
-                $ticketUrgent
-                    ->setAppelsUrgents($appel)
-                    ->setStatus($status)
-                ;
+                    $ticketUrgent = new TicketUrgents();
+                    $ticketUrgent
+                        ->setAppelsUrgents($appel)
+                        ->setStatus($status)
+                    ;
 
-                $em->persist($ticketUrgent);
-                $em->flush($ticketUrgent);
+                    $em->persist($ticketUrgent);
+                    $em->flush($ticketUrgent);
+                }
+
+                $this->addFlash(
+                    'success',
+                    'Rendez-vous enregistré avec succès !'
+                );
+
+                return $this->redirectToRoute('app_appels');
             }
-
-            $this->addFlash(
-                'success',
-                'Rendez-vous enregistré avec succès !'
-            );
-
-            return $this->redirectToRoute('app_appels');
         }
-    }
 
-    return $this->render('appels/new.html.twig', [
-        'form' => $form->createView(),
-        'current_page' => 'app_appels',
-    ]);
-}
+        return $this->render('appels/new.html.twig', [
+            'form' => $form->createView(),
+            'current_page' => 'app_appels',
+        ]);
+    }
 
     
 

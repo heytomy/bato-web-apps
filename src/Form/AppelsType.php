@@ -6,7 +6,9 @@ use App\Entity\Appels;
 use App\Entity\Contrat;
 use App\Entity\ClientDef;
 use App\Entity\TicketUrgents;
+use App\Entity\AppsUtilisateur;
 use App\Entity\DefAppsUtilisateur;
+use App\Repository\AppsUtilisateurRepository;
 use App\Repository\ClientDefRepository;
 use Symfony\Component\Form\AbstractType;
 use App\Repository\TicketUrgentsRepository;
@@ -18,6 +20,7 @@ use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Validator\Constraints\Email;
 use Symfony\Component\Validator\Constraints\Regex;
+use Symfony\Component\Validator\Constraints\Choice;
 use Symfony\Component\Validator\Constraints\Length;
 use Symfony\Component\Validator\Constraints\Callback;
 use Symfony\Component\Validator\Constraints\NotBlank;
@@ -30,7 +33,6 @@ use Symfony\Component\Form\Extension\Core\Type\EmailType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\Form\Extension\Core\Type\DateTimeType;
-use Symfony\Component\Validator\Constraints\Choice;
 use Symfony\Component\Validator\Context\ExecutionContextInterface;
 
 
@@ -41,7 +43,11 @@ class AppelsType extends AbstractType
     private $router;
     private $security;
 
-    public function __construct(ClientDefRepository $clientDefRepository, DefAppsUtilisateurRepository $roles, RouterInterface $router, Security $security)
+    public function __construct(
+        ClientDefRepository $clientDefRepository, 
+        AppsUtilisateurRepository $roles, 
+        RouterInterface $router, 
+        Security $security)
     {
         $this->clientDefRepository = $clientDefRepository;
         $this->roles = $roles;
@@ -70,11 +76,11 @@ class AppelsType extends AbstractType
                 ])
             ->add('ID_Utilisateur', EntityType::class, [
                 'required' => true,
-                'class' => DefAppsUtilisateur::class,
+                'class' => AppsUtilisateur::class,
                 'choices' => $this->roles->findByRoleTech('ROLE_TECH_SAV'),
                 'label' => 'Technicien',
-                'choice_label' => function (DefAppsUtilisateur $fullname) {
-                    return $fullname->getNom() . ' ' . $fullname->getPrenom();
+                'choice_label' => function (AppsUtilisateur $username) {
+                    return $username->getIDUtilisateur()->getNom() . ' ' . $username->getIDUtilisateur()->getPrenom();
                 },
                 'placeholder' => 'Choisissez un technicien',
                 'attr' => [

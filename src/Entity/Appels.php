@@ -42,10 +42,6 @@ class Appels
     #[ORM\Column(nullable: true)]
     private ?bool $isUrgent = null;
 
-    #[ORM\ManyToOne(targetEntity: DefAppsUtilisateur::class)]
-    #[ORM\JoinColumn(name:"ID_Utilisateur", referencedColumnName:"ID_Utilisateur", nullable:true)]
-    private $ID_Utilisateur;
-
     #[ORM\ManyToOne(inversedBy: 'appels')]
     #[ORM\JoinColumn(name:"CodeClient", referencedColumnName:"Code", nullable:true)]
     private ?ClientDef $CodeClient = null;
@@ -54,15 +50,18 @@ class Appels
     #[ORM\JoinColumn(name:"CodeContrat", referencedColumnName:"Code", nullable:true)]
     private ?Contrat $CodeContrat = null;
 
-    #[ORM\OneToOne(inversedBy: 'appels', cascade: ['persist', 'remove'])]
-    #[ORM\JoinColumn(name:"ID_rdv", referencedColumnName:"id", nullable:true)]
-    private ?Calendrier $rdv = null;
-
     #[ORM\OneToMany(mappedBy: 'idAppel', targetEntity: PhotosAppels::class)]
     private Collection $photos;
 
     #[ORM\Column]
     private ?\DateTimeImmutable $createdAt = null;
+
+    #[ORM\OneToOne(mappedBy: 'appels', cascade: ['persist', 'remove'])]
+    private ?Calendrier $rdv = null;
+
+    #[ORM\ManyToOne(inversedBy: 'appels')]
+    #[ORM\JoinColumn(name: 'ID_Utilisateur', referencedColumnName: 'id', nullable: true)]
+    private ?AppsUtilisateur $ID_Utilisateur = null;
 
     public function __construct()
     {
@@ -72,19 +71,6 @@ class Appels
     public function getId(): ?int
     {
         return $this->id;
-    }
-
-    public function getIDUtilisateur(): ?DefAppsUtilisateur
-    {
-        return $this->ID_Utilisateur;
-    }
-
-
-    public function setIDUtilisateur(?DefAppsUtilisateur $ID_Utilisateur): self
-    {
-        $this->ID_Utilisateur = $ID_Utilisateur;
-
-        return $this;
     }
 
     public function getNom(): ?string
@@ -207,18 +193,6 @@ class Appels
         return $this;
     }
 
-    public function getRdv(): ?Calendrier
-    {
-        return $this->rdv;
-    }
-
-    public function setRdv(?Calendrier $rdv): self
-    {
-        $this->rdv = $rdv;
-
-        return $this;
-    }
-
     /**
      * @return Collection<int, PhotosAppels>
      */
@@ -257,6 +231,40 @@ class Appels
     public function setCreatedAt(\DateTimeImmutable $createdAt): self
     {
         $this->createdAt = $createdAt;
+
+        return $this;
+    }
+
+    public function getRdv(): ?Calendrier
+    {
+        return $this->rdv;
+    }
+
+    public function setRdv(?Calendrier $rdv): self
+    {
+        // unset the owning side of the relation if necessary
+        if ($rdv === null && $this->rdv !== null) {
+            $this->rdv->setAppels(null);
+        }
+
+        // set the owning side of the relation if necessary
+        if ($rdv !== null && $rdv->getAppels() !== $this) {
+            $rdv->setAppels($this);
+        }
+
+        $this->rdv = $rdv;
+
+        return $this;
+    }
+
+    public function getIDUtilisateur(): ?AppsUtilisateur
+    {
+        return $this->ID_Utilisateur;
+    }
+
+    public function setIDUtilisateur(?AppsUtilisateur $ID_Utilisateur): self
+    {
+        $this->ID_Utilisateur = $ID_Utilisateur;
 
         return $this;
     }

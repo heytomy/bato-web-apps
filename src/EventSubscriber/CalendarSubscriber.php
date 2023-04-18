@@ -68,12 +68,22 @@ class CalendarSubscriber implements EventSubscriberInterface
                 'id' => $booking->getId(),
                 'allDay' => $booking->isAllDay(),
             ]);
-            $bookingEvent->addOption(
-                'url',
-                $this->router->generate('app_appels_show', [
-                    'id' => $booking->getAppels()->getId(),
-                ])
-            );
+            if (null !== $booking->getChantier()) {
+                $bookingEvent->addOption(
+                    'url',
+                    $this->router->generate('app_chantier_show', [
+                        'id' => $booking->getChantier()->getId(),
+                    ])
+                );
+            }
+            if (null !== $booking->getAppels()) {
+                $bookingEvent->addOption(
+                    'url',
+                    $this->router->generate('app_appels_show', [
+                        'id' => $booking->getAppels()->getId(),
+                    ])
+                );
+            }
 
             // finally, add the event to the CalendarEvent to fill the calendar
             $calendar->addEvent($bookingEvent);

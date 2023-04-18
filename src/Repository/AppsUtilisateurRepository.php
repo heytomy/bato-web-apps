@@ -57,6 +57,17 @@ class AppsUtilisateurRepository extends ServiceEntityRepository implements Passw
         $this->save($user, true);
     }
 
+    public function findByRoleTech(string $role): array
+    {
+        $queryBuilder = $this->createQueryBuilder('a');
+        $queryBuilder
+            ->innerJoin('a.roles', 'r')
+            ->where('r.Libelle = :role')
+            ->setParameter('role', $role);
+    
+        return $queryBuilder->getQuery()->getResult();
+    }
+
     // public function listRolesByUserId($userId) 
     // {
     //     $qb = $this->createQueryBuilder('u')

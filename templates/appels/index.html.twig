@@ -144,3 +144,7 @@
 	{{ parent() }}
 {% endblock %}
 
+{% block stylesheets %}
+	{{ parent() }}
+	{{ encore_entry_link_tags('appels') }}
+{% endblock %}

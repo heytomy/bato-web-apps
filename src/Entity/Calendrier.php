@@ -27,8 +27,13 @@ class Calendrier
     #[ORM\Column]
     private ?bool $allDay = null;
 
-    #[ORM\OneToOne(mappedBy: 'rdv', cascade: ['persist', 'remove'])]
+    #[ORM\OneToOne(inversedBy: 'rdv', cascade: ['persist', 'remove'])]
+    #[ORM\JoinColumn(name:"ID_Appels", referencedColumnName:"id", nullable:true)]
     private ?Appels $appels = null;
+
+    #[ORM\OneToOne(inversedBy: 'rdv', cascade: ['persist', 'remove'])]
+    #[ORM\JoinColumn(name:"ID_Chantier", referencedColumnName:"Id", nullable:true)]
+    private ?ChantierApps $Chantier = null;
 
     public function getId(): ?int
     {
@@ -90,12 +95,19 @@ class Calendrier
 
     public function setAppels(?Appels $appels): self
     {
-        // set the owning side of the relation if necessary
-        if ($appels !== null && $appels->getRdv() !== $this) {
-            $appels->setRdv($this);
-        }
-
         $this->appels = $appels;
+
+        return $this;
+    }
+
+    public function getChantier(): ?ChantierApps
+    {
+        return $this->Chantier;
+    }
+
+    public function setChantier(?ChantierApps $Chantier): self
+    {
+        $this->Chantier = $Chantier;
 
         return $this;
     }

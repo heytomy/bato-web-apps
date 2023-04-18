@@ -87,25 +87,30 @@ class AjaxController extends AbstractController
             // Les données sont complètes
             // On initialise un code
             $code = 200;
-            // On vérifie si l'id existe
-            if(!$booking){
-                // On instancie un rendez-vous
-                $booking = new Calendrier;
-
-                // On change le code
-                $code = 201;
-            }
-
+            
             // On hydrate l'objet avec les données
             $booking
                 ->setTitre($data->titre)
                 ->setDateDebut(new DateTime($data->dateDebut))
                 ;
+            
             // On met la dateFin à null s'il n'y a pas de donnée, sinon on insert la donnée dateFin
+            
+            if (isset($data->allDay)) {
+                if($data->allDay) {
+                    $booking->setAllDay($data->allDay);
+                    $booking->setDateFin(null);
+                } else {
+                    $booking->setAllDay($data->allDay);
+                    $dateFin = new DateTime($data->dateDebut);
+                    $dateFin->modify('+1 hour');
+                    $booking->setDateFin($dateFin);
+                }
+            }
             if(isset($data->dateFin) && !empty($data->dateFin)){
                 $booking->setDateFin(new DateTime($data->dateFin));
             }
-            $calendrierRepository->save($booking, true);
+            $calendrierRepository->save($booking, true);            
 
             // On rerourne le code
             return new Response('Ok', $code);

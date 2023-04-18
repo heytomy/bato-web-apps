@@ -150,4 +150,40 @@ class ChantierController extends AbstractController
             'current_page'      =>  'app_chantier',
         ]);
     }
+
+    #[Route('/{id}/edit', name: 'app_chantier_edit', methods: ['GET', 'POST'])]
+    public function edit(
+        Request $request, 
+        ChantierApps $chantier, 
+        ChantierAppsRepository $chantierAppsRepository, 
+        EntityManagerInterface $em
+        ): Response
+    {
+        $form = $this->createForm(ChantierAppsType::class, $chantier);
+        $form->handleRequest($request);
+        $rdv = $chantier->getRdv();
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $rdv
+                ->setTitre($chantier->getCodeClient()->getNom())
+                ->setDateDebut($chantier->getDateDebut())
+                ->setDateFin($chantier->getDateFin())
+                ->setAllDay(false)
+                ->setChantier($chantier)
+                ;
+
+            $em->persist($chantier);
+            $em->flush($chantier);
+
+            $em->persist($rdv);
+            $em->flush($rdv);
+            return $this->redirectToRoute('app_chantier_show', ['id' => $chantier->getId()], Response::HTTP_SEE_OTHER);
+        }
+
+        return $this->renderForm('chantier/edit.html.twig', [
+            'chantier'      =>  $chantier,
+            'form'          =>  $form,
+            'current_page'  =>  'app_chantier',
+        ]);
+    }
 }

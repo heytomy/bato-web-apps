@@ -31,10 +31,7 @@ class AppelsController extends AbstractController
     #[Route('/appels', name: 'app_appels')]
     public function index(AppelsRepository $appelsRepository): Response
     {
-        $appels = $appelsRepository->createQueryBuilder('a')
-            ->orderBy('a.rdv', 'DESC')
-            ->getQuery()
-            ->getResult();
+        $appels = $appelsRepository->findBy(criteria: [] ,orderBy: ['id' => 'DESC']);
 
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
         return $this->render('appels/index.html.twig', [
@@ -44,81 +41,81 @@ class AppelsController extends AbstractController
     }
 
     #[Route('/appels/new', name: 'app_appels_new')]
-public function new(Request $request, EntityManagerInterface $em, TicketUrgentsRepository $ticketUrgent): Response
-{
-    //TODO: Bar de filtre pour la recherche de client
+    public function new(Request $request, EntityManagerInterface $em, TicketUrgentsRepository $ticketUrgent): Response
+    {
+        //TODO: Bar de filtre pour la recherche de client
 
-    $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
+        $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
 
-    $appel = new Appels();
-    $rdv = new Calendrier();
-    $form = $this->createForm(AppelsType::class, $appel);
+        $appel = new Appels();
+        $rdv = new Calendrier();
+        $form = $this->createForm(AppelsType::class, $appel);
 
-    $form->handleRequest($request);
+        $form->handleRequest($request);
 
-    if ($form->isSubmitted() && $form->isValid()) {
+        if ($form->isSubmitted() && $form->isValid()) {
 
-        $rdvDateTime = $form->get('rdvDateTime')->getData()->format('Y-m-d H:i:s');
-        $rdvDateTimeFin = $form->get('rdvDateTimeFin')->getData();
+            $rdvDateTime = $form->get('rdvDateTime')->getData()->format('Y-m-d H:i:s');
+            $rdvDateTimeFin = $form->get('rdvDateTimeFin')->getData();
 
-        if ($rdvDateTimeFin !== null) {
-            $rdvDateTimeFin = $rdvDateTimeFin->format('Y-m-d H:i:s');
-        } elseif ($form->get('allDay')->getData()) {
-            $rdvDateTimeFin = null;
-        } else {
-            $rdvDateTimeFin = (new DateTime($rdvDateTime))->modify('+1 hour')->format('Y-m-d H:i:s');
-        }
-
-        if ($rdvDateTimeFin !== null && new DateTime($rdvDateTime) > new DateTime($rdvDateTimeFin)) {
-            $this->addFlash(
-                'error',
-                'La date et heure de fin doit être postérieure à la date et heure de début.'
-            );
-        } else {
-            $rdv
-                ->setDateDebut(new DateTime($rdvDateTime))
-                ->setDateFin($rdvDateTimeFin !== null ? new DateTime($rdvDateTimeFin) : null)
-                ->setAllDay($form->get('allDay')->getData())
-                ->setTitre($appel->getNom());
-
-            $appel
-                ->setRdv($rdv)
-                ->setCreatedAt(new \DateTimeImmutable());
-
-            $em->persist($appel);
-            $em->flush($appel);
-
-            $em->persist($rdv);
-            $em->flush($rdv);
-
-            if ($form->get('isUrgent')->getData() && $form->get('status')->getData()) {
-
-                $status = $form->get('status')->getData();
-
-                $ticketUrgent = new TicketUrgents();
-                $ticketUrgent
-                    ->setAppelsUrgents($appel)
-                    ->setStatus($status)
-                ;
-
-                $em->persist($ticketUrgent);
-                $em->flush($ticketUrgent);
+            if ($rdvDateTimeFin !== null) {
+                $rdvDateTimeFin = $rdvDateTimeFin->format('Y-m-d H:i:s');
+            } elseif ($form->get('allDay')->getData()) {
+                $rdvDateTimeFin = null;
+            } else {
+                $rdvDateTimeFin = (new DateTime($rdvDateTime))->modify('+1 hour')->format('Y-m-d H:i:s');
             }
 
-            $this->addFlash(
-                'success',
-                'Rendez-vous enregistré avec succès !'
-            );
+            if ($rdvDateTimeFin !== null && new DateTime($rdvDateTime) > new DateTime($rdvDateTimeFin)) {
+                $this->addFlash(
+                    'error',
+                    'La date et heure de fin doit être postérieure à la date et heure de début.'
+                );
+            } else {
+                $rdv
+                    ->setDateDebut(new DateTime($rdvDateTime))
+                    ->setDateFin($rdvDateTimeFin !== null ? new DateTime($rdvDateTimeFin) : null)
+                    ->setAllDay($form->get('allDay')->getData())
+                    ->setTitre($appel->getNom());
 
-            return $this->redirectToRoute('app_appels');
+                $appel
+                    ->setRdv($rdv)
+                    ->setCreatedAt(new \DateTimeImmutable());
+
+                $em->persist($appel);
+                $em->flush($appel);
+
+                $em->persist($rdv);
+                $em->flush($rdv);
+
+                if ($form->get('isUrgent')->getData() && $form->get('status')->getData()) {
+
+                    $status = $form->get('status')->getData();
+
+                    $ticketUrgent = new TicketUrgents();
+                    $ticketUrgent
+                        ->setAppelsUrgents($appel)
+                        ->setStatus($status)
+                    ;
+
+                    $em->persist($ticketUrgent);
+                    $em->flush($ticketUrgent);
+                }
+
+                $this->addFlash(
+                    'success',
+                    'Rendez-vous enregistré avec succès !'
+                );
+
+                return $this->redirectToRoute('app_appels');
+            }
         }
-    }
 
-    return $this->render('appels/new.html.twig', [
-        'form' => $form->createView(),
-        'current_page' => 'app_appels',
-    ]);
-}
+        return $this->render('appels/new.html.twig', [
+            'form' => $form->createView(),
+            'current_page' => 'app_appels',
+        ]);
+    }
 
     
 

@@ -57,6 +57,13 @@ class ChantierApps
     #[ORM\JoinColumn(name: 'CodeClient', referencedColumnName: 'Code', nullable: false)]
     private ?ClientDef $codeClient = null;
 
+    #[ORM\OneToOne(mappedBy: 'Chantier', cascade: ['persist', 'remove'])]
+    private ?Calendrier $rdv = null;
+
+    #[ORM\ManyToOne(inversedBy: 'chantierApps')]
+    #[ORM\JoinColumn(name: 'ID_Utilisateur', referencedColumnName: 'id', nullable: true)]
+    private ?AppsUtilisateur $ID_Utilisateur = null;
+
     public function __construct()
     {
         $this->photosChantiers = new ArrayCollection();
@@ -275,6 +282,40 @@ class ChantierApps
     public function setCodeClient(?ClientDef $codeClient): self
     {
         $this->codeClient = $codeClient;
+
+        return $this;
+    }
+
+    public function getRdv(): ?Calendrier
+    {
+        return $this->rdv;
+    }
+
+    public function setRdv(?Calendrier $rdv): self
+    {
+        // unset the owning side of the relation if necessary
+        if ($rdv === null && $this->rdv !== null) {
+            $this->rdv->setChantier(null);
+        }
+
+        // set the owning side of the relation if necessary
+        if ($rdv !== null && $rdv->getChantier() !== $this) {
+            $rdv->setChantier($this);
+        }
+
+        $this->rdv = $rdv;
+
+        return $this;
+    }
+
+    public function getIDUtilisateur(): ?AppsUtilisateur
+    {
+        return $this->ID_Utilisateur;
+    }
+
+    public function setIDUtilisateur(?AppsUtilisateur $ID_Utilisateur): self
+    {
+        $this->ID_Utilisateur = $ID_Utilisateur;
 
         return $this;
     }

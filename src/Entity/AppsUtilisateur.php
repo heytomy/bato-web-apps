@@ -51,9 +51,17 @@ class AppsUtilisateur implements UserInterface, PasswordAuthenticatedUserInterfa
     #[ORM\Column(name: 'colorCode',length: 7, nullable: true)]
     private ?string $colorCode = null;
 
+    #[ORM\OneToMany(mappedBy: 'ID_Utilisateur', targetEntity: ChantierApps::class)]
+    private Collection $chantierApps;
+
+    #[ORM\OneToMany(mappedBy: 'ID_Utilisateur', targetEntity: Appels::class)]
+    private Collection $appels;
+
     public function __construct()
     {
         $this->roles = new ArrayCollection();
+        $this->chantierApps = new ArrayCollection();
+        $this->appels = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -193,6 +201,66 @@ class AppsUtilisateur implements UserInterface, PasswordAuthenticatedUserInterfa
     public function setColorCode(?string $colorCode): self
     {
         $this->colorCode = $colorCode;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, ChantierApps>
+     */
+    public function getChantierApps(): Collection
+    {
+        return $this->chantierApps;
+    }
+
+    public function addChantierApp(ChantierApps $chantierApp): self
+    {
+        if (!$this->chantierApps->contains($chantierApp)) {
+            $this->chantierApps->add($chantierApp);
+            $chantierApp->setIDUtilisateur($this);
+        }
+
+        return $this;
+    }
+
+    public function removeChantierApp(ChantierApps $chantierApp): self
+    {
+        if ($this->chantierApps->removeElement($chantierApp)) {
+            // set the owning side to null (unless already changed)
+            if ($chantierApp->getIDUtilisateur() === $this) {
+                $chantierApp->setIDUtilisateur(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Appels>
+     */
+    public function getAppels(): Collection
+    {
+        return $this->appels;
+    }
+
+    public function addAppel(Appels $appel): self
+    {
+        if (!$this->appels->contains($appel)) {
+            $this->appels->add($appel);
+            $appel->setIDUtilisateur($this);
+        }
+
+        return $this;
+    }
+
+    public function removeAppel(Appels $appel): self
+    {
+        if ($this->appels->removeElement($appel)) {
+            // set the owning side to null (unless already changed)
+            if ($appel->getIDUtilisateur() === $this) {
+                $appel->setIDUtilisateur(null);
+            }
+        }
 
         return $this;
     }

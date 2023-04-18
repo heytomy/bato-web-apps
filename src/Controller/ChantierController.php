@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use App\Entity\Calendrier;
 use DateTime;
 use App\Entity\ChantierApps;
 use App\Form\ChantierAppsType;
@@ -33,14 +34,28 @@ class ChantierController extends AbstractController
     }
 
     #[Route('/new', name: 'app_chantier_new', methods: ['GET', 'POST'])]
-    public function new(Request $request, ChantierAppsRepository $chantierAppsRepository): Response
+    public function new(Request $request, ChantierAppsRepository $chantierAppsRepository, EntityManagerInterface $em): Response
     {
         $chantier = new ChantierApps();
+        $rdv = new Calendrier();
         $form = $this->createForm(ChantierAppsType::class, $chantier);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $chantierAppsRepository->save($chantier, true);
+            $rdv
+                ->setTitre($chantier->getCodeClient()->getNom())
+                ->setDateDebut($chantier->getDateDebut())
+                ->setDateFin($chantier->getDateFin())
+                ->setAllDay(false)
+                ->setChantier($chantier)
+                ;
+
+            $em->persist($chantier);
+            $em->flush($chantier);
+
+            $em->persist($rdv);
+            $em->flush($rdv);
+            // $chantierAppsRepository->save($chantier, true);
 
             return $this->redirectToRoute('app_chantier', [], Response::HTTP_SEE_OTHER);
         }

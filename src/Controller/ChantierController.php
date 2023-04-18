@@ -92,13 +92,13 @@ class ChantierController extends AbstractController
             $comment
                 ->setDateCom(new DateTime())
                 ->setNom($nom)
-                ->setCodeChantier($chantier->getId())
+                ->setCodeChantier($chantier)
                 ->setOwner($user->getIDUtilisateur())
                 ;
             $em->persist($comment);
             $em->flush();
 
-            return $this->redirectToRoute('app_appels_show', ['id' => $chantier->getId()]);
+            return $this->redirectToRoute('app_chantier_show', ['id' => $chantier->getId()]);
         }
 
         /**
@@ -117,6 +117,7 @@ class ChantierController extends AbstractController
                 ->setDateCom(new DateTime())
                 ->setNom($nom)
                 ->setOwner($user->getIDUtilisateur())
+                ->setCodeChantier($chantier)
                 ;
 
             // On récupère le contenu du champ parentid
@@ -130,13 +131,13 @@ class ChantierController extends AbstractController
             
             $em->persist($reply);
             $em->flush();
-            return $this->redirectToRoute('app_appels_show', ['id' => $chantier->getId()]);
+            return $this->redirectToRoute('app_chantier_show', ['id' => $chantier->getId()]);
         }
 
         /**
          * partie photos
          */
-        // $photos = $photosAppelsRepository->findBy(['idAppel' => $appel->getId()]) ?? null;
+        $photos = $photosChantierRepository->findBy(['codeChantier' => $chantier->getId()]) ?? null;
 
         return $this->render('chantier/show.html.twig',[
             'chantier'          =>  $chantier,
@@ -145,8 +146,44 @@ class ChantierController extends AbstractController
             'commentForm'       =>  $commentForm,
             'replyForm'         =>  $replyForm,
             'replies'           =>  $replies,
-            'photos'            =>  null,
+            'photos'            =>  $photos,
             'current_page'      =>  'app_chantier',
+        ]);
+    }
+
+    #[Route('/{id}/edit', name: 'app_chantier_edit', methods: ['GET', 'POST'])]
+    public function edit(
+        Request $request, 
+        ChantierApps $chantier, 
+        ChantierAppsRepository $chantierAppsRepository, 
+        EntityManagerInterface $em
+        ): Response
+    {
+        $form = $this->createForm(ChantierAppsType::class, $chantier);
+        $form->handleRequest($request);
+        $rdv = $chantier->getRdv();
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $rdv
+                ->setTitre($chantier->getCodeClient()->getNom())
+                ->setDateDebut($chantier->getDateDebut())
+                ->setDateFin($chantier->getDateFin())
+                ->setAllDay(false)
+                ->setChantier($chantier)
+                ;
+
+            $em->persist($chantier);
+            $em->flush($chantier);
+
+            $em->persist($rdv);
+            $em->flush($rdv);
+            return $this->redirectToRoute('app_chantier_show', ['id' => $chantier->getId()], Response::HTTP_SEE_OTHER);
+        }
+
+        return $this->renderForm('chantier/edit.html.twig', [
+            'chantier'      =>  $chantier,
+            'form'          =>  $form,
+            'current_page'  =>  'app_chantier',
         ]);
     }
 }

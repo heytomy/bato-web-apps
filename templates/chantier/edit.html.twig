@@ -1,0 +1,11 @@
+{% extends '_inc/listPage.html.twig' %}
+
+{% block title %}Modifier Chantier{% endblock %}
+
+{% block back_button %}{{ path('app_chantier') }}{% endblock %}
+
+{% block list %}
+    <h1 class="text-center font-weight-bold" style="font-size: 3em;">Modifier les information du Chantier</h1>
+
+    {{ include('chantier/_form.html.twig') }}
+{% endblock %}

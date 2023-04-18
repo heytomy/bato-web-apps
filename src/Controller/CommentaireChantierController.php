@@ -14,7 +14,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 #[Route('/chantier/comment')]
 class CommentaireChantierController extends AbstractController
 {
-    #[Route('/{id}', name: 'app_appels_commentaire_delete', methods: ['POST'])]
+    #[Route('/{id}', name: 'app_chantier_commentaire_delete', methods: ['POST'])]
     public function deleteComment(
         Request $request,
         CommentairesChantier $comment,
@@ -25,10 +25,10 @@ class CommentaireChantierController extends AbstractController
             $commentairesChantierRepository->remove($comment, true);
         }
 
-        return $this->redirectToRoute('app_chantier_show', ['id' => $comment->getCodeChantier()]);
+        return $this->redirectToRoute('app_chantier_show', ['id' => $comment->getCodeChantier()->getId()]);
     }
 
-    #[Route('/reply/{id}', name: 'app_appels_reply_delete', methods: ['POST'])]
+    #[Route('/reply/{id}', name: 'app_chantier_reply_delete', methods: ['POST'])]
     public function deleteReply(
         Request $request,
         RepCommentairesChantier $reply,
@@ -39,6 +39,6 @@ class CommentaireChantierController extends AbstractController
             $repCommentairesChantierRepository->remove($reply, true);
         }
 
-        return $this->redirectToRoute('app_chantier_show', ['id' => $reply->getParent()->getCodeChantier()]);
+        return $this->redirectToRoute('app_chantier_show', ['id' => $reply->getCodeChantier()->getId()]);
     }
 }

@@ -15,6 +15,7 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Component\Form\Extension\Core\Type\DateType;
 use Symfony\Component\Form\Extension\Core\Type\DateTimeType;
+use Symfony\Component\Form\Extension\Core\Type\HiddenType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 
 class ChantierAppsType extends AbstractType
@@ -141,16 +142,16 @@ class ChantierAppsType extends AbstractType
             ])
             ->add('description', TinymceType::class, [
                 'required'      =>  true,
-                'label'         =>  'Déscription',
+                'label'         =>  'Description',
                 'attr'          =>  [
                     'selector'      =>  'textarea',
-                    'toolbar'       =>  'undo redo | h2 bold italic underline title | copy cut paste',
+                    'toolbar'       =>  'undo redo | copy cut paste',
                     'menubar'       =>  'false',
                     'contextmenu'   =>  'false',
-                    'placeholder'   =>  'Veuillez écrire une déscription du chantier'
+                    'placeholder'   =>  'Veuillez décrire le chantier'
                 ],
                 'constraints'   =>  [
-                    new Assert\NotBlank(['message' => 'Veuillez entrer une déscription du chantier']),
+                    new Assert\NotBlank(['message' => 'Veuillez entrer une description du chantier']),
                 ],
             ])
         ;

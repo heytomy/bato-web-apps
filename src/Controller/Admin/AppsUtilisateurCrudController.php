@@ -38,11 +38,11 @@ class AppsUtilisateurCrudController extends AbstractCrudController
     public function configureFields(string $pageName): iterable
     {
         $fields = [
-            IdField::new('id')->hideOnForm(),
-            TextField::new('ID_Utilisateur'),
+            IdField::new('id')->hideOnForm()->hideOnIndex(),
             TextField::new('Nom_utilisateur'),
             ArrayField::new('roles'),
             BooleanField::new('is_verified'),
+
         ];
 
         $password = TextField::new('Mot_de_passe')

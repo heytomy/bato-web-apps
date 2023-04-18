@@ -2,6 +2,15 @@
 
 {% block title %}Chantier{% endblock %}
 
+{% block search %}
+    <div class="p-2 col d-flex flex-row-reverse">
+        <a class="btn btn-secondary p-2" href="{{ path('app_chantier_edit', {'id': chantier.id}) }}">
+            <i class="fa-solid fa-pen-to-square"></i>
+            Modifier
+        </a>
+    </div>
+{% endblock %}
+
 {% block back_button %}
     {{ path('app_chantier') }}
 {% endblock %}
@@ -48,7 +57,7 @@
         
         <div class="row border border-light rounded m-2 p-2">
             {% if photos %}
-                {% include 'photoAppels/photo.html.twig' %}
+                {% include 'photoChantier/photo.html.twig' %}
             {% else %}
                 
             {% endif %}

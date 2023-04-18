@@ -8,76 +8,7 @@
 
 <h1 class="text-center font-weight-bold" style="font-size: 3em;">Nouvel Appel</h1>
 
-
-<div class="container-fluid">
-
-  <div class="row mb-4">
-    <div class="col d-flex justify-content-end">
-      <button class="btn btn-secondary" id="clear-fields-btn">Réinitialiser</button>
-    </div>
-  </div>
-
-  <div class="card border rounded-5 bg-light p-4">
-    {{ form_start(form) }}
-
-    <div class="row mb-4 mt-1 form-check">
-      <div class="col mb-2">{{ form_row(form.isNewClient) }}</div>
-    </div>
-
-    <div class="row mt-3">
-      <div class="col">{{ form_row(form.ID_Utilisateur) }}</div>
-    </div>
-
-    <div class="row mt-3 ">
-      <div class="col">{{ form_row(form.ClientList) }}</div>
-    </div>
-
-    <div class="row mt-3">
-      <div class="col-md-6">{{ form_row(form.CodeContrat) }}</div>
-      <div class="col-md-6">{{ form_row(form.CodeClient) }}</div>
-    </div>
-
-    <div class="row mt-4">
-      <div class="col-md-6">{{ form_row(form.Nom) }}</div>
-      <div class="col-md-6">{{ form_row(form.Adr) }}</div>
-      <div class="col-md-6">{{ form_row(form.CP) }}</div>
-      <div class="col-md-6">{{ form_row(form.Ville) }}</div>
-      <div class="col-md-6">{{ form_row(form.Tel) }}</div>
-      <div class="col-md-6">{{ form_row(form.Email) }}</div>
-    </div>
-
-    <div class="row mt-4">
-      <div class="col">{{ form_row(form.description) }}</div>
-    </div>
-
-    <div class="row mt-3">
-      {% if app.request.hasPreviousSession %}
-        {% for flashMessage in app.session.flashbag.get('error') %}
-          <div class="alert alert-danger alert-dismissible fade show" role="alert">
-          {{ flashMessage }}
-        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>          
-          </div>
-        {% endfor %}
-      {% endif %}
-
-      <div class="col-md-6">{{ form_row(form.rdvDateTime) }}</div>
-      <div class="col-md-6">{{ form_row(form.rdvDateTimeFin) }}</div>
-    </div>
-
-    <div class="row mt-3 form-check">
-      <div class="col">{{ form_row(form.allDay) }}</div>
-    </div>
-
-    <div class="row mb-4 mt-1 form-check">
-      <div class="col mb-2">{{ form_row(form.isUrgent) }}</div>
-      <div class="col-3">{{ form_row(form.status) }}</div>
-    </div>
-
-    <button type="submit" class="btn btn-primary">{{ button_label|default('Enregistrer') }}</button>
-    {{ form_end(form) }}
-  </div>
-</div>
-
+{% include 'appels/_form.html.twig' %}
 
 {% endblock %}
 

@@ -1,0 +1,11 @@
+{% extends '_inc/listPage.html.twig' %}
+
+{% block title %}Modifier Appels{% endblock %}
+
+{% block back_button %}{{ path('app_appels') }}{% endblock %}
+
+{% block list %}
+    <h1 class="text-center font-weight-bold" style="font-size: 3em;">Modifier les information de l'appel</h1>
+
+    {{ include('appels/_form.html.twig') }}
+{% endblock %}

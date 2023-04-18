@@ -231,7 +231,7 @@ class AppelsType extends AbstractType
                 'label' => 'Description',
                 'attr' => [
                     'selector' => 'textarea',
-                    'toolbar' => 'undo redo | h2 bold italic underline title | copy cut paste',
+                    'toolbar' => 'undo redo | copy cut paste',
                     'menubar' => 'false',                
                     'contextmenu' => 'false',
                     'placeholder' => 'Décrivez le problème rencontré par le client',

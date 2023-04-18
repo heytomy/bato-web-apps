@@ -40,6 +40,7 @@ class AppelsController extends AbstractController
         ]);
     }
 
+
     #[Route('/appels/new', name: 'app_appels_new')]
     public function new(Request $request, EntityManagerInterface $em, TicketUrgentsRepository $ticketUrgent): Response
     {
@@ -57,14 +58,15 @@ class AppelsController extends AbstractController
 
             $rdvDateTime = $form->get('rdvDateTime')->getData()->format('Y-m-d H:i:s');
             $rdvDateTimeFin = $form->get('rdvDateTimeFin')->getData();
-
-            if ($rdvDateTimeFin !== null) {
-                $rdvDateTimeFin = $rdvDateTimeFin->format('Y-m-d H:i:s');
-            } elseif ($form->get('allDay')->getData()) {
-                $rdvDateTimeFin = null;
-            } else {
-                $rdvDateTimeFin = (new DateTime($rdvDateTime))->modify('+1 hour')->format('Y-m-d H:i:s');
-            }
+        $cleanDescription = strip_tags($form->get('description')->getData());
+        
+        if ($rdvDateTimeFin !== null) {
+            $rdvDateTimeFin = $rdvDateTimeFin->format('Y-m-d H:i:s');
+        } elseif ($form->get('allDay')->getData()) {
+            $rdvDateTimeFin = null;
+        } else {
+            $rdvDateTimeFin = (new DateTime($rdvDateTime))->modify('+1 hour')->format('Y-m-d H:i:s');
+        }
 
             if ($rdvDateTimeFin !== null && new DateTime($rdvDateTime) > new DateTime($rdvDateTimeFin)) {
                 $this->addFlash(
@@ -78,9 +80,10 @@ class AppelsController extends AbstractController
                     ->setAllDay($form->get('allDay')->getData())
                     ->setTitre($appel->getNom());
 
-                $appel
-                    ->setRdv($rdv)
-                    ->setCreatedAt(new \DateTimeImmutable());
+            $appel
+                ->setRdv($rdv)
+                ->setDescription($cleanDescription)
+                ->setCreatedAt(new \DateTimeImmutable());
 
                 $em->persist($appel);
                 $em->flush($appel);
@@ -129,6 +132,7 @@ class AppelsController extends AbstractController
         foreach ($client->getContrats() as $contrat) {
             $contrats[] = [
                 'codecontrat' => $contrat->getId(),
+                'libelle' => $contrat->getLibelle(),
             ];
         }
     

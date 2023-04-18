@@ -107,7 +107,7 @@ clientField.addEventListener('change', function() {
         $.each(response.contrats, function(index, contrat) {
             $('#appels_CodeContrat').append($('<option>', {
                 value: contrat.codecontrat,
-                text: contrat.codecontrat
+                text: contrat.libelle
             }));
         });
 

@@ -37,7 +37,7 @@
 				</div>
 				<div>{% if appel.CodeContrat %}
 					Code Contrat:
-						{{appel.CodeContrat.getId()}}
+						{{appel.CodeContrat.getId()}} - {{appel.CodeContrat.libelle}}
 						{% else %}
 					N'a pas de contrat d'entretien
 					{% endif %}
@@ -64,10 +64,10 @@
 								<div class="col-md-6">
 									{% if appel.CodeContrat %}
 										<strong>Code Contrat:</strong>
-										{{appel.CodeContrat.getId()}}
+										{{appel.CodeContrat.getId()}} - {{appel.CodeContrat.libelle}}
 									{% else %}
 										<p>N'a pas de contrat d'entretien</p>
-									{% endif %}
+									{% endif %}<br>
 									{% if appel.CodeClient %}
 										<strong>Code Client:</strong>
 										{{appel.CodeClient.getId()}}

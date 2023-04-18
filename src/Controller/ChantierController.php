@@ -92,13 +92,13 @@ class ChantierController extends AbstractController
             $comment
                 ->setDateCom(new DateTime())
                 ->setNom($nom)
-                ->setCodeChantier($chantier->getId())
+                ->setCodeChantier($chantier)
                 ->setOwner($user->getIDUtilisateur())
                 ;
             $em->persist($comment);
             $em->flush();
 
-            return $this->redirectToRoute('app_appels_show', ['id' => $chantier->getId()]);
+            return $this->redirectToRoute('app_chantier_show', ['id' => $chantier->getId()]);
         }
 
         /**
@@ -117,6 +117,7 @@ class ChantierController extends AbstractController
                 ->setDateCom(new DateTime())
                 ->setNom($nom)
                 ->setOwner($user->getIDUtilisateur())
+                ->setCodeChantier($chantier)
                 ;
 
             // On récupère le contenu du champ parentid
@@ -130,13 +131,13 @@ class ChantierController extends AbstractController
             
             $em->persist($reply);
             $em->flush();
-            return $this->redirectToRoute('app_appels_show', ['id' => $chantier->getId()]);
+            return $this->redirectToRoute('app_chantier_show', ['id' => $chantier->getId()]);
         }
 
         /**
          * partie photos
          */
-        // $photos = $photosAppelsRepository->findBy(['idAppel' => $appel->getId()]) ?? null;
+        $photos = $photosChantierRepository->findBy(['codeChantier' => $chantier->getId()]) ?? null;
 
         return $this->render('chantier/show.html.twig',[
             'chantier'          =>  $chantier,
@@ -145,7 +146,7 @@ class ChantierController extends AbstractController
             'commentForm'       =>  $commentForm,
             'replyForm'         =>  $replyForm,
             'replies'           =>  $replies,
-            'photos'            =>  null,
+            'photos'            =>  $photos,
             'current_page'      =>  'app_chantier',
         ]);
     }

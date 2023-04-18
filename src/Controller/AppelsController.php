@@ -43,7 +43,7 @@ class AppelsController extends AbstractController
         ]);
     }
 
-    #[Route('/appels/new', name: 'app_appels_new')]
+#[Route('/appels/new', name: 'app_appels_new')]
 public function new(Request $request, EntityManagerInterface $em, TicketUrgentsRepository $ticketUrgent): Response
 {
     //TODO: Bar de filtre pour la recherche de client
@@ -61,6 +61,8 @@ public function new(Request $request, EntityManagerInterface $em, TicketUrgentsR
         $rdvDateTime = $form->get('rdvDateTime')->getData()->format('Y-m-d H:i:s');
         $rdvDateTimeFin = $form->get('rdvDateTimeFin')->getData();
 
+        $cleanDescription = strip_tags($form->get('description')->getData());
+        
         if ($rdvDateTimeFin !== null) {
             $rdvDateTimeFin = $rdvDateTimeFin->format('Y-m-d H:i:s');
         } elseif ($form->get('allDay')->getData()) {
@@ -83,6 +85,7 @@ public function new(Request $request, EntityManagerInterface $em, TicketUrgentsR
 
             $appel
                 ->setRdv($rdv)
+                ->setDescription($cleanDescription)
                 ->setCreatedAt(new \DateTimeImmutable());
 
             $em->persist($appel);
@@ -132,6 +135,7 @@ public function new(Request $request, EntityManagerInterface $em, TicketUrgentsR
         foreach ($client->getContrats() as $contrat) {
             $contrats[] = [
                 'codecontrat' => $contrat->getId(),
+                'libelle' => $contrat->getLibelle(),
             ];
         }
     

@@ -16,7 +16,7 @@
                     <h5>à {{appel.getRdv().dateDebut | date('h:i')}}</h5>
                 </div>
             </div>
-            {% if appel.CodeContrat %}  <div>Code du contrat: {{appel.CodeContrat}}</div>   {% endif %}
+            {% if appel.CodeContrat %}  <div>Code du contrat: {{appel.CodeContrat}} - {{appel.CodeContrat.libelle}}</div>   {% endif %}
             {% if appel.CodeClient %}  <div>Code du contrat: {{appel.CodeClient}}</div>   {% endif %}    
         </div>
 

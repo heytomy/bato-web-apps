@@ -43,50 +43,49 @@ class RegistrationController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-
             $DefAppsUser
-            ->setPrenom($form->get('Prenom')->getData())
-            ->setNom($form->get('Nom')->getData())
-            ->setAdresse($form->get('Adresse')->getData())
-            ->setCP($form->get('CP')->getData())
-            ->setVille($form->get('Ville')->getData())
-            ->setMail($form->get('Mail')->getData())
-            ->setTel1($form->get('Tel_1')->getData())
-            ->setTel2($form->get('Tel_2')->getData());
-
-            $entityManager->persist($AppsUser);
-            $entityManager->flush();
-
+                ->setPrenom($form->get('Prenom')->getData())
+                ->setNom($form->get('Nom')->getData())
+                ->setAdresse($form->get('Adresse')->getData())
+                ->setCP($form->get('CP')->getData())
+                ->setVille($form->get('Ville')->getData())
+                ->setMail($form->get('Mail')->getData())
+                ->setTel1($form->get('Tel_1')->getData())
+                ->setTel2($form->get('Tel_2')->getData());
+        
             $AppsUser
-                ->setIDUtilisateur($DefAppsUser)
                 ->setNomUtilisateur($form->get('Nom_utilisateur')->getData())
                 ->setColorCode($form->get('colorCode')->getData())
                 ->addRole($form->get('roles')->getData())
                 ->setPassword(
                     $userPasswordHasher->hashPassword(
                         $AppsUser,
-                            $form->get('plainPassword')->getData()
+                        $form->get('plainPassword')->getData()
+                    )
                 )
-            );
-
+                ->setIDUtilisateur($DefAppsUser);
+        
             $entityManager->persist($DefAppsUser);
+            $entityManager->persist($AppsUser);
             $entityManager->flush();
 
-            // generate a signed url and email it to the user
-            $this->emailVerifier->sendEmailConfirmation('app_verify_email', $AppsUser,
-                (new TemplatedEmail())
-                    ->from(new Address('test_mail@mrb-studio.fr', 'Bato Dashboard Verifier'))
-                    ->to($AppsUser->getIDUtilisateur()->getMail())
-                    ->subject('Please Confirm your Email')
-                    ->htmlTemplate('registration/confirmation_email.html.twig')
-            );
+            $this->addFlash('success', 'L\'utilisateur à été crée avec succès! ');
+            return $this->redirectToRoute('app_register');
+
+            // $this->emailVerifier->sendEmailConfirmation('app_verify_email', $AppsUser,
+            //     (new TemplatedEmail())
+            //         ->from(new Address('test_mail@mrb-studio.fr', 'Bato Dashboard Verifier'))
+            //         ->to($AppsUser->getIDUtilisateur()->getMail())
+            //         ->subject('Please Confirm your Email')
+            //         ->htmlTemplate('registration/confirmation_email.html.twig')
+            // );
             // do anything else you need here, like send an email
 
-            return $userAuthenticator->authenticateUser(
-                $AppsUser,
-                $authenticator,
-                $request
-            );
+            // return $userAuthenticator->authenticateUser(
+            //     $AppsUser,
+            //     $authenticator,
+            //     $request
+            // );
         }
 
         return $this->render('registration/register.html.twig', [

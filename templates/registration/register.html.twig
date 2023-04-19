@@ -75,21 +75,45 @@ alert.remove();
 								</div>
 							</div>
 
-							{{ form_row(registrationForm.plainPassword.first, { 'attr': {'class': 'form-control mb-3'} }) }}
-							{{ form_row(registrationForm.plainPassword.second, { 'attr': {'class': 'form-control mb-3'} }) }}
+							<div class="row">
+								<div class="col">
+									{{ form_label(registrationForm.plainPassword.first) }}
+									<div class="input-group">
+										{{ form_widget(registrationForm.plainPassword.first) }}
+											<button class="btn btn-secondary" type="button" id="show-password-icon-1">
+												<i class="fas fa-eye"></i>
+											</button>
+									</div>
+								</div>
+								<div class="col">
+									{{ form_label(registrationForm.plainPassword.second) }}
+									<div class="input-group">
+										{{ form_widget(registrationForm.plainPassword.second) }}
+											<button class="btn btn-secondary" type="button" id="show-password-icon-2">
+												<i class="fas fa-eye"></i>
+											</button>
+									</div>
+								</div>
 
-							{{ form_widget(registrationForm._token) }}
+							</div>
 
-							<button type="submit" class="btn btn-dark mb-2 align-self-center py-2 mt-4">
-								<strong>Inscrire l'utilisateur</strong>
-							</button>
+								{{ form_widget(registrationForm._token) }}
+
+								<button type="submit" class="btn btn-dark mb-2 align-self-center py-2 mt-4">
+									<strong>Inscrire l'utilisateur</strong>
+								</button>
+							</div>
+
 						</div>
-
 					</div>
 				</div>
+				{{ form_end(registrationForm) }}
 			</div>
-			{{ form_end(registrationForm) }}
-		</div>
-	</form>
+		</form>
+	{% endblock %}
+
+	{% block javascripts %}
+	{{ parent() }}
+	{{ encore_entry_script_tags('togglePassword') }}
 {% endblock %}
 

@@ -149,6 +149,7 @@ class RegistrationFormType extends AbstractType
                     'label' => 'Password',
                     'attr' => [
                         'placeholder' => 'Entrez le mot de passe',
+                        'class' => 'form-control',
                     ],
                     'constraints' => [
                         new NotBlank(),
@@ -158,6 +159,7 @@ class RegistrationFormType extends AbstractType
                     'label' => 'Repeat Password',
                     'attr' => [
                         'placeholder' => 'Confirmez le mot de passe',
+                        'class' => 'form-control',
                     ],
                     'constraints' => [
                         new Callback([

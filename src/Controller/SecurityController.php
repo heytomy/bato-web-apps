@@ -12,6 +12,11 @@ class SecurityController extends AbstractController
     #[Route(path: '/', name: 'app_login')]
     public function login(AuthenticationUtils $authenticationUtils): Response
     {
+        $this->addFlash(
+           'success',
+           'Vous êtes connecté !'
+        );
+        
         // Redirect the user to the main page if he want to access /login and his already logged in
         if ($this->getUser()) {
             return $this->redirectToRoute('app_dashboard');
@@ -32,6 +37,11 @@ class SecurityController extends AbstractController
     #[Route(path: '/logout', name: 'app_logout')]
     public function logout(): void
     {
+        $this->addFlash(
+            'success',
+            'Vous êtes déconnecté !'
+         );
+
         throw new \LogicException('This method can be blank - it will be intercepted by the logout key on your firewall.');
     }
 }

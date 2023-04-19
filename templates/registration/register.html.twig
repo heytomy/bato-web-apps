@@ -6,14 +6,31 @@
 {% block body %}
 	<form method="post">
 		{{ form_start(registrationForm) }}
-
-		{% for flash_error in app.flashes('verify_email_error') %}
-			<div class="alert alert-danger" role="alert">{{ flash_error }}</div>
-		{% endfor %}
-
 		<div class="container-fluid mt-5 p-5">
 			<div class="row justify-content-center">
 				<div class="col-md-10 ">
+					{% for flash_success in app.flashes('success') %}
+						<div class="alert alert-success alert-dismissible fade show mt-1" role="alert">
+							{{ flash_success }}
+							<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+						</div>
+						<script>
+							setTimeout(function () {
+var alert = document.querySelector('.alert');
+alert.classList.remove('show');
+alert.classList.add('hide');
+setTimeout(function () {
+alert.remove();
+}, 1000);
+}, 5000);
+						</script>
+					{% endfor %}
+
+					{% for flash_error in app.flashes('verify_email_error') %}
+						<div class="alert alert-danger" role="alert">{{ flash_error }}</div>
+					{% endfor %}
+
+
 					<div class="card border rounded-5 bg-light">
 						<h5 class="card-title align-self-center mt-4 mb-4">
 							<strong>Inscription</strong>
@@ -58,21 +75,45 @@
 								</div>
 							</div>
 
-							{{ form_row(registrationForm.plainPassword.first, { 'attr': {'class': 'form-control mb-3'} }) }}
-							{{ form_row(registrationForm.plainPassword.second, { 'attr': {'class': 'form-control mb-3'} }) }}
+							<div class="row">
+								<div class="col">
+									{{ form_label(registrationForm.plainPassword.first) }}
+									<div class="input-group">
+										{{ form_widget(registrationForm.plainPassword.first) }}
+											<button class="btn btn-secondary" type="button" id="show-password-icon-1">
+												<i class="fas fa-eye"></i>
+											</button>
+									</div>
+								</div>
+								<div class="col">
+									{{ form_label(registrationForm.plainPassword.second) }}
+									<div class="input-group">
+										{{ form_widget(registrationForm.plainPassword.second) }}
+											<button class="btn btn-secondary" type="button" id="show-password-icon-2">
+												<i class="fas fa-eye"></i>
+											</button>
+									</div>
+								</div>
 
-							{{ form_widget(registrationForm._token) }}
+							</div>
 
-							<button type="submit" class="btn btn-dark mb-2 align-self-center py-2 mt-4">
-								<strong>Inscrire l'utilisateur</strong>
-							</button>
+								{{ form_widget(registrationForm._token) }}
+
+								<button type="submit" class="btn btn-dark mb-2 align-self-center py-2 mt-4">
+									<strong>Inscrire l'utilisateur</strong>
+								</button>
+							</div>
+
 						</div>
-
 					</div>
 				</div>
+				{{ form_end(registrationForm) }}
 			</div>
-			{{ form_end(registrationForm) }}
-		</div>
-	</form>
+		</form>
+	{% endblock %}
+
+	{% block javascripts %}
+	{{ parent() }}
+	{{ encore_entry_script_tags('togglePassword') }}
 {% endblock %}
 

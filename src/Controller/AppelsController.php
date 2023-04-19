@@ -58,15 +58,15 @@ class AppelsController extends AbstractController
 
             $rdvDateTime = $form->get('rdvDateTime')->getData()->format('Y-m-d H:i:s');
             $rdvDateTimeFin = $form->get('rdvDateTimeFin')->getData();
-        $cleanDescription = strip_tags($form->get('description')->getData());
+            $cleanDescription = strip_tags($form->get('description')->getData());
         
-        if ($rdvDateTimeFin !== null) {
-            $rdvDateTimeFin = $rdvDateTimeFin->format('Y-m-d H:i:s');
-        } elseif ($form->get('allDay')->getData()) {
-            $rdvDateTimeFin = null;
-        } else {
-            $rdvDateTimeFin = (new DateTime($rdvDateTime))->modify('+1 hour')->format('Y-m-d H:i:s');
-        }
+            if ($rdvDateTimeFin !== null) {
+                $rdvDateTimeFin = $rdvDateTimeFin->format('Y-m-d H:i:s');
+            } elseif ($form->get('allDay')->getData()) {
+                $rdvDateTimeFin = null;
+            } else {
+                $rdvDateTimeFin = (new DateTime($rdvDateTime))->modify('+1 hour')->format('Y-m-d H:i:s');
+            }
 
             if ($rdvDateTimeFin !== null && new DateTime($rdvDateTime) > new DateTime($rdvDateTimeFin)) {
                 $this->addFlash(
@@ -236,6 +236,85 @@ class AppelsController extends AbstractController
             'replies'           =>  $replies,
             'photos'            =>  $photos,
             'current_page'      =>  'app_appels',
+        ]);
+    }
+
+    #[Route('appels/{id}/edit', name: 'app_appels_edit', methods: ['GET', 'POST'])]
+    public function edit(
+        Request $request, 
+        Appels $appel, 
+        AppelsRepository $appelsRepository, 
+        EntityManagerInterface $em
+        ): Response
+    {
+        $form = $this->createForm(AppelsType::class, $appel);
+        $form->handleRequest($request);
+        $rdv = $appel->getRdv();
+
+        if ($form->isSubmitted() && $form->isValid()) {
+
+            $rdvDateTime = $form->get('rdvDateTime')->getData()->format('Y-m-d H:i:s');
+            $rdvDateTimeFin = $form->get('rdvDateTimeFin')->getData();
+            $cleanDescription = strip_tags($form->get('description')->getData());
+        
+            if ($rdvDateTimeFin !== null) {
+                $rdvDateTimeFin = $rdvDateTimeFin->format('Y-m-d H:i:s');
+            } elseif ($form->get('allDay')->getData()) {
+                $rdvDateTimeFin = null;
+            } else {
+                $rdvDateTimeFin = (new DateTime($rdvDateTime))->modify('+1 hour')->format('Y-m-d H:i:s');
+            }
+
+            if ($rdvDateTimeFin !== null && new DateTime($rdvDateTime) > new DateTime($rdvDateTimeFin)) {
+                $this->addFlash(
+                    'error',
+                    'La date et heure de fin doit être postérieure à la date et heure de début.'
+                );
+            } else {
+                $rdv
+                    ->setDateDebut(new DateTime($rdvDateTime))
+                    ->setDateFin($rdvDateTimeFin !== null ? new DateTime($rdvDateTimeFin) : null)
+                    ->setAllDay($form->get('allDay')->getData())
+                    ->setTitre($appel->getNom());
+
+            $appel
+                ->setRdv($rdv)
+                ->setDescription($cleanDescription)
+                ->setCreatedAt(new \DateTimeImmutable());
+
+                $em->persist($appel);
+                $em->flush($appel);
+
+                $em->persist($rdv);
+                $em->flush($rdv);
+
+                if ($form->get('isUrgent')->getData() && $form->get('status')->getData()) {
+
+                    $status = $form->get('status')->getData();
+
+                    $ticketUrgent = new TicketUrgents();
+                    $ticketUrgent
+                        ->setAppelsUrgents($appel)
+                        ->setStatus($status)
+                    ;
+
+                    $em->persist($ticketUrgent);
+                    $em->flush($ticketUrgent);
+                }
+
+                $this->addFlash(
+                    'success',
+                    'Rendez-vous enregistré avec succès !'
+                );
+
+                return $this->redirectToRoute('app_appels_show');
+            }
+        }
+
+        return $this->renderForm('appels/edit.html.twig', [
+            'appel'         =>  $appel,
+            'form'          =>  $form,
+            'current_page'  =>  'app_appels',
         ]);
     }
 }

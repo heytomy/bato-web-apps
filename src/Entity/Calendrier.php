@@ -28,11 +28,11 @@ class Calendrier
     private ?bool $allDay = null;
 
     #[ORM\OneToOne(inversedBy: 'rdv', cascade: ['persist', 'remove'])]
-    #[ORM\JoinColumn(name:"ID_Appels", referencedColumnName:"id", nullable:true)]
+    #[ORM\JoinColumn(name:"ID_Appels", referencedColumnName:"id", nullable:true, onDelete:"CASCADE")]
     private ?Appels $appels = null;
 
     #[ORM\OneToOne(inversedBy: 'rdv', cascade: ['persist', 'remove'])]
-    #[ORM\JoinColumn(name:"ID_Chantier", referencedColumnName:"Id", nullable:true)]
+    #[ORM\JoinColumn(name:"ID_Chantier", referencedColumnName:"Id", nullable:true, onDelete:"CASCADE")]
     private ?ChantierApps $Chantier = null;
 
     public function getId(): ?int

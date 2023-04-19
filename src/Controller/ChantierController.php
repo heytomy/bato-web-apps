@@ -67,7 +67,7 @@ class ChantierController extends AbstractController
         ]);
     }
 
-    #[Route('/{id}', name: 'app_chantier_show')]
+    #[Route('/{id}', name: 'app_chantier_show', methods: ['GET'])]
     public function show(
         ChantierApps $chantier, 
         CommentairesChantierRepository $commentairesChantierRepository, 
@@ -185,5 +185,15 @@ class ChantierController extends AbstractController
             'form'          =>  $form,
             'current_page'  =>  'app_chantier',
         ]);
+    }
+
+    #[Route('/{id}', name: 'app_chantier_delete', methods: ['POST'])]
+    public function delete(Request $request, ChantierApps $chantier, ChantierAppsRepository $chantierAppsRepository): Response
+    {
+        if ($this->isCsrfTokenValid('delete'.$chantier->getId(), $request->request->get('_token'))) {
+            $chantierAppsRepository->remove($chantier, true);
+        }
+        
+        return $this->redirectToRoute('app_chantier', [], Response::HTTP_SEE_OTHER);
     }
 }

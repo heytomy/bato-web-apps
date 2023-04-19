@@ -6,6 +6,15 @@
     {{ path('app_appels') }}
 {% endblock %}
 
+{% block search %}
+    <div class="p-2 col d-flex flex-row-reverse">
+        <a class="btn btn-secondary p-2" href="{{ path('app_appels_edit', {'id': appel.id}) }}">
+            <i class="fa-solid fa-pen-to-square"></i>
+            Modifier
+        </a>
+    </div>
+{% endblock %}
+
 {% block list %}
     <div class="border rounded container bg-light p-2">
         <div class="row border border-light rounded bg-client m-2 p-2"> 

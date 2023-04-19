@@ -150,7 +150,7 @@ class AppelsController extends AbstractController
         return new JsonResponse($data);
     }
 
-    #[Route('/appels/{id}', name: 'app_appels_show')]
+    #[Route('/appels/{id}', name: 'app_appels_show', methods: ['GET', 'POST'])]
     public function show(
         Appels $appel, 
         CommentairesAppelsRepository $commentairesAppelsRepository, 
@@ -239,7 +239,7 @@ class AppelsController extends AbstractController
         ]);
     }
 
-    #[Route('appels/{id}/edit', name: 'app_appels_edit', methods: ['GET', 'POST'])]
+    #[Route('/appels/{id}/edit', name: 'app_appels_edit', methods: ['GET', 'POST'])]
     public function edit(
         Request $request, 
         Appels $appel, 
@@ -316,5 +316,15 @@ class AppelsController extends AbstractController
             'form'          =>  $form,
             'current_page'  =>  'app_appels',
         ]);
+    }
+
+    #[Route('/appels/{id}/delete', name: 'app_appels_delete', methods: ['POST'])]
+    public function delete(Request $request, Appels $appel, AppelsRepository $appelsRepository): Response
+    {
+        if ($this->isCsrfTokenValid('delete'.$appel->getId(), $request->request->get('_token'))) {
+            $appelsRepository->remove($appel, true);
+        }
+
+        return $this->redirectToRoute('app_appels', [], Response::HTTP_SEE_OTHER);
     }
 }

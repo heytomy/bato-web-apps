@@ -53,10 +53,14 @@ class RegistrationController extends AbstractController
                 ->setTel1($form->get('Tel_1')->getData())
                 ->setTel2($form->get('Tel_2')->getData());
         
+
+            $roles = $form->get('roles')->getData();
+
             $AppsUser
                 ->setNomUtilisateur($form->get('Nom_utilisateur')->getData())
                 ->setColorCode($form->get('colorCode')->getData())
-                ->addRole($form->get('roles')->getData())
+                ->addRole($roles)
+                ->setIsVerified(true)
                 ->setPassword(
                     $userPasswordHasher->hashPassword(
                         $AppsUser,
@@ -65,6 +69,8 @@ class RegistrationController extends AbstractController
                 )
                 ->setIDUtilisateur($DefAppsUser);
         
+            // dd($AppsUser);
+            
             $entityManager->persist($DefAppsUser);
             $entityManager->persist($AppsUser);
             $entityManager->flush();

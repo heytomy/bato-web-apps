@@ -63,6 +63,10 @@ class Appels
     #[ORM\JoinColumn(name: 'ID_Utilisateur', referencedColumnName: 'id', nullable: true)]
     private ?AppsUtilisateur $ID_Utilisateur = null;
 
+    #[ORM\ManyToOne(inversedBy: 'appels')]
+    #[ORM\JoinColumn(name: 'ID_statut', referencedColumnName: 'Id', nullable: true)]
+    private ?StatutChantier $statut = null;
+
     public function __construct()
     {
         $this->photos = new ArrayCollection();
@@ -265,6 +269,18 @@ class Appels
     public function setIDUtilisateur(?AppsUtilisateur $ID_Utilisateur): self
     {
         $this->ID_Utilisateur = $ID_Utilisateur;
+
+        return $this;
+    }
+
+    public function getStatut(): ?StatutChantier
+    {
+        return $this->statut;
+    }
+
+    public function setStatut(?StatutChantier $statut): self
+    {
+        $this->statut = $statut;
 
         return $this;
     }

@@ -55,13 +55,17 @@ class ChantierAppsRepository extends ServiceEntityRepository
      * Cette fonction existe pour faire un query pour prendre un certain nombre de clients. 
      * @param ?int $offset Définit un décalage pour les données prises. C'est 0 par défaut
      * @param int $limit Fixe une certaine limite au nombre de données prises. C'est 10 par défaut
+     * @param ?string $stat chercher les chantiers qui sont en cours par defaut
      * @return Collection Renvoie une collection des clients
      */
-    public function findByLimit(?int $offset = 0, int $limit = 10)
+    public function findByLimit(?int $offset = 0, int $limit = 10, ?string $stat = 'EN_COURS')
     {
         $qb = $this->createQueryBuilder('c');
 
         $qb->select()
+            ->innerJoin('c.statut', 's')
+            ->andWhere('s.statut = :stat')
+            ->setParameter('stat', $stat)
             ->orderBy('c.id', 'DESC')
             ->setFirstResult($offset)
             ->setMaxResults($limit)

@@ -79,6 +79,7 @@ function fetchClients() {
         isFetching = false;
     })
     .catch(error => {
+        alert('il y avait une erreur pendant le fetching des clients');
         console.error(error);
         // hide loading animation
         cacheChargement();
@@ -196,20 +197,40 @@ backToTopButton.addEventListener('click', backToTop)
 // fetch initial set of clients
 fetchClients();
 
-const form = document.querySelector('#search-form');
-form.addEventListener('submit', event => {
-  event.preventDefault();
+// const form = document.querySelector('#search-form');
+// form.addEventListener('submit', event => {
+//   event.preventDefault();
 
+//   removeElementsByClass('client');
+
+//   inputValue = document.querySelector('#nom').value;
+//   url = '/ajax/chantier/search';
+
+//   fetchClients();
+// })
+
+const statutHeader = document.querySelector('.statut');
+const chantierEnCours = document.querySelector('#chantierEnCours');
+chantierEnCours.addEventListener('click', event => {
+  statutHeader.textContent = 'Les chantiers en cours';
+
+  offset = 0;
   removeElementsByClass('client');
-
-  inputValue = document.querySelector('#nom').value;
-  url = '/ajax/chantier/search';
-
-  console.log(inputValue);
+  url = '/ajax/chantier';
 
   fetchClients();
 })
 
+const chantierTermine = document.querySelector('#chantierTermine');
+chantierTermine.addEventListener('click', event => {
+  statutHeader.textContent = 'Les chantiers archivés';
+
+  offset = 0;
+  removeElementsByClass('client');
+  url = '/ajax/chantier/termine';
+
+  fetchClients();
+})
 
 function removeElementsByClass(className){
   const elements = document.getElementsByClassName(className);

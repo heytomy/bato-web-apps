@@ -54,6 +54,23 @@ class AjaxController extends AbstractController
         ]);
     }
 
+    #[Route('/ajax/chantier/termine', name: 'app_ajax_chantier_termine' , methods:['POST'])]
+    public function getClientsChantierTermine(Request $request, ChantierAppsRepository $chantierAppsRepository)
+    {
+        $data = json_decode($request->getContent(), true);
+        $offset = $data['offset'] ?? 0;
+        $limit = $data['limit'] ?? 10;
+
+        $clients = $chantierAppsRepository->findByLimit($offset, $limit, 'TERMINE');
+        $clients = $chantierAppsRepository->collectionToArray($clients);
+        $total = $chantierAppsRepository->getCountClients();
+
+        return $this->json([
+            'clients' => $clients,
+            'total' => $total,
+        ]);
+    }
+
     /** 
      * Cette fonction reçoit une requette AJAX du fichier: assets/infiniteScrollSAV.js
      * Elle cherche les clients par le nom envoyée par l'ajax $nom

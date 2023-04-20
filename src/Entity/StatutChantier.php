@@ -21,9 +21,13 @@ class StatutChantier
     #[ORM\OneToMany(mappedBy: 'statut', targetEntity: ChantierApps::class)]
     private Collection $chantierApps;
 
+    #[ORM\OneToMany(mappedBy: 'statut', targetEntity: Appels::class)]
+    private Collection $appels;
+
     public function __construct()
     {
         $this->chantierApps = new ArrayCollection();
+        $this->appels = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -67,6 +71,36 @@ class StatutChantier
             // set the owning side to null (unless already changed)
             if ($chantierApp->getStatut() === $this) {
                 $chantierApp->setStatut(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Appels>
+     */
+    public function getAppels(): Collection
+    {
+        return $this->appels;
+    }
+
+    public function addAppel(Appels $appel): self
+    {
+        if (!$this->appels->contains($appel)) {
+            $this->appels->add($appel);
+            $appel->setStatut($this);
+        }
+
+        return $this;
+    }
+
+    public function removeAppel(Appels $appel): self
+    {
+        if ($this->appels->removeElement($appel)) {
+            // set the owning side to null (unless already changed)
+            if ($appel->getStatut() === $this) {
+                $appel->setStatut(null);
             }
         }
 

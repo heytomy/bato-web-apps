@@ -22,6 +22,7 @@ use Symfony\Component\Routing\Annotation\Route;
 use App\Repository\CommentairesAppelsRepository;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use App\Repository\RepCommentairesAppelsRepository;
+use App\Repository\StatutChantierRepository;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
@@ -40,14 +41,14 @@ class AppelsController extends AbstractController
         ]);
     }
 
-
     #[Route('/appels/new', name: 'app_appels_new')]
-    public function new(Request $request, EntityManagerInterface $em, TicketUrgentsRepository $ticketUrgent): Response
+    public function new(Request $request, EntityManagerInterface $em, TicketUrgentsRepository $ticketUrgent, StatutChantierRepository $statutChantierRepository): Response
     {
         //TODO: Bar de filtre pour la recherche de client
 
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
 
+        $statutEnCours = $statutChantierRepository->findOneBy(['statut' => 'EN_COURS']);
         $appel = new Appels();
         $rdv = new Calendrier();
         $form = $this->createForm(AppelsType::class, $appel);
@@ -81,6 +82,7 @@ class AppelsController extends AbstractController
                     ->setTitre($appel->getNom());
 
             $appel
+                ->setStatut($statutEnCours)
                 ->setRdv($rdv)
                 ->setDescription($cleanDescription)
                 ->setCreatedAt(new \DateTimeImmutable());
@@ -119,8 +121,6 @@ class AppelsController extends AbstractController
             'current_page' => 'app_appels',
         ]);
     }
-
-    
 
     #[IsGranted('ROLE_ADMIN')]
     #[Route('/get-client-and-contrats-info/{id}', name:'get_client_and_contrats_info', methods:'GET')]

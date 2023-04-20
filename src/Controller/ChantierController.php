@@ -18,6 +18,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use App\Repository\CommentairesChantierRepository;
 use App\Repository\RepCommentairesChantierRepository;
+use App\Repository\StatutChantierRepository;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
@@ -34,14 +35,16 @@ class ChantierController extends AbstractController
     }
 
     #[Route('/new', name: 'app_chantier_new', methods: ['GET', 'POST'])]
-    public function new(Request $request, ChantierAppsRepository $chantierAppsRepository, EntityManagerInterface $em): Response
+    public function new(Request $request, ChantierAppsRepository $chantierAppsRepository, EntityManagerInterface $em, StatutChantierRepository $statutChantierRepository): Response
     {
+        $statutEnCours = $statutChantierRepository->findOneBy(['statut' => 'EN_COURS']);
         $chantier = new ChantierApps();
         $rdv = new Calendrier();
         $form = $this->createForm(ChantierAppsType::class, $chantier);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+            $chantier->setStatut($statutEnCours);
             $rdv
                 ->setTitre($chantier->getCodeClient()->getNom())
                 ->setDateDebut($chantier->getDateDebut())

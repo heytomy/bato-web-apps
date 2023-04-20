@@ -2,34 +2,40 @@
 
 namespace App\Form;
 
-use App\Entity\ChantierApps;
 use App\Entity\ClientDef;
+use App\Entity\ChantierApps;
 use App\Entity\StatutChantier;
+use App\Entity\AppsUtilisateur;
 use App\Repository\ClientDefRepository;
-use App\Repository\StatutChantierRepository;
 use Symfony\Component\Form\AbstractType;
+use App\Repository\StatutChantierRepository;
+use App\Repository\AppsUtilisateurRepository;
 use Eckinox\TinymceBundle\Form\Type\TinymceType;
-use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\FormBuilderInterface;
+use Symfony\Bridge\Doctrine\Form\Type\EntityType;
+use Symfony\Component\Validator\Constraints\NotBlank;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Component\Form\Extension\Core\Type\DateType;
-use Symfony\Component\Form\Extension\Core\Type\DateTimeType;
-use Symfony\Component\Form\Extension\Core\Type\HiddenType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
+use Symfony\Component\Form\Extension\Core\Type\HiddenType;
+use Symfony\Component\Form\Extension\Core\Type\DateTimeType;
 
 class ChantierAppsType extends AbstractType
 {
     protected $statutChantierRepository;
     protected $clientDefRepository;
+    private $roles;
 
     public function __construct(
         StatutChantierRepository $statutChantierRepository,
         ClientDefRepository $clientDefRepository,
+        AppsUtilisateurRepository $roles, 
         )
     {
         $this->statutChantierRepository = $statutChantierRepository;
         $this->clientDefRepository = $clientDefRepository;
+        $this->roles = $roles;
     }
 
     public function buildForm(FormBuilderInterface $builder, array $options): void
@@ -48,6 +54,22 @@ class ChantierAppsType extends AbstractType
             //         'class'             =>  'form-select',
             //     ],
             // ])
+            ->add('ID_Utilisateur', EntityType::class, [
+                'required' => true,
+                'class' => AppsUtilisateur::class,
+                'choices' => $this->roles->findByRoleTech('ROLE_TECH_CHANTIER'),
+                'label' => 'Technicien',
+                'choice_label' => function (AppsUtilisateur $username) {
+                    return $username->getIDUtilisateur()->getNom() . ' ' . $username->getIDUtilisateur()->getPrenom();
+                },
+                'placeholder' => 'Choisissez un technicien',
+                'attr' => [
+                    'class' => 'form-select'
+                ],
+                'constraints' => [
+                    new NotBlank(['message' => 'Veuillez sélectionner un technicien'])
+                ]
+            ])
             ->add('codeClient', EntityType::class, [
                 'required'      =>  true,
                 'class'         =>  ClientDef::class,

@@ -134,12 +134,21 @@ function createClientModal(client, clientElement) {
           <button type="button" class="btn-close border rounder bg-dark" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
         <div class="modal-body">
-          <div>Code du contrat:    ${client.codeContrat}</div>
-          <div>Code du client:   ${client.codeClient}</div>
-          </br>
-          <div>Adresse:           ${client.adr}</div>
-          <div>CP:                ${client.cp}</div>
-          </br></br></br>
+          <div class="row">
+            <div class="col-md-6">
+              <p><strong>Code du chantier:</strong>    ${client.codeChantier}</p>
+              <p><strong>Code Client:</strong>         ${client.codeClient}</p>
+            </div>
+              <div class="col-md-6">
+                <p><strong>Nom:</strong>                ${client.nom}</p>
+                <p><strong>Téléphone:</strong>          ${client.tel}</p>
+                <p><strong>Adresse:</strong>            ${client.adr}<br>${client.cp} ${client.ville}</p>
+              </div>
+              <div class="col-md-6">
+              </div>
+              <div class="col-md-6">
+              </div>
+          </div>
         </div>
         <div class="modal-footer">
           <div class="row w-100">

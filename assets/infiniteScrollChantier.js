@@ -125,6 +125,10 @@ function createClientModal(client, clientElement) {
   clientModal.setAttribute('aria-hidden','true');
   clientModal.setAttribute('aria-labelledby',`clientModalLabel-${client.codeChantier}`);
 
+  const dateFormatOptions = { day: 'numeric', month: 'numeric', year: 'numeric' };
+  const formattedDateDebut = new Date(client.dateDebut).toLocaleDateString('fr-FR', dateFormatOptions);
+  const formattedDateFin = new Date(client.dateFin).toLocaleDateString('fr-FR', dateFormatOptions);
+
   clientModal.innerHTML = 
   `
     <div class="modal-dialog modal-dialog-centered">
@@ -134,15 +138,24 @@ function createClientModal(client, clientElement) {
           <button type="button" class="btn-close border rounder bg-dark" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
         <div class="modal-body">
-          <div>Code du chantier:    ${client.codeChantier}</div>
-          <div>Code du client:      ${client.codeClient}</div>
-          </br>
-          <div>statut:              ${client.statut}</div>
-          <div>dateDebut:           ${client.dateDebut}</div>
-          <div>dateFin:             ${client.dateFin}</div>
-          <div>Adresse:             ${client.adr}</div>
-          <div>CP:                  ${client.cp}</div>
-          </br></br></br>
+          <div class="row">
+            <div class="col-md-6">
+              <p><strong>Code du chantier:</strong>    ${client.codeChantier}</p>
+              <p><strong>Code Client:</strong>         ${client.codeClient}</p>
+            </div>
+              <div class="col-md-6">
+                <p><strong>Nom:</strong>                ${client.nom}</p>
+                <p><strong>Téléphone:</strong>          ${client.tel}</p>
+                <p><strong>Adresse:</strong>            ${client.adr}<br>${client.cp} ${client.ville}</p>
+              </div>
+              <div class="col-md-6">
+                <p><strong>Date debut du chantier:</strong>   ${formattedDateDebut}</p>
+                <p><strong>Fin prévu le:</strong>             ${formattedDateFin}</p>
+              </div>
+              <div class="col-md-6">
+                <p><strong>Libellé:</strong>                  ${client.libelle}</p>
+              </div>
+          </div>
         </div>
         <div class="modal-footer">
           <div class="row w-100">

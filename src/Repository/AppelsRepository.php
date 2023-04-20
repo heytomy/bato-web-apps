@@ -39,6 +39,22 @@ class AppelsRepository extends ServiceEntityRepository
         }
     }
 
+    /**
+     * @param string $stat le paramètre du statut en chaîne de charactère
+     * @return Appels[] Renvoie une liste des Appels d'un statut particulier
+     */
+    public function findByStatut(string $stat)
+    {
+        return $this->createQueryBuilder('a')
+            ->innerJoin('a.statut', 's')
+            ->andWhere('s.statut = :stat')
+            ->orderBy('a.id', 'DESC')
+            ->setParameter('stat', $stat)
+            ->getQuery()
+            ->getResult()
+            ;
+    }
+
     
 
 //    /**

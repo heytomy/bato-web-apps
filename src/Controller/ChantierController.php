@@ -18,6 +18,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use App\Repository\CommentairesChantierRepository;
 use App\Repository\RepCommentairesChantierRepository;
+use App\Repository\StatutChantierRepository;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
@@ -34,14 +35,16 @@ class ChantierController extends AbstractController
     }
 
     #[Route('/new', name: 'app_chantier_new', methods: ['GET', 'POST'])]
-    public function new(Request $request, ChantierAppsRepository $chantierAppsRepository, EntityManagerInterface $em): Response
+    public function new(Request $request, ChantierAppsRepository $chantierAppsRepository, EntityManagerInterface $em, StatutChantierRepository $statutChantierRepository): Response
     {
+        $statutEnCours = $statutChantierRepository->findOneBy(['statut' => 'EN_COURS']);
         $chantier = new ChantierApps();
         $rdv = new Calendrier();
         $form = $this->createForm(ChantierAppsType::class, $chantier);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+            $chantier->setStatut($statutEnCours);
             $rdv
                 ->setTitre($chantier->getCodeClient()->getNom())
                 ->setDateDebut($chantier->getDateDebut())
@@ -67,7 +70,7 @@ class ChantierController extends AbstractController
         ]);
     }
 
-    #[Route('/{id}', name: 'app_chantier_show', methods: ['GET'])]
+    #[Route('/{id}', name: 'app_chantier_show', methods: ['GET', 'POST'])]
     public function show(
         ChantierApps $chantier, 
         CommentairesChantierRepository $commentairesChantierRepository, 
@@ -187,11 +190,13 @@ class ChantierController extends AbstractController
         ]);
     }
 
-    #[Route('/{id}', name: 'app_chantier_delete', methods: ['POST'])]
+    #[Route('/{id}/delete', name: 'app_chantier_delete', methods: ['POST'])]
     public function delete(Request $request, ChantierApps $chantier, ChantierAppsRepository $chantierAppsRepository): Response
     {
         if ($this->isCsrfTokenValid('delete'.$chantier->getId(), $request->request->get('_token'))) {
             $chantierAppsRepository->remove($chantier, true);
+        } else {
+            dd($request);
         }
         
         return $this->redirectToRoute('app_chantier', [], Response::HTTP_SEE_OTHER);

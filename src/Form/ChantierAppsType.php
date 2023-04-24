@@ -41,6 +41,19 @@ class ChantierAppsType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
+            // ->add('statut', EntityType::class, [
+            //     'required'      =>  false,
+            //     'class'         =>  StatutChantier::class,
+            //     'choices'       =>  $this->statutChantierRepository->findAll(),
+            //     'label'         =>  'Statut du chantier',
+            //     'choice_label'  =>  function (StatutChantier $statutChantier) {
+            //         return $statutChantier->getStatut();
+            //     },
+            //     'placeholder'   =>  'Choisissez le statut du chantier',
+            //     'attr'          =>  [
+            //         'class'             =>  'form-select',
+            //     ],
+            // ])
             ->add('ID_Utilisateur', EntityType::class, [
                 'required' => true,
                 'class' => AppsUtilisateur::class,
@@ -56,20 +69,6 @@ class ChantierAppsType extends AbstractType
                 'constraints' => [
                     new NotBlank(['message' => 'Veuillez sélectionner un technicien'])
                 ]
-            ])
-
-            ->add('statut', EntityType::class, [
-                'required'      =>  false,
-                'class'         =>  StatutChantier::class,
-                'choices'       =>  $this->statutChantierRepository->findAll(),
-                'label'         =>  'Statut du chantier',
-                'choice_label'  =>  function (StatutChantier $statutChantier) {
-                    return $statutChantier->getStatut();
-                },
-                'placeholder'   =>  'Choisissez le statut du chantier',
-                'attr'          =>  [
-                    'class'             =>  'form-select',
-                ],
             ])
             ->add('codeClient', EntityType::class, [
                 'required'      =>  true,

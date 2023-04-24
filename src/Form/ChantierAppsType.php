@@ -144,7 +144,7 @@ class ChantierAppsType extends AbstractType
                     'class'         =>  'form-control   datetimepicker',
                     'placeholder'   =>  'veuillez indiquer la date de début du chantier',
                 ],
-                'html5'         =>  true,
+                'html5'         =>  false,
                 'constraints'   =>  [
                     new Assert\NotBlank()
                 ],
@@ -157,7 +157,7 @@ class ChantierAppsType extends AbstractType
                     'class'         =>  'form-control   datetimepicker',
                     'placeholder'   =>  'veuillez indiquer la date de fin du chantier',
                 ],
-                'html5'         =>  true,
+                'html5'         =>  false,
                 'constraints'   =>  [
                     new Assert\NotBlank()
                 ],

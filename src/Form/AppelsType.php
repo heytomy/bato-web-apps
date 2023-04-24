@@ -272,7 +272,7 @@ class AppelsType extends AbstractType
                     'class' => 'form-control datetimepicker',
                     'placeholder' => 'Sélectionnez une date et heure de fin de RDV',
                 ],
-                'html5' => true,
+                'html5' => false,
             ]) 
 
             ->add('allDay', CheckboxType::class, [

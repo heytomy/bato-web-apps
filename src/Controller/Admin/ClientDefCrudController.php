@@ -2,14 +2,14 @@
 
 namespace App\Controller\Admin;
 
-use App\Entity\DefAppsUtilisateur;
+use App\Entity\ClientDef;
 use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractCrudController;
 
-class DefAppsUtilisateurCrudController extends AbstractCrudController
+class ClientDefCrudController extends AbstractCrudController
 {
     public static function getEntityFqcn(): string
     {
-        return DefAppsUtilisateur::class;
+        return ClientDef::class;
     }
 
     /*

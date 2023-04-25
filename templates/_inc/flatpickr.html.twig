@@ -1,0 +1,78 @@
+<script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+<script src="https://npmcdn.com/flatpickr/dist/l10n/fr.js"></script>
+
+<script>
+
+flatpickr('#appels_rdvDateTime', {
+    enableTime: true,
+    time_24hr: true,
+	minTime: "07:00",
+    maxTime: "20:00",
+    altInput: true,
+    altFormat: "d-m-Y H:i",
+    dateFormat: "d-m-Y H:i",
+    minDate: "today",
+    disable: [
+        function(date) {
+            // Disable weekends (Saturday = 6, Sunday = 0)
+            return (date.getDay() === 6 || date.getDay() === 0);
+        }
+    ],
+	"locale": "fr",
+});
+
+flatpickr('#appels_rdvDateTimeFin', {
+    enableTime: true,
+    time_24hr: true,
+	minTime: "07:00",
+    maxTime: "20:00",
+    altInput: true,
+    altFormat: "d-m-Y H:i",
+    dateFormat: "d-m-Y H:i",
+    minDate: "today",
+    disable: [
+        function(date) {
+            // Disable weekends (Saturday = 6, Sunday = 0)
+            return (date.getDay() === 6 || date.getDay() === 0);
+        }
+    ],
+	"locale": "fr",
+});
+
+flatpickr('#chantier_apps_dateDebut', {
+    enableTime: true,
+    time_24hr: true,
+	minTime: "07:00",
+    maxTime: "20:00",
+    altInput: true,
+    altFormat: "d-m-Y H:i",
+    dateFormat: "d-m-Y H:i",
+    minDate: "today",
+    disable: [
+        function(date) {
+            // Disable weekends (Saturday = 6, Sunday = 0)
+            return (date.getDay() === 6 || date.getDay() === 0);
+        }
+    ],
+	"locale": "fr",
+});
+
+flatpickr('#chantier_apps_dateFin', {
+    enableTime: true,
+    time_24hr: true,
+	minTime: "07:00",
+    maxTime: "20:00",
+    altInput: true,
+    altFormat: "d-m-Y H:i",
+    dateFormat: "d-m-Y H:i",
+    minDate: "today",
+    disable: [
+        function(date) {
+            // Disable weekends (Saturday = 6, Sunday = 0)
+            return (date.getDay() === 6 || date.getDay() === 0);
+        }
+    ],
+	"locale": "fr",
+});
+
+</script>

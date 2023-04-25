@@ -9,12 +9,12 @@
 <h1 class="text-center font-weight-bold" style="font-size: 3em;">Nouvel Appel</h1>
 
 {% include 'appels/_form.html.twig' %}
+{% include '_inc/flatpickr.html.twig' %}
 
 {% endblock %}
 
 {% block javascripts %}
 	{{ parent() }}
 	{{ encore_entry_script_tags('appelsAutocomplete') }}
-	{{ encore_entry_script_tags('datePicker') }}
 {% endblock %}
 

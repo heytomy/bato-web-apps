@@ -5,22 +5,17 @@ namespace App\Form;
 use App\Entity\Appels;
 use App\Entity\Contrat;
 use App\Entity\ClientDef;
-use App\Entity\TicketUrgents;
 use App\Entity\AppsUtilisateur;
-use App\Entity\DefAppsUtilisateur;
 use App\Repository\AppsUtilisateurRepository;
 use App\Repository\ClientDefRepository;
 use Symfony\Component\Form\AbstractType;
-use App\Repository\TicketUrgentsRepository;
 use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\Routing\RouterInterface;
-use App\Repository\DefAppsUtilisateurRepository;
 use Eckinox\TinymceBundle\Form\Type\TinymceType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Validator\Constraints\Email;
 use Symfony\Component\Validator\Constraints\Regex;
-use Symfony\Component\Validator\Constraints\Choice;
 use Symfony\Component\Validator\Constraints\Length;
 use Symfony\Component\Validator\Constraints\Callback;
 use Symfony\Component\Validator\Constraints\NotBlank;
@@ -28,13 +23,11 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Component\Form\Extension\Core\Type\TelType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
-use EasyCorp\Bundle\EasyAdminBundle\Orm\EntityRepository;
 use Symfony\Component\Form\Extension\Core\Type\EmailType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\Form\Extension\Core\Type\DateTimeType;
 use Symfony\Component\Validator\Context\ExecutionContextInterface;
-
 
 class AppelsType extends AbstractType
 {
@@ -246,12 +239,12 @@ class AppelsType extends AbstractType
                 'required' => true,
                 'label' => 'Date et heure du rendez-vous :',
                 'widget' => 'single_text',
-                // 'format' => 'dd-MM-yyyy HH:mm',
+                'format' => 'dd-MM-yyyy HH:mm',
                 'attr' => [
-                    'class' => 'form-control datetimepicker',
+                    'class' => 'form-control',
                     'placeholder' => 'Sélectionnez une date et heure de RDV',
                 ],
-                'html5' => true,
+                'html5' => false,
                 'constraints' => [
                     new Assert\NotBlank(),
                     new Assert\GreaterThanOrEqual([
@@ -279,7 +272,7 @@ class AppelsType extends AbstractType
                     'class' => 'form-control datetimepicker',
                     'placeholder' => 'Sélectionnez une date et heure de fin de RDV',
                 ],
-                'html5' => true,
+                'html5' => false,
             ]) 
 
             ->add('allDay', CheckboxType::class, [

@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use App\Entity\Appels;
 use App\Entity\ChantierApps;
 use App\Entity\StatutChantier;
 use App\Repository\StatutChantierRepository;
@@ -41,5 +42,33 @@ class StatusController extends AbstractController
            'Le statut ne peut pas être changé'
         );
         return $this->redirectToRoute('app_chantier_show', ['id' => $chantier->getId()]);
+    }
+
+    #[Route('/status/change/appel/{id}', name: 'app_status_change_appels', methods:['POST'])]
+    public function changeStatusAppel(
+        Request $request, 
+        Appels $appel, 
+        EntityManagerInterface $em,
+        StatutChantierRepository $statutChantierRepository,
+        ): Response
+    {
+        if ($this->isCsrfTokenValid('change_status_'.$appel->getId(), $request->request->get('_token'))) {
+            $statutTermine = $statutChantierRepository->findOneBy(['statut' => 'TERMINE']);
+            $appel->setStatut($statutTermine);
+            $em->persist($appel);
+            $em->flush();
+
+            $this->addFlash(
+                'success',
+                'Le statut du chantier a été modifié'
+            );
+            // Redirect to the page that displays your entity
+            return $this->redirectToRoute('app_appels', []);
+        }
+        $this->addFlash(
+           'error',
+           'Le statut ne peut pas être changé'
+        );
+        return $this->redirectToRoute('app_appels_show', ['id' => $appel->getId()]);
     }
 }

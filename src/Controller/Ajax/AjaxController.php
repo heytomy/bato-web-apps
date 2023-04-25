@@ -99,7 +99,7 @@ class AjaxController extends AbstractController
 
         $clients = $chantierAppsRepository->findByLimit($offset, $limit, 'TERMINE');
         $clients = $chantierAppsRepository->collectionToArray($clients);
-        $total = $chantierAppsRepository->getCountClients();
+        $total = $chantierAppsRepository->getCountClients('TERMINE');
 
         return $this->json([
             'clients' => $clients,

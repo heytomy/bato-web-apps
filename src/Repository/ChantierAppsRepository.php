@@ -39,9 +39,12 @@ class ChantierAppsRepository extends ServiceEntityRepository
         }
     }
 
-    public function getCountClients()
+    public function getCountClients(?string $statut = 'EN_COURS')
     {
-        $qb = $this->createQueryBuilder('c');
+        $qb = $this->createQueryBuilder('c')
+                ->innerJoin('c.statut', 's')
+                ->andWhere('s.statut = :statut')
+                ->setParameter('statut', $statut);;
 
         $qb->select(
             $qb->expr()->count(x: 'c.id')
@@ -50,7 +53,6 @@ class ChantierAppsRepository extends ServiceEntityRepository
 
         return $qb->getQuery()->getSingleScalarResult();
     }
-
     /**
      * Cette fonction existe pour faire un query pour prendre un certain nombre de clients. 
      * @param ?int $offset Définit un décalage pour les données prises. C'est 0 par défaut

@@ -1,0 +1,4 @@
+<form method="post" action="{{ path('app_status_change_appels', {'id': appel.id}) }}">
+    <input type="hidden" name="_token" value="{{ csrf_token('change_status_' ~ appel.id) }}">
+    <button class="btn btn-danger" type="submit"><i class="fa-solid fa-building-circle-check"></i> Marquer l'appel <strong>'Terminé'</strong></button>
+</form>

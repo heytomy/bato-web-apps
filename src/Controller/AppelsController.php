@@ -32,10 +32,10 @@ class AppelsController extends AbstractController
     #[Route('/appels', name: 'app_appels')]
     public function index(AppelsRepository $appelsRepository): Response
     {
-        $appels = $appelsRepository->findBy(criteria: [] ,orderBy: ['id' => 'DESC']);
+        $appels = $appelsRepository->findByStatut('EN_COURS');
 
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
-        return $this->render('appels/index.html.twig', [
+        return $this->render('appels/index_test.html.twig', [
             'current_page' => 'app_appels',
             'appels' => $appels,
         ]);

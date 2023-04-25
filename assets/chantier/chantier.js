@@ -7,7 +7,7 @@ const backToTopButton = document.querySelector('.back-to-top');
 
 // initialize offset and limit values
 let offset = 0;
-let url = '/ajax/sav';
+let url = '/ajax/chantier';
 const limit = 10;
 
 // initialize variable to track whether a request is in progress
@@ -79,6 +79,7 @@ function fetchClients() {
         isFetching = false;
     })
     .catch(error => {
+        alert('il y avait une erreur pendant le fetching des clients');
         console.error(error);
         // hide loading animation
         cacheChargement();
@@ -105,9 +106,9 @@ function createClientElement(client) {
   const clientElement = document.createElement('div');
   clientElement.classList.add('row', 'border', 'border-light', 'rounded', 'bg-client', 'm-2', 'p-2', 'client');
   clientElement.innerHTML = `
-    <h1>                    ${client.nom}</h1>
-    <div>Code du contrat:    ${client.codeContrat}</div>
-    <div>Code du client:   ${client.codeClient}</div>
+    <h1>                        ${client.nom}</h1>
+    <div>Code du chantier:      ${client.codeChantier}</div>
+    <div>Code du client:        ${client.codeClient}</div>
   `;
   return clientElement;
 }
@@ -116,34 +117,50 @@ function createClientElement(client) {
 function createClientModal(client, clientElement) {
   clientElement.setAttribute('type', 'button');
   clientElement.setAttribute('data-bs-toggle', 'modal');
-  clientElement.setAttribute('data-bs-target', `#clientModal-${client.codeContrat}`);
+  clientElement.setAttribute('data-bs-target', `#clientModal-${client.codeChantier}`);
 
   const clientModal = document.createElement('div');
   clientModal.classList.add('modal', 'fade', 'client');
-  clientModal.id = `clientModal-${client.codeContrat}`;
+  clientModal.id = `clientModal-${client.codeChantier}`;
   clientModal.setAttribute('tabindex','-1');
   clientModal.setAttribute('aria-hidden','true');
-  clientModal.setAttribute('aria-labelledby',`clientModalLabel-${client.codeContrat}`);
+  clientModal.setAttribute('aria-labelledby',`clientModalLabel-${client.codeChantier}`);
+
+  const dateFormatOptions = { day: 'numeric', month: 'numeric', year: 'numeric' };
+  const formattedDateDebut = new Date(client.dateDebut).toLocaleDateString('fr-FR', dateFormatOptions);
+  const formattedDateFin = new Date(client.dateFin).toLocaleDateString('fr-FR', dateFormatOptions);
 
   clientModal.innerHTML = 
   `
     <div class="modal-dialog modal-dialog-centered">
       <div class="modal-content">
         <div class="modal-header">
-          <h1 class="modal-title fs-5" id="clientModalLabel-${client.codeContrat}">${client.nom}</h1>
+          <h1 class="modal-title fs-5" id="clientModalLabel-${client.codeChantier}">${client.nom}</h1>
           <button type="button" class="btn-close border rounder bg-dark" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
         <div class="modal-body">
-          <div>Code du contrat:    ${client.codeContrat}</div>
-          <div>Code du client:   ${client.codeClient}</div>
-          </br>
-          <div>Adresse:           ${client.adr}</div>
-          <div>CP:                ${client.cp}</div>
-          </br></br></br>
+          <div class="row">
+            <div class="col-md-6">
+              <p><strong>Code du chantier:</strong>    ${client.codeChantier}</p>
+              <p><strong>Code Client:</strong>         ${client.codeClient}</p>
+            </div>
+              <div class="col-md-6">
+                <p><strong>Nom:</strong>                ${client.nom}</p>
+                <p><strong>Téléphone:</strong>          ${client.tel}</p>
+                <p><strong>Adresse:</strong>            ${client.adr}<br>${client.cp} ${client.ville}</p>
+              </div>
+              <div class="col-md-6">
+                <p><strong>Date debut du chantier:</strong>   ${formattedDateDebut}</p>
+                <p><strong>Fin prévu le:</strong>             ${formattedDateFin}</p>
+              </div>
+              <div class="col-md-6">
+                <p><strong>Libellé:</strong>                  ${client.libelle}</p>
+              </div>
+          </div>
         </div>
         <div class="modal-footer">
           <div class="row w-100">
-            <a href="/sav/${client.codeContrat}" class="btn btn-primary col p-2 m-2">Afficher</a>
+            <a href="/chantier/${client.codeChantier}" class="btn btn-primary col p-2 m-2">Afficher</a>
             <a href="#" class="btn btn-secondary col p-2 m-2" data-bs-dismiss="modal">Fermer</a>
           </div>
         </div>
@@ -180,20 +197,40 @@ backToTopButton.addEventListener('click', backToTop)
 // fetch initial set of clients
 fetchClients();
 
-const form = document.querySelector('#search-form');
-form.addEventListener('submit', event => {
-  event.preventDefault();
+// const form = document.querySelector('#search-form');
+// form.addEventListener('submit', event => {
+//   event.preventDefault();
 
+//   removeElementsByClass('client');
+
+//   inputValue = document.querySelector('#nom').value;
+//   url = '/ajax/chantier/search';
+
+//   fetchClients();
+// })
+
+const statutHeader = document.querySelector('.statut');
+const chantierEnCours = document.querySelector('#chantierEnCours');
+chantierEnCours.addEventListener('click', event => {
+  statutHeader.textContent = 'Les chantiers en cours';
+
+  offset = 0;
   removeElementsByClass('client');
-
-  inputValue = document.querySelector('#nom').value;
-  url = '/ajax/sav/search';
-
-  console.log(inputValue);
+  url = '/ajax/chantier';
 
   fetchClients();
 })
 
+const chantierTermine = document.querySelector('#chantierTermine');
+chantierTermine.addEventListener('click', event => {
+  statutHeader.textContent = 'Les chantiers archivés';
+
+  offset = 0;
+  removeElementsByClass('client');
+  url = '/ajax/chantier/termine';
+
+  fetchClients();
+})
 
 function removeElementsByClass(className){
   const elements = document.getElementsByClassName(className);

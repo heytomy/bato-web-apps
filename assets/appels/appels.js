@@ -7,7 +7,7 @@ const backToTopButton = document.querySelector('.back-to-top');
 
 // initialize offset and limit values
 let offset = 0;
-let url = '/ajax/chantier';
+let url = '/ajax/appels';
 const limit = 10;
 
 // initialize variable to track whether a request is in progress
@@ -79,6 +79,7 @@ function fetchClients() {
         isFetching = false;
     })
     .catch(error => {
+        alert('il y avait une erreur pendant le fetching des clients');
         console.error(error);
         // hide loading animation
         cacheChargement();
@@ -106,8 +107,8 @@ function createClientElement(client) {
   clientElement.classList.add('row', 'border', 'border-light', 'rounded', 'bg-client', 'm-2', 'p-2', 'client');
   clientElement.innerHTML = `
     <h1>                        ${client.nom}</h1>
-    <div>Code du chantier:      ${client.codeChantier}</div>
-    <div>Code du client:        ${client.codeClient}</div>
+    <div>${client.codeContrat ? '<strong>Code Contrat:</strong> ' + client.codeContrat : 'N\'a pas de contrat d\'entretien'}</div>
+    <div>${client.codeClient ? '<strong>Code Client:</strong> ' + client.codeClient : '<strong style="color: #B60E0E;">Nouveau client !</strong>'}</div>
   `;
   return clientElement;
 }
@@ -116,37 +117,50 @@ function createClientElement(client) {
 function createClientModal(client, clientElement) {
   clientElement.setAttribute('type', 'button');
   clientElement.setAttribute('data-bs-toggle', 'modal');
-  clientElement.setAttribute('data-bs-target', `#clientModal-${client.codeChantier}`);
+  clientElement.setAttribute('data-bs-target', `#clientModal-${client.codeAppel}`);
 
   const clientModal = document.createElement('div');
   clientModal.classList.add('modal', 'fade', 'client');
-  clientModal.id = `clientModal-${client.codeChantier}`;
+  clientModal.id = `clientModal-${client.codeAppel}`;
   clientModal.setAttribute('tabindex','-1');
   clientModal.setAttribute('aria-hidden','true');
-  clientModal.setAttribute('aria-labelledby',`clientModalLabel-${client.codeChantier}`);
+  clientModal.setAttribute('aria-labelledby',`clientModalLabel-${client.codeAppel}`);
+
+  const dateFormatOptions = { day: 'numeric', month: 'numeric', year: 'numeric' };
+  const formattedDateDebut = new Date(client.dateDebut).toLocaleDateString('fr-FR', dateFormatOptions);
+  const formattedDateFin = new Date(client.dateFin).toLocaleDateString('fr-FR', dateFormatOptions);
 
   clientModal.innerHTML = 
   `
     <div class="modal-dialog modal-dialog-centered">
       <div class="modal-content">
         <div class="modal-header">
-          <h1 class="modal-title fs-5" id="clientModalLabel-${client.codeChantier}">${client.nom}</h1>
+          <h1 class="modal-title fs-5" id="clientModalLabel-${client.codeAppel}">${client.nom}</h1>
           <button type="button" class="btn-close border rounder bg-dark" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
         <div class="modal-body">
-          <div>Code du chantier:    ${client.codeChantier}</div>
-          <div>Code du client:      ${client.codeClient}</div>
-          </br>
-          <div>statut:              ${client.statut}</div>
-          <div>dateDebut:           ${client.dateDebut}</div>
-          <div>dateFin:             ${client.dateFin}</div>
-          <div>Adresse:             ${client.adr}</div>
-          <div>CP:                  ${client.cp}</div>
-          </br></br></br>
+          <div class="row">
+            <div class="col-md-6">
+              <p>${client.codeContrat ? '<strong>Code Contrat:</strong> ' + client.codeContrat : 'N\'a pas de contrat d\'entretien'}</p>
+              <p>${client.codeClient ? '<strong>Code Client:</strong> ' + client.codeClient : '<strong style="color: #B60E0E;">Nouveau client !</strong>'}</p>
+            </div>
+              <div class="col-md-6">
+                <p><strong>Nom:</strong>                ${client.nom}</p>
+                <p><strong>Téléphone:</strong>          ${client.tel}</p>
+                <p><strong>Adresse:</strong>            ${client.adr}<br>${client.cp} ${client.ville}</p>
+              </div>
+              <div class="col-md-6">
+                <p><strong>Date de rendez-vous:</strong>   ${formattedDateDebut}</p>
+                <p><strong>Fin prévu le:</strong>             ${formattedDateFin}</p>
+              </div>
+              <div class="col-md-6">
+                <p><strong>Rendez-vous urgent ?</strong>      <br> ${client.isUrgent ? '<p>Oui</p>' : '<p">Non</p>'}</p>
+              </div>
+          </div>
         </div>
         <div class="modal-footer">
           <div class="row w-100">
-            <a href="/chantier/${client.codeChantier}" class="btn btn-primary col p-2 m-2">Afficher</a>
+            <a href="/appels/${client.codeAppel}" class="btn btn-primary col p-2 m-2">Afficher</a>
             <a href="#" class="btn btn-secondary col p-2 m-2" data-bs-dismiss="modal">Fermer</a>
           </div>
         </div>
@@ -183,20 +197,40 @@ backToTopButton.addEventListener('click', backToTop)
 // fetch initial set of clients
 fetchClients();
 
-const form = document.querySelector('#search-form');
-form.addEventListener('submit', event => {
-  event.preventDefault();
+// const form = document.querySelector('#search-form');
+// form.addEventListener('submit', event => {
+//   event.preventDefault();
 
+//   removeElementsByClass('client');
+
+//   inputValue = document.querySelector('#nom').value;
+//   url = '/ajax/appels/search';
+
+//   fetchClients();
+// })
+
+const statutHeader = document.querySelector('.statut');
+const appelsEnCours = document.querySelector('#appelsEnCours');
+appelsEnCours.addEventListener('click', event => {
+  statutHeader.textContent = 'Les appels en cours';
+
+  offset = 0;
   removeElementsByClass('client');
-
-  inputValue = document.querySelector('#nom').value;
-  url = '/ajax/chantier/search';
-
-  console.log(inputValue);
+  url = '/ajax/appels';
 
   fetchClients();
 })
 
+const appelsTermine = document.querySelector('#appelsTermine');
+appelsTermine.addEventListener('click', event => {
+  statutHeader.textContent = 'Les appels archivés';
+
+  offset = 0;
+  removeElementsByClass('client');
+  url = '/ajax/appels/termine';
+
+  fetchClients();
+})
 
 function removeElementsByClass(className){
   const elements = document.getElementsByClassName(className);

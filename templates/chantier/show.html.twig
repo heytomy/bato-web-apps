@@ -8,7 +8,7 @@
             <i class="fa-solid fa-pen-to-square"></i>
             Modifier
         </a>
-    </div>
+    </div>    
 {% endblock %}
 
 {% block back_button %}
@@ -16,6 +16,15 @@
 {% endblock %}
 
 {% block list %}
+
+    {% if chantier.getStatut.statut == 'EN_COURS' %}
+        <div class="d-flex justify-content-between container flex-sm-row flex-column pb-2">
+            <div class="p-2 col d-flex flex-row-reverse">
+                {% include 'chantier/_change_statut_form.html.twig' %}
+            </div>
+        </div>
+    {% endif %}
+    
     <div class="border rounded container bg-light p-2">
         <div class="row border border-light rounded bg-client m-2 p-2"> 
             <div class="d-flex justify-content-between">

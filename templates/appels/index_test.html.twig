@@ -1,22 +1,22 @@
 {% extends '_inc/listPage.html.twig' %}
 
-{% block title %}Chantier{% endblock %}
+{% block title %}Appels{% endblock %}
 
 {% block back_button %}
     {{ path('app_dashboard') }}
 {% endblock %}
 
 {% block new_button %}
-	<a class="btn btn-primary" href="{{ path('app_chantier_new') }}">
+	<a class="btn btn-primary" href="{{ path('app_appels_new') }}">
 		<i class="fa-solid fa-chevron-right"></i>
-		Nouveau chantier
+		Nouvel Appel
 	</a>
 {% endblock %}
 
 {% block search %}
     <div class="p-2 col d-flex flex-row-reverse">
-            <button class="btn btn-danger ms-1" id='chantierTermine'>Chantiers archivés</button>
-            <button class="btn btn-danger" id='chantierEnCours'>Chantiers en cours</button>
+            <button class="btn btn-danger ms-1" id='appelsTermine'>Appels archivés</button>
+            <button class="btn btn-danger" id='appelsEnCours'>Appels en cours</button>
     </div>
 {% endblock %}
 
@@ -32,9 +32,16 @@
 {% endblock %} #}
 
 {% block list %}
+    {% for message in app.flashes('success') %}
+        <div class="alert alert-success alert-dismissible fade show mt-5" role="alert">
+            {{ message }}
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    {% endfor %}
+
     <div class="d-flex justify-content-between container flex-sm-row flex-column">
         <div class="col p-2">
-            <h1 class="font-weight-bold statut" style="font-size: 3em;">Les chantiers en cours</h1>
+            <h1 class="font-weight-bold statut" style="font-size: 3em;">Les appels en cours</h1>
         </div>
         <div class="col p-2 d-flex flex-row-reverse">
             <h1 class="font-weight-bold statut" style="font-size: 3em;">Bar de recherche</h1>
@@ -50,5 +57,5 @@
 
 {% block javascripts %}
     {{ parent() }}
-    {{ encore_entry_script_tags('chantier_JS') }}
+    {{ encore_entry_script_tags('appels_JS') }}
 {% endblock %}

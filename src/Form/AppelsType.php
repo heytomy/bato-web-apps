@@ -37,11 +37,11 @@ class AppelsType extends AbstractType
     private $security;
 
     public function __construct(
-        ClientDefRepository $clientDefRepository, 
-        AppsUtilisateurRepository $roles, 
-        RouterInterface $router, 
-        Security $security)
-    {
+        ClientDefRepository $clientDefRepository,
+        AppsUtilisateurRepository $roles,
+        RouterInterface $router,
+        Security $security
+    ) {
         $this->clientDefRepository = $clientDefRepository;
         $this->roles = $roles;
         $this->router = $router;
@@ -66,7 +66,7 @@ class AppelsType extends AbstractType
                     'for' => 'isNewClient'
                 ]
 
-                ])
+            ])
             ->add('ID_Utilisateur', EntityType::class, [
                 'required' => true,
                 'class' => AppsUtilisateur::class,
@@ -104,7 +104,7 @@ class AppelsType extends AbstractType
             //         'data-contrats-url' => $this->router->generate('get_client_and_contrats_info', ['id' => '__clientId__']),
             //     ],
             // ])
-            
+
             ->add('ClientList', EntityType::class, [
                 'required' => false,
                 'mapped' => false,
@@ -119,7 +119,7 @@ class AppelsType extends AbstractType
                     'class' => 'form-select',
                     'data-contrats-url' => $this->router->generate('get_client_and_contrats_info', ['id' => '__clientId__']),
                 ],
-            ]) 
+            ])
 
             ->add('Nom', TextType::class, [
                 'required' => true,
@@ -225,7 +225,7 @@ class AppelsType extends AbstractType
                 'attr' => [
                     'selector' => 'textarea',
                     'toolbar' => 'undo redo | copy cut paste',
-                    'menubar' => 'false',                
+                    'menubar' => 'false',
                     'contextmenu' => 'false',
                     'placeholder' => 'Décrivez le problème rencontré par le client',
                 ],
@@ -260,7 +260,7 @@ class AppelsType extends AbstractType
                         }
                     })
                 ],
-            ]) 
+            ])
 
             ->add('rdvDateTimeFin', DateTimeType::class, [
                 'mapped' => false,
@@ -269,11 +269,11 @@ class AppelsType extends AbstractType
                 'widget' => 'single_text',
                 // 'format' => 'dd-MM-yyyy HH:mm',
                 'attr' => [
-                    'class' => 'form-control datetimepicker',
+                    'class' => 'form-control',
                     'placeholder' => 'Sélectionnez une date et heure de fin de RDV',
                 ],
                 'html5' => false,
-            ]) 
+            ])
 
             ->add('allDay', CheckboxType::class, [
                 'mapped' => false,
@@ -300,7 +300,7 @@ class AppelsType extends AbstractType
                 'label_attr' => [
                     'class' => 'form-check-label',
                 ]
-                ])
+            ])
 
             ->add('status', ChoiceType::class, [
                 'mapped' => false,
@@ -315,7 +315,7 @@ class AppelsType extends AbstractType
                 'attr' => [
                     'class' => 'form-control urgency-select d-none',
                 ],
-                ]);    
+            ]);
     }
 
     public function configureOptions(OptionsResolver $resolver): void

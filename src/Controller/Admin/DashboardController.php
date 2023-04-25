@@ -12,6 +12,7 @@ use App\Controller\Admin\ClientDefCrudController;
 use EasyCorp\Bundle\EasyAdminBundle\Config\MenuItem;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Dashboard;
 use App\Controller\Admin\AppsUtilisateurCrudController;
+use App\Entity\ChantierApps;
 use EasyCorp\Bundle\EasyAdminBundle\Router\AdminUrlGenerator;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractDashboardController;
@@ -51,6 +52,7 @@ class DashboardController extends AbstractDashboardController
         yield MenuItem::linkToCrud('Clients', 'fa fa-plus', ClientDef::class);
         yield MenuItem::linkToCrud('Utilisateurs', 'fa fa-plus', AppsUtilisateur::class);
         yield MenuItem::linkToCrud('DefUtilisateurs', 'fa fa-plus', DefAppsUtilisateur::class);
+        yield MenuItem::linkToCrud('Chantier', 'fa fa-plus', ChantierApps::class);
 
 
     }

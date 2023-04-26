@@ -38,9 +38,13 @@ class ChantierController extends AbstractController
     public function new(Request $request, ChantierAppsRepository $chantierAppsRepository, EntityManagerInterface $em, StatutChantierRepository $statutChantierRepository): Response
     {
         $statutEnCours = $statutChantierRepository->findOneBy(['statut' => 'EN_COURS']);
+        
         $chantier = new ChantierApps();
+        
         $rdv = new Calendrier();
+        
         $form = $this->createForm(ChantierAppsType::class, $chantier);
+        
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
@@ -52,6 +56,8 @@ class ChantierController extends AbstractController
                 ->setAllDay(false)
                 ->setChantier($chantier)
                 ;
+
+            dd($chantier);
 
             $em->persist($chantier);
             $em->flush($chantier);

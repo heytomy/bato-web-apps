@@ -267,7 +267,7 @@ class AppelsType extends AbstractType
                 'required' => false,
                 'label' => 'Fin de rendez-vous prévu :',
                 'widget' => 'single_text',
-                // 'format' => 'dd-MM-yyyy HH:mm',
+                'format' => 'dd-MM-yyyy HH:mm',
                 'attr' => [
                     'class' => 'form-control',
                     'placeholder' => 'Sélectionnez une date et heure de fin de RDV',

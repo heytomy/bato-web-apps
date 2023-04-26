@@ -3,19 +3,23 @@
 namespace App\Controller\Admin;
 
 use App\Entity\AppsUtilisateur;
+use App\Entity\DefAppsUtilisateur;
+use Doctrine\ORM\EntityManagerInterface;
+use EasyCorp\Bundle\EasyAdminBundle\Dto\EntityDto;
 use EasyCorp\Bundle\EasyAdminBundle\Field\ArrayField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\BooleanField;
-use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractCrudController;
-use EasyCorp\Bundle\EasyAdminBundle\Config\{Action, Actions, Crud, KeyValueStore};
+use EasyCorp\Bundle\EasyAdminBundle\Field\TextareaField;
 use EasyCorp\Bundle\EasyAdminBundle\Context\AdminContext;
-use EasyCorp\Bundle\EasyAdminBundle\Dto\EntityDto;
+use EasyCorp\Bundle\EasyAdminBundle\Field\TelephoneField;
+use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractCrudController;
+use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
+use Symfony\Component\Form\{FormBuilderInterface, FormEvent, FormEvents};
 use EasyCorp\Bundle\EasyAdminBundle\Field\{IdField, EmailField, TextField};
 use Symfony\Component\Form\Extension\Core\Type\{PasswordType, RepeatedType};
-use Symfony\Component\Form\{FormBuilderInterface, FormEvent, FormEvents};
-use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
+use EasyCorp\Bundle\EasyAdminBundle\Config\{Action, Actions, Crud, KeyValueStore};
 
 
-class AppsUtilisateurCrudController extends AbstractCrudController
+class UtilisateurCrudController extends AbstractCrudController
 {
     public function __construct(
         public UserPasswordHasherInterface $userPasswordHasher
@@ -24,6 +28,7 @@ class AppsUtilisateurCrudController extends AbstractCrudController
     public static function getEntityFqcn(): string
     {
         return AppsUtilisateur::class;
+        return DefAppsUtilisateur::class;
     }
 
     public function configureActions(Actions $actions): Actions
@@ -42,7 +47,15 @@ class AppsUtilisateurCrudController extends AbstractCrudController
             TextField::new('Nom_utilisateur'),
             ArrayField::new('roles'),
             BooleanField::new('is_verified'),
-
+            IdField::new('id')->hideOnForm(),
+            TextField::new('Nom'),
+            TextField::new('Prenom'),
+            TextareaField::new('Adresse'),
+            TextField::new('CP'),
+            TextField::new('Ville'),
+            TelephoneField::new('Tel_1'),
+            TelephoneField::new('Tel_2'),
+            EmailField::new('Mail'),
         ];
 
         $password = TextField::new('Mot_de_passe')
@@ -60,6 +73,25 @@ class AppsUtilisateurCrudController extends AbstractCrudController
         $fields[] = $password;
 
         return $fields;
+    }
+
+    
+    public function persistEntity(EntityManagerInterface $em, $entityInstance): void
+    {
+        if (!$entityInstance instanceof DefAppsUtilisateur) return;
+
+        parent::persistEntity($em, $entityInstance);
+    }
+
+    public function deleteEntity(EntityManagerInterface $em, $entityInstance): void
+    {
+        if (!$entityInstance instanceof DefAppsUtilisateur) return;
+
+        foreach ($entityInstance->getComptes() as $user) {
+            $em->remove($user);
+        }
+
+        parent::deleteEntity($em, $entityInstance);
     }
 
     public function createNewFormBuilder(EntityDto $entityDto, KeyValueStore $formOptions, AdminContext $context): FormBuilderInterface

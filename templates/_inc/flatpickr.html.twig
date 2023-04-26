@@ -40,13 +40,8 @@ flatpickr('#appels_rdvDateTimeFin', {
 });
 
 flatpickr('#chantier_apps_dateDebut', {
-    enableTime: true,
-    time_24hr: true,
-	minTime: "07:00",
-    maxTime: "20:00",
-    altInput: true,
-    altFormat: "d-m-Y H:i",
-    dateFormat: "d-m-Y H:i",
+    enableTime: false,
+    dateFormat: "d-m-Y",
     minDate: "today",
     disable: [
         function(date) {
@@ -58,13 +53,8 @@ flatpickr('#chantier_apps_dateDebut', {
 });
 
 flatpickr('#chantier_apps_dateFin', {
-    enableTime: true,
-    time_24hr: true,
-	minTime: "07:00",
-    maxTime: "20:00",
-    altInput: true,
-    altFormat: "d-m-Y H:i",
-    dateFormat: "d-m-Y H:i",
+    enableTime: false,
+    dateFormat: "d-m-Y",
     minDate: "today",
     disable: [
         function(date) {

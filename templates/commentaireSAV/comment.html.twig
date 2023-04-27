@@ -16,7 +16,7 @@
                                                         <p class="mb-1">
                                                             <span class="commentAuthor">{{ comment.owner.nom }} {{ comment.owner.prenom }}</span>
                                                             
-                                                            <span class="small">- {{ comment.getDateCom() | date('Y-m-d h:i') }}</span>
+                                                            <span class="small">- {{ comment.getDateCom() | date('d/m/Y h:i') }}</span>
                                                         </p>
                                                     </div>
                                                     <p class="small mb-0 ">
@@ -52,7 +52,7 @@
                                                                         <p class="mb-1">
                                                                             <span class="commentAuthor">{{ reply.nom }}</span>
                                                                     
-                                                                            <span class="small">- {{ reply.getDateCom() | date('Y-m-d h:i') }}</span>
+                                                                            <span class="small">- {{ reply.getDateCom() | date('d/m/Y H:i') }}</span>
                                                                         </p>
                                                                     </div>
                                                                     <p class="small mb-0">

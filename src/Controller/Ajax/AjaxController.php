@@ -5,9 +5,10 @@ namespace App\Controller\Ajax;
 use DateTime;
 use App\Entity\Calendrier;
 use App\Repository\AppelsRepository;
-use App\Repository\CalendrierRepository;
-use App\Repository\ChantierAppsRepository;
 use App\Repository\ContratRepository;
+use App\Repository\CalendrierRepository;
+use Doctrine\ORM\EntityManagerInterface;
+use App\Repository\ChantierAppsRepository;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -128,7 +129,7 @@ class AjaxController extends AbstractController
     }
 
     #[Route('/ajax/calendrier/{id}/edit', name: 'app_ajax_calendrier_edit', methods: ['PUT'])]
-    public function majEvent(?Calendrier $booking, Request $request, CalendrierRepository $calendrierRepository)
+    public function majEvent(?Calendrier $booking, Request $request, CalendrierRepository $calendrierRepository, EntityManagerInterface $em)
     {  
         // On récupère les données
         $data = json_decode($request->getContent());
@@ -147,23 +148,54 @@ class AjaxController extends AbstractController
                 ->setDateDebut(new DateTime($data->dateDebut))
                 ;
             
-            // On met la dateFin à null s'il n'y a pas de donnée, sinon on insert la donnée dateFin
-            
-            if (isset($data->allDay)) {
-                if($data->allDay) {
-                    $booking->setAllDay($data->allDay);
-                    $booking->setDateFin(null);
-                } else {
-                    $booking->setAllDay($data->allDay);
-                    $dateFin = new DateTime($data->dateDebut);
-                    $dateFin->modify('+1 hour');
+            if (null !== $booking->getChantier()) {
+                
+                $dateDebut = DateTime::createFromFormat('Y-m-d\TH:i:s.uO', $data->dateDebut);
+                $dateDebut->setTime(0, 0, 0);
+
+                $booking->setDateDebut($dateDebut);
+                $booking->getChantier()->setDateDebut($dateDebut);
+
+                if(isset($data->dateFin) && !empty($data->dateFin)){
+
+                    $dateFin = DateTime::createFromFormat('Y-m-d\TH:i:s.uO', $data->dateFin);
+                    $dateFin->setTime(0, 0, 0);
+
                     $booking->setDateFin($dateFin);
+                    $booking->getChantier()->setDateFin($dateFin);
+                }
+            } else {
+                // On met la dateFin à null s'il n'y a pas de donnée, sinon on insert la donnée dateFin
+                if (isset($data->allDay)) {
+                    if($data->allDay) {
+                        $booking->setAllDay($data->allDay);
+                        $booking->setDateFin(null);
+                    } else {
+                        $booking->setAllDay($data->allDay);
+                        $dateFin = new DateTime($data->dateDebut);
+                        $dateFin->modify('+1 hour');
+                        if (null === $booking->getChantier()) {
+                            $booking->setDateFin($dateFin);
+                        }
+                    }
+                }
+                if(isset($data->dateFin) && !empty($data->dateFin)){
+                    $booking->setDateFin(new DateTime($data->dateFin));
+    
+                    if (null !== $booking->getChantier()) {
+                        $dateFin = DateTime::createFromFormat('Y-m-d', $data->dateFin);
+        
+                        $booking->setDateFin($dateFin);
+                        $booking->getChantier()->setDateFin($dateFin);
+                    }
                 }
             }
-            if(isset($data->dateFin) && !empty($data->dateFin)){
-                $booking->setDateFin(new DateTime($data->dateFin));
-            }
-            $calendrierRepository->save($booking, true);            
+            $em->persist($booking);
+            $em->flush($booking);
+
+            $em->persist($booking->getChantier());
+            $em->flush($booking->getChantier());
+
 
             // On rerourne le code
             return new Response('Ok', $code);

@@ -32,7 +32,7 @@ document.addEventListener("DOMContentLoaded", () => {
       right: "dayGridMonth,timeGridWeek,timeGridDay,listWeek"
     },
     locale: frLocale,
-    initialView: "dayGridMonth",
+    initialView: "timeGridWeek",
     editable: true,
     navLinks: true, // can click day/week names to navigate views
     plugins: [ interactionPlugin, dayGridPlugin, timeGridPlugin, listPlugin ],

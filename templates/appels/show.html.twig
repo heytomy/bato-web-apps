@@ -37,6 +37,8 @@
             {% if appel.CodeClient %}  <div>Code du client: {{appel.CodeClient.getId()}}</div>   {% endif %}    
                 <div class="d-flex flex-column align-items-end">
                     <h6>Fin prévu le {{appel.getRdv().dateFin | date('d/m/Y H:i')}}</h6>
+
+                    <h5 class='text-primary'><strong>Technicien: </strong>{{appel.IDUtilisateur.IDUtilisateur.nom}} {{appel.IDUtilisateur.IDUtilisateur.prenom}}</h5>
                 </div>   
 
         </div>

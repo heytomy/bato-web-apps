@@ -35,7 +35,7 @@ class AppelsController extends AbstractController
         $appels = $appelsRepository->findByStatut('EN_COURS');
 
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
-        return $this->render('appels/index_test.html.twig', [
+        return $this->render('appels/index.html.twig', [
             'current_page' => 'app_appels',
             'appels' => $appels,
         ]);
@@ -160,7 +160,7 @@ class AppelsController extends AbstractController
         ): Response
     {
         $user = $this->getUser() ?? null;
-        $comments = $commentairesAppelsRepository->findBy(['codeAppels' => $appel->getId()]);
+        $comments = $commentairesAppelsRepository->findBy(['codeAppels' => $appel]);
         $nom = $user->getIdUtilisateur()->getNom() ." ". $user->getIdUtilisateur()->getPrenom();
 
         /**
@@ -174,7 +174,7 @@ class AppelsController extends AbstractController
             $comment
                 ->setDateCom(new DateTime())
                 ->setNom($nom)
-                ->setCodeAppels($appel->getId())
+                ->setCodeAppels($appel)
                 ->setOwner($user->getIDUtilisateur())
                 ;
             if ($appel->getCodeClient()) {

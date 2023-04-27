@@ -1,10 +1,9 @@
 {% extends '_inc/listPage.html.twig' %}
 
-{% block back_button %}
-	{{ path('app_dashboard') }}
-{% endblock %}
+{% block title %}Appels{% endblock %}
 
-{% block title %}Bato - Liste des appels
+{% block back_button %}
+    {{ path('app_dashboard') }}
 {% endblock %}
 
 {% block new_button %}
@@ -14,137 +13,49 @@
 	</a>
 {% endblock %}
 
-{% block list %}
-
-{% for message in app.flashes('success') %}
-    <div class="alert alert-success alert-dismissible fade show mt-5" role="alert">
-        {{ message }}
-        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+{% block search %}
+    <div class="p-2 col d-flex flex-row-reverse">
+            <button class="btn btn-danger ms-1" id='appelsTermine'>Appels archivés</button>
+            <button class="btn btn-danger" id='appelsEnCours'>Appels en cours</button>
     </div>
-{% endfor %}
+{% endblock %}
 
-	<div class="client-container border rounded container bg-light p-2 mt-3">
-		{% for appel in appels %}
-			<div class="row border border-light rounded bg-client m-2 p-2 client" data-bs-toggle="modal" data-bs-target="#appelModal{{appel.id}}">
-				<div class="d-flex justify-content-between">
-					<h1>{{appel.getRdv().titre|raw}}</h1>
-					<div class="d-flex flex-column align-items-end">
-						<h5>Le
-							{{appel.getRdv().dateDebut | date('d/m/Y')}}</h5>
-						<h5>à
-							{{appel.getRdv().dateDebut | date('H:i')}}</h5>
-					</div>
-				</div>
-				<div>{% if appel.CodeContrat %}
-					Code Contrat:
-						{{appel.CodeContrat.getId()}} - {{appel.CodeContrat.libelle}}
-						{% else %}
-					N'a pas de contrat d'entretien
-					{% endif %}
-				</div>
-				<div>{% if appel.CodeClient %}
-					Code Client:					
-						{{appel.CodeClient.getId()}}
-						{% else %}
-					<strong style="color: #B60E0E;">Nouveau client !</strong>
-					{% endif %}
-				</div>
-			</div>
+{# {% block search %}
+    {{ form_start(searchForm, {'attr': {'class': 'd-flex justify-content-end col p-2', 'id': 'search-form'}}) }}
+        <div class="">
+            {{ form_row(searchForm.nom) }}
+        </div>
+        <div class="px-2">
+            {{ form_row(searchForm.submit) }}
+        </div>
+    {{ form_end(searchForm) }}
+{% endblock %} #}
 
-			<div class="modal fade" id="appelModal{{appel.id}}" tabindex="-1" aria-labelledby="appelModal{{appel.id}}Label" aria-hidden="true">
-				<div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
-					<div class="modal-content">
-						<div class="modal-header">
-							<h5 class="modal-title" id="appelModal{{appel.id}}Label">{{appel.getRdv().titre|raw}}</h5>
-							<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-						</div>
-						<div class="modal-body">
-							<div class="row">
+{% block list %}
+    {% for message in app.flashes('success') %}
+        <div class="alert alert-success alert-dismissible fade show mt-5" role="alert">
+            {{ message }}
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    {% endfor %}
 
-								<div class="col-md-6">
-									{% if appel.CodeContrat %}
-										<strong>Code Contrat:</strong>
-										{{appel.CodeContrat.getId()}} - {{appel.CodeContrat.libelle}}
-									{% else %}
-										<p>N'a pas de contrat d'entretien</p>
-									{% endif %}<br>
-									{% if appel.CodeClient %}
-										<strong>Code Client:</strong>
-										{{appel.CodeClient.getId()}}
-									{% else %}
-										<strong style="color: #B60E0E;">Nouveau client !</strong>
-									{% endif %}
+    <div class="d-flex justify-content-between container flex-sm-row flex-column">
+        <div class="col p-2">
+            <h1 class="font-weight-bold statut" style="font-size: 3em;">Les appels en cours</h1>
+        </div>
+        <div class="col p-2 d-flex flex-row-reverse">
+            <h1 class="font-weight-bold statut" style="font-size: 3em;">Bar de recherche</h1>
+        </div>
+    </div>
+    <div class="client-container border rounded container bg-light p-2"></div>
+{% endblock %}
 
-								</div>
-
-								<div class="col-md-6">
-									<p>
-										<strong>Nom:</strong>
-										{% if appel.CodeClient %}
-											{{ appel.CodeClient }}
-										{% else %}
-											{{ appel.getRdv().titre }}
-										{% endif %}
-
-									</p>
-
-									<p>
-										<strong>Téléphone:</strong>
-										{{ appel.Tel }}
-									</p>
-									<p>
-										<strong>Adresse:</strong>
-									</p>
-									<p>{{appel.Adr}}<br>{{appel.CP}}
-										{{appel.Ville}}
-									</p>
-								</div>
-
-
-								<div class="col-md-6">
-									<p>
-										<strong>Date de rendez-vous:</strong>
-									</p>
-									<p>
-										Le
-										{{appel.getRdv().dateDebut | date('d/m/Y')}}
-										à
-										{{appel.getRdv().dateDebut | date('H:i')}}
-									</p>
-									<p>	
-										Fin prévu le
-										{{appel.getRdv().dateFin | date('d/m/Y H:i')}}
-									</p>
-								</div>
-
-								<div class="col-md-6">
-									<p>
-										<strong>Rendez-vous urgent ?
-										</strong>
-									</p>
-									<p>{{ appel.isUrgent ? 'Oui' : 'Non' }}</p>
-								</div>
-
-							</div>
-						</div>
-						<div class="modal-footer">
-							<a href="{{ path('app_appels_show', {'id': appel.id}) }}" class="btn btn-primary">Afficher</a>
-							<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fermer</button>
-						</div>
-					</div>
-				</div>
-			</div>
-
-		{% endfor %}
-	</div>
-
+{% block content %}
+    <button class="btn btn-primary back-to-top"><i class="fa-solid fa-angles-up"></i> Retour en haut</button>
+    {% include '_inc/chargementAnimation.html.twig' %}
 {% endblock %}
 
 {% block javascripts %}
-	{{ parent() }}
-{% endblock %}
-
-{% block stylesheets %}
-	{{ parent() }}
-	{{ encore_entry_link_tags('appels') }}
+    {{ parent() }}
+    {{ encore_entry_script_tags('appels_JS') }}
 {% endblock %}

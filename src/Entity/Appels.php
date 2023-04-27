@@ -50,7 +50,7 @@ class Appels
     #[ORM\JoinColumn(name:"CodeContrat", referencedColumnName:"Code", nullable:true)]
     private ?Contrat $CodeContrat = null;
 
-    #[ORM\OneToMany(mappedBy: 'idAppel', targetEntity: PhotosAppels::class)]
+    #[ORM\OneToMany(mappedBy: 'idAppel', targetEntity: PhotosAppels::class, orphanRemoval: true)]
     private Collection $photos;
 
     #[ORM\Column]
@@ -67,9 +67,13 @@ class Appels
     #[ORM\JoinColumn(name: 'ID_statut', referencedColumnName: 'Id', nullable: true)]
     private ?StatutChantier $statut = null;
 
+    #[ORM\OneToMany(mappedBy: 'codeAppels', targetEntity: CommentairesAppels::class, orphanRemoval: true)]
+    private Collection $commentairesAppels;
+
     public function __construct()
     {
         $this->photos = new ArrayCollection();
+        $this->commentairesAppels = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -281,6 +285,36 @@ class Appels
     public function setStatut(?StatutChantier $statut): self
     {
         $this->statut = $statut;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, CommentairesAppels>
+     */
+    public function getCommentairesAppels(): Collection
+    {
+        return $this->commentairesAppels;
+    }
+
+    public function addCommentairesAppel(CommentairesAppels $commentairesAppel): self
+    {
+        if (!$this->commentairesAppels->contains($commentairesAppel)) {
+            $this->commentairesAppels->add($commentairesAppel);
+            $commentairesAppel->setCodeAppels($this);
+        }
+
+        return $this;
+    }
+
+    public function removeCommentairesAppel(CommentairesAppels $commentairesAppel): self
+    {
+        if ($this->commentairesAppels->removeElement($commentairesAppel)) {
+            // set the owning side to null (unless already changed)
+            if ($commentairesAppel->getCodeAppels() === $this) {
+                $commentairesAppel->setCodeAppels(null);
+            }
+        }
 
         return $this;
     }

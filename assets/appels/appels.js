@@ -151,7 +151,7 @@ function createClientModal(client, clientElement) {
               </div>
               <div class="col-md-6">
                 <p><strong>Date de rendez-vous:</strong>   ${formattedDateDebut}</p>
-                <p><strong>Fin prévu le:</strong>             ${formattedDateFin}</p>
+                <p>${client.dateFin ? '<strong>Fin prévu le:</strong>' + formattedDateFin : ''}</p>
               </div>
               <div class="col-md-6">
                 <p><strong>Rendez-vous urgent ?</strong>      <br> ${client.isUrgent ? '<p>Oui</p>' : '<p">Non</p>'}</p>

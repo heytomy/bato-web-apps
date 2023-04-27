@@ -138,28 +138,28 @@ class ChantierAppsType extends AbstractType
             ])
             ->add('dateDebut', DateType::class, [
                 'required'      =>  true,
-                'format'        => 'dd-mm-YY',
+                // 'format'        => 'dd-mm-YY',
                 'label'         =>  'Date de début du chantier',
                 'widget'        =>  'single_text',
                 'attr'          =>  [
                     'class'         =>  'form-control   datetimepicker',
                     'placeholder'   =>  'veuillez indiquer la date de début du chantier',
                 ],
-                'html5'         =>  false,
+                'html5'         =>  true,
                 'constraints'   =>  [
                     new Assert\NotBlank()
                 ],
             ])
             ->add('dateFin', DateType::class, [
                 'required'      =>  true,
-                'format'        => 'dd-mm-YY',
+                // 'format'        => 'dd-mm-YY',
                 'label'         =>  'Date de fin du chantier',
                 'widget'        =>  'single_text',
                 'attr'          =>  [
                     'class'         =>  'form-control   datetimepicker',
                     'placeholder'   =>  'veuillez indiquer la date de fin du chantier',
                 ],
-                'html5'         =>  false,
+                'html5'         =>  true,
                 'constraints'   =>  [
                     new Assert\NotBlank()
                 ],

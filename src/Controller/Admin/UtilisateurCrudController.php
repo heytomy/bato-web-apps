@@ -60,14 +60,14 @@ class UtilisateurCrudController extends AbstractCrudController
                 'ROLE_USER' => 'success',
                 'ROLE_GESTION' => 'warning',
                 'ROLE_TECH_SAV' => 'success',
-                'ROLE_TECH_CHANTIER' => 'success'
-
+                'ROLE_TECH_CHANTIER' => 'success',
             ])
             ->setChoices([
                 'Administrateur' => 'ROLE_ADMIN',
                 'Technicien SAV' => 'ROLE_TECH_SAV',
                 'Technicien Chantier' => 'ROLE_TECH_CHANTIER',
                 'Gestion' => 'ROLE_GESTION',
+                'Utilisateur' => 'ROLE_USER',
             ]),
             TextField::new('ID_Utilisateur.Nom', 'Nom'),
             TextField::new('ID_Utilisateur.Prenom', 'Prénom'),

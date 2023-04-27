@@ -7,10 +7,12 @@ use App\Entity\DefAppsUtilisateur;
 use Doctrine\ORM\EntityManagerInterface;
 use EasyCorp\Bundle\EasyAdminBundle\Dto\EntityDto;
 use EasyCorp\Bundle\EasyAdminBundle\Field\ArrayField;
+use EasyCorp\Bundle\EasyAdminBundle\Field\ChoiceField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\BooleanField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\TextareaField;
 use EasyCorp\Bundle\EasyAdminBundle\Context\AdminContext;
 use EasyCorp\Bundle\EasyAdminBundle\Field\TelephoneField;
+use EasyCorp\Bundle\EasyAdminBundle\Orm\EntityRepository;
 use App\Controller\Admin\DefAppsUtilisateurCrudController;
 use EasyCorp\Bundle\EasyAdminBundle\Field\AssociationField;
 use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractCrudController;
@@ -19,16 +21,17 @@ use Symfony\Component\Form\{FormBuilderInterface, FormEvent, FormEvents};
 use EasyCorp\Bundle\EasyAdminBundle\Field\{IdField, EmailField, TextField};
 use Symfony\Component\Form\Extension\Core\Type\{PasswordType, RepeatedType};
 use EasyCorp\Bundle\EasyAdminBundle\Config\{Action, Actions, Crud, KeyValueStore};
+
 class UtilisateurCrudController extends AbstractCrudController
 {
     public function __construct(
+        private EntityRepository $entityRepo,
         public UserPasswordHasherInterface $userPasswordHasher
     ) {}
     
     public static function getEntityFqcn(): string
     {
         return AppsUtilisateur::class;
-        return DefAppsUtilisateur::class;
     }
 
     public function configureActions(Actions $actions): Actions
@@ -42,26 +45,40 @@ class UtilisateurCrudController extends AbstractCrudController
 
     public function configureFields(string $pageName): iterable
     {
+
         $fields = [
+        AssociationField::new('ID_Utilisateur')
+        ->setCrudController(DefAppsUtilisateurCrudController::class)
+        ->autocomplete(),
+
             IdField::new('id')->hideOnForm()->hideOnIndex(),
             TextField::new('Nom_utilisateur'),
-            ArrayField::new('roles'),
+            ChoiceField::new('roles')
+            ->allowMultipleChoices()
+            ->renderAsBadges([
+                'ROLE_ADMIN' => 'danger',
+                'ROLE_USER' => 'success',
+                'ROLE_GESTION' => 'warning',
+                'ROLE_TECH_SAV' => 'success',
+                'ROLE_TECH_CHANTIER' => 'success'
+
+            ])
+            ->setChoices([
+                'Administrateur' => 'ROLE_ADMIN',
+                'Technicien SAV' => 'ROLE_TECH_SAV',
+                'Technicien Chantier' => 'ROLE_TECH_CHANTIER',
+                'Gestion' => 'ROLE_GESTION',
+            ]),
+            TextField::new('ID_Utilisateur.Nom', 'Nom'),
+            TextField::new('ID_Utilisateur.Prenom', 'Prénom'),
+            TextareaField::new('ID_Utilisateur.Adresse', 'Adresse'),
+            TextField::new('ID_Utilisateur.CP', 'Code Postal'),
+            TextField::new('ID_Utilisateur.Ville', 'Ville'),
+            TelephoneField::new('ID_Utilisateur.Tel_1', 'Tel-1'),
+            TelephoneField::new('ID_Utilisateur.Tel_2', 'Tel-2'),
+            EmailField::new('ID_Utilisateur.Mail', 'E-Mail'),
             BooleanField::new('is_verified'),
-            TextField::new('Nom'),
-            TextField::new('Prenom'),
-            TextareaField::new('Adresse'),
-            TextField::new('CP'),
-            TextField::new('Ville'),
-            TelephoneField::new('Tel_1'),
-            TelephoneField::new('Tel_2'),
-            EmailField::new('Mail'),
         ];
-
-        $fields[] =
-            AssociationField::new('ID_Utilisateur')
-            ->setCrudController(DefAppsUtilisateurCrudController::class)
-            ->autocomplete();
-
 
         $password = TextField::new('Mot_de_passe')
             ->setFormType(RepeatedType::class)

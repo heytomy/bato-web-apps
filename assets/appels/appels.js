@@ -103,12 +103,34 @@ function infiniteScrollHandler() {
 
 // function to create a new client element
 function createClientElement(client) {
+  const dateFormatOptions = { day: 'numeric', month: 'numeric', year: 'numeric' };
+  const formattedDateDebut = new Date(client.dateDebut).toLocaleDateString('fr-FR', dateFormatOptions);
+  const formattedDateFin = new Date(client.dateFin).toLocaleDateString('fr-FR', dateFormatOptions);
+
   const clientElement = document.createElement('div');
   clientElement.classList.add('row', 'border', 'border-light', 'rounded', 'bg-client', 'm-2', 'p-2', 'client');
   clientElement.innerHTML = `
-    <h1>                        ${client.nom}</h1>
-    <div>${client.codeContrat ? '<strong>Code Contrat:</strong> ' + client.codeContrat : 'N\'a pas de contrat d\'entretien'}</div>
-    <div>${client.codeClient ? '<strong>Code Client:</strong> ' + client.codeClient : '<strong style="color: #B60E0E;">Nouveau client !</strong>'}</div>
+    <div class="d-flex justify-content-between">
+      <h1>${client.nom}</h1>
+      <p><strong>Date de rendez-vous:</strong>   ${formattedDateDebut}</p>
+    </div>
+    
+    <div class="d-flex justify-content-between">
+      <div>
+        ${client.codeContrat ? '<strong>Code Contrat:</strong> ' + client.codeContrat : 'N\'a pas de contrat d\'entretien'}
+      </div>
+      <div>
+        
+      </div>
+    </div>
+    <div class="d-flex justify-content-between">
+      <div>
+        ${client.codeClient ? '<strong>Code Client:</strong> ' + client.codeClient : '<strong style="color: #B60E0E;">Nouveau client !</strong>'}
+      </div>
+      <div class='text-primary'>
+        <strong>Technicien:</strong> ${client.technicien}
+      </div>
+    </div>
   `;
   return clientElement;
 }
@@ -155,6 +177,7 @@ function createClientModal(client, clientElement) {
               </div>
               <div class="col-md-6">
                 <p><strong>Rendez-vous urgent ?</strong>      <br> ${client.isUrgent ? '<p>Oui</p>' : '<p">Non</p>'}</p>
+                <p><strong>Technicien: </strong>  ${client.technicien}
               </div>
           </div>
         </div>

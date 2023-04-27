@@ -52,6 +52,5 @@ class DashboardController extends AbstractDashboardController
         yield MenuItem::linkToCrud('Utilisateurs', 'fa fa-user', AppsUtilisateur::class);
         yield MenuItem::linkToCrud('Appels', 'fa fa-phone', Appels::class);
         yield MenuItem::linkToCrud('Calendrier', 'fa fa-calendar', Calendrier::class);
-
     }
 }

@@ -33,9 +33,6 @@ class CommentairesAppels
     #[ORM\Column(name: 'Nom', length: 30, nullable: true)]
     private ?string $nom = null;
 
-    #[ORM\Column]
-    private ?int $codeAppels = null;
-
     #[ORM\Column(name: 'CodeClient', length: 8, nullable: true)]
     private ?string $codeClient = null;
 
@@ -45,6 +42,10 @@ class CommentairesAppels
 
     #[ORM\OneToMany(mappedBy: 'parent', targetEntity: RepCommentairesAppels::class, orphanRemoval: true)]
     private Collection $replies;
+
+    #[ORM\ManyToOne(inversedBy: 'commentairesAppels')]
+    #[ORM\JoinColumn(name: 'code_appels', referencedColumnName: 'id', nullable: false)]
+    private ?Appels $codeAppels = null;
 
     public function __construct()
     {
@@ -88,18 +89,6 @@ class CommentairesAppels
     public function setNom(?string $nom): self
     {
         $this->nom = $nom;
-
-        return $this;
-    }
-
-    public function getCodeAppels(): ?int
-    {
-        return $this->codeAppels;
-    }
-
-    public function setCodeAppels(int $codeAppels): self
-    {
-        $this->codeAppels = $codeAppels;
 
         return $this;
     }
@@ -154,6 +143,18 @@ class CommentairesAppels
                 $reply->setParent(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getCodeAppels(): ?Appels
+    {
+        return $this->codeAppels;
+    }
+
+    public function setCodeAppels(?Appels $codeAppels): self
+    {
+        $this->codeAppels = $codeAppels;
 
         return $this;
     }

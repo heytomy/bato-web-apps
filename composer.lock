@@ -1142,16 +1142,16 @@
         },
         {
             "name": "doctrine/orm",
-            "version": "2.14.2",
+            "version": "2.14.3",
             "source": {
                 "type": "git",
                 "url": "https://github.com/doctrine/orm.git",
-                "reference": "e5fb1a4a8f5aa4e37612f66a22aac10291bcbb52"
+                "reference": "a64f315dfeae5e50b17f132626fd9e9b4ec8985d"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/doctrine/orm/zipball/e5fb1a4a8f5aa4e37612f66a22aac10291bcbb52",
-                "reference": "e5fb1a4a8f5aa4e37612f66a22aac10291bcbb52",
+                "url": "https://api.github.com/repos/doctrine/orm/zipball/a64f315dfeae5e50b17f132626fd9e9b4ec8985d",
+                "reference": "a64f315dfeae5e50b17f132626fd9e9b4ec8985d",
                 "shasum": ""
             },
             "require": {
@@ -1237,9 +1237,9 @@
             ],
             "support": {
                 "issues": "https://github.com/doctrine/orm/issues",
-                "source": "https://github.com/doctrine/orm/tree/2.14.2"
+                "source": "https://github.com/doctrine/orm/tree/2.14.3"
             },
-            "time": "2023-03-30T15:18:54+00:00"
+            "time": "2023-04-20T09:46:32+00:00"
         },
         {
             "name": "doctrine/persistence",
@@ -1393,16 +1393,16 @@
         },
         {
             "name": "easycorp/easyadmin-bundle",
-            "version": "v4.6.1",
+            "version": "v4.6.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/EasyCorp/EasyAdminBundle.git",
-                "reference": "340548d93c2f6a732a71a528668fdf155d4a2f25"
+                "reference": "96ead4d842f7da1ad0183fd16b6e2596f9e2a595"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/EasyCorp/EasyAdminBundle/zipball/340548d93c2f6a732a71a528668fdf155d4a2f25",
-                "reference": "340548d93c2f6a732a71a528668fdf155d4a2f25",
+                "url": "https://api.github.com/repos/EasyCorp/EasyAdminBundle/zipball/96ead4d842f7da1ad0183fd16b6e2596f9e2a595",
+                "reference": "96ead4d842f7da1ad0183fd16b6e2596f9e2a595",
                 "shasum": ""
             },
             "require": {
@@ -1474,7 +1474,7 @@
             ],
             "support": {
                 "issues": "https://github.com/EasyCorp/EasyAdminBundle/issues",
-                "source": "https://github.com/EasyCorp/EasyAdminBundle/tree/v4.6.1"
+                "source": "https://github.com/EasyCorp/EasyAdminBundle/tree/v4.6.2"
             },
             "funding": [
                 {
@@ -1482,7 +1482,7 @@
                     "type": "github"
                 }
             ],
-            "time": "2023-03-12T10:16:10+00:00"
+            "time": "2023-04-26T18:19:05+00:00"
         },
         {
             "name": "eckinox/tinymce-bundle",
@@ -1936,16 +1936,16 @@
         },
         {
             "name": "phpstan/phpdoc-parser",
-            "version": "1.19.1",
+            "version": "1.20.3",
             "source": {
                 "type": "git",
                 "url": "https://github.com/phpstan/phpdoc-parser.git",
-                "reference": "f545fc30978190a056832aa7ed995e36a66267f3"
+                "reference": "6c04009f6cae6eda2f040745b6b846080ef069c2"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/phpstan/phpdoc-parser/zipball/f545fc30978190a056832aa7ed995e36a66267f3",
-                "reference": "f545fc30978190a056832aa7ed995e36a66267f3",
+                "url": "https://api.github.com/repos/phpstan/phpdoc-parser/zipball/6c04009f6cae6eda2f040745b6b846080ef069c2",
+                "reference": "6c04009f6cae6eda2f040745b6b846080ef069c2",
                 "shasum": ""
             },
             "require": {
@@ -1975,9 +1975,9 @@
             "description": "PHPDoc parser with support for nullable, intersection and generic types",
             "support": {
                 "issues": "https://github.com/phpstan/phpdoc-parser/issues",
-                "source": "https://github.com/phpstan/phpdoc-parser/tree/1.19.1"
+                "source": "https://github.com/phpstan/phpdoc-parser/tree/1.20.3"
             },
-            "time": "2023-04-18T11:30:56+00:00"
+            "time": "2023-04-25T09:01:03+00:00"
         },
         {
             "name": "psr/cache",
@@ -8078,16 +8078,16 @@
     "packages-dev": [
         {
             "name": "doctrine/data-fixtures",
-            "version": "1.6.5",
+            "version": "1.6.6",
             "source": {
                 "type": "git",
                 "url": "https://github.com/doctrine/data-fixtures.git",
-                "reference": "e6b97f557942ea17564bbc30ae3ebc9bd2209363"
+                "reference": "4af35dadbfcf4b00abb2a217c4c8c8800cf5fcf4"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/doctrine/data-fixtures/zipball/e6b97f557942ea17564bbc30ae3ebc9bd2209363",
-                "reference": "e6b97f557942ea17564bbc30ae3ebc9bd2209363",
+                "url": "https://api.github.com/repos/doctrine/data-fixtures/zipball/4af35dadbfcf4b00abb2a217c4c8c8800cf5fcf4",
+                "reference": "4af35dadbfcf4b00abb2a217c4c8c8800cf5fcf4",
                 "shasum": ""
             },
             "require": {
@@ -8140,7 +8140,7 @@
             ],
             "support": {
                 "issues": "https://github.com/doctrine/data-fixtures/issues",
-                "source": "https://github.com/doctrine/data-fixtures/tree/1.6.5"
+                "source": "https://github.com/doctrine/data-fixtures/tree/1.6.6"
             },
             "funding": [
                 {
@@ -8156,7 +8156,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2023-04-03T14:58:58+00:00"
+            "time": "2023-04-20T13:08:54+00:00"
         },
         {
             "name": "doctrine/doctrine-fixtures-bundle",
@@ -8243,26 +8243,24 @@
         },
         {
             "name": "masterminds/html5",
-            "version": "2.7.6",
+            "version": "2.8.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/Masterminds/html5-php.git",
-                "reference": "897eb517a343a2281f11bc5556d6548db7d93947"
+                "reference": "3c5d5a56d56f48a1ca08a0670f0f80c1dad368f3"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Masterminds/html5-php/zipball/897eb517a343a2281f11bc5556d6548db7d93947",
-                "reference": "897eb517a343a2281f11bc5556d6548db7d93947",
+                "url": "https://api.github.com/repos/Masterminds/html5-php/zipball/3c5d5a56d56f48a1ca08a0670f0f80c1dad368f3",
+                "reference": "3c5d5a56d56f48a1ca08a0670f0f80c1dad368f3",
                 "shasum": ""
             },
             "require": {
-                "ext-ctype": "*",
                 "ext-dom": "*",
-                "ext-libxml": "*",
                 "php": ">=5.3.0"
             },
             "require-dev": {
-                "phpunit/phpunit": "^4.8.35 || ^5.7.21 || ^6 || ^7"
+                "phpunit/phpunit": "^4.8.35 || ^5.7.21 || ^6 || ^7 || ^8"
             },
             "type": "library",
             "extra": {
@@ -8306,9 +8304,9 @@
             ],
             "support": {
                 "issues": "https://github.com/Masterminds/html5-php/issues",
-                "source": "https://github.com/Masterminds/html5-php/tree/2.7.6"
+                "source": "https://github.com/Masterminds/html5-php/tree/2.8.0"
             },
-            "time": "2022-08-18T16:18:26+00:00"
+            "time": "2023-04-26T07:27:39+00:00"
         },
         {
             "name": "myclabs/deep-copy",

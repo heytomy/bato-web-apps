@@ -142,7 +142,7 @@ class ChantierAppsType extends AbstractType
                 'label'         =>  'Date de début du chantier',
                 'widget'        =>  'single_text',
                 'attr'          =>  [
-                    'class'         =>  'form-control   datetimepicker',
+                    'class'         =>  'form-control',
                     'placeholder'   =>  'veuillez indiquer la date de début du chantier',
                 ],
                 'html5'         =>  true,
@@ -156,7 +156,7 @@ class ChantierAppsType extends AbstractType
                 'label'         =>  'Date de fin du chantier',
                 'widget'        =>  'single_text',
                 'attr'          =>  [
-                    'class'         =>  'form-control   datetimepicker',
+                    'class'         =>  'form-control',
                     'placeholder'   =>  'veuillez indiquer la date de fin du chantier',
                 ],
                 'html5'         =>  true,

@@ -3,20 +3,29 @@
 namespace App\Controller\Admin;
 
 use App\Entity\AppsUtilisateur;
-use EasyCorp\Bundle\EasyAdminBundle\Field\ArrayField;
-use EasyCorp\Bundle\EasyAdminBundle\Field\BooleanField;
-use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractCrudController;
-use EasyCorp\Bundle\EasyAdminBundle\Config\{Action, Actions, Crud, KeyValueStore};
-use EasyCorp\Bundle\EasyAdminBundle\Context\AdminContext;
+use App\Entity\DefAppsUtilisateur;
+use Doctrine\ORM\EntityManagerInterface;
 use EasyCorp\Bundle\EasyAdminBundle\Dto\EntityDto;
+use EasyCorp\Bundle\EasyAdminBundle\Field\ArrayField;
+use EasyCorp\Bundle\EasyAdminBundle\Field\ChoiceField;
+use EasyCorp\Bundle\EasyAdminBundle\Field\BooleanField;
+use EasyCorp\Bundle\EasyAdminBundle\Field\TextareaField;
+use EasyCorp\Bundle\EasyAdminBundle\Context\AdminContext;
+use EasyCorp\Bundle\EasyAdminBundle\Field\TelephoneField;
+use EasyCorp\Bundle\EasyAdminBundle\Orm\EntityRepository;
+use App\Controller\Admin\DefAppsUtilisateurCrudController;
+use EasyCorp\Bundle\EasyAdminBundle\Field\AssociationField;
+use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractCrudController;
+use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
+use Symfony\Component\Form\{FormBuilderInterface, FormEvent, FormEvents};
 use EasyCorp\Bundle\EasyAdminBundle\Field\{IdField, EmailField, TextField};
 use Symfony\Component\Form\Extension\Core\Type\{PasswordType, RepeatedType};
-use Symfony\Component\Form\{FormBuilderInterface, FormEvent, FormEvents};
-use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
+use EasyCorp\Bundle\EasyAdminBundle\Config\{Action, Actions, Crud, KeyValueStore};
 
-class AppsUtilisateurCrudController extends AbstractCrudController
+class UtilisateurCrudController extends AbstractCrudController
 {
     public function __construct(
+        private EntityRepository $entityRepo,
         public UserPasswordHasherInterface $userPasswordHasher
     ) {}
     
@@ -36,12 +45,39 @@ class AppsUtilisateurCrudController extends AbstractCrudController
 
     public function configureFields(string $pageName): iterable
     {
+
         $fields = [
+        AssociationField::new('ID_Utilisateur')
+        ->setCrudController(DefAppsUtilisateurCrudController::class)
+        ->autocomplete(),
+
             IdField::new('id')->hideOnForm()->hideOnIndex(),
             TextField::new('Nom_utilisateur'),
-            ArrayField::new('roles'),
+            ChoiceField::new('roles')
+            ->allowMultipleChoices()
+            ->renderAsBadges([
+                'ROLE_ADMIN' => 'danger',
+                'ROLE_USER' => 'success',
+                'ROLE_GESTION' => 'warning',
+                'ROLE_TECH_SAV' => 'success',
+                'ROLE_TECH_CHANTIER' => 'success',
+            ])
+            ->setChoices([
+                'Administrateur' => 'ROLE_ADMIN',
+                'Technicien SAV' => 'ROLE_TECH_SAV',
+                'Technicien Chantier' => 'ROLE_TECH_CHANTIER',
+                'Gestion' => 'ROLE_GESTION',
+                'Utilisateur' => 'ROLE_USER',
+            ]),
+            TextField::new('ID_Utilisateur.Nom', 'Nom'),
+            TextField::new('ID_Utilisateur.Prenom', 'Prénom'),
+            TextareaField::new('ID_Utilisateur.Adresse', 'Adresse'),
+            TextField::new('ID_Utilisateur.CP', 'Code Postal'),
+            TextField::new('ID_Utilisateur.Ville', 'Ville'),
+            TelephoneField::new('ID_Utilisateur.Tel_1', 'Tel-1'),
+            TelephoneField::new('ID_Utilisateur.Tel_2', 'Tel-2'),
+            EmailField::new('ID_Utilisateur.Mail', 'E-Mail'),
             BooleanField::new('is_verified'),
-
         ];
 
         $password = TextField::new('Mot_de_passe')
@@ -59,6 +95,25 @@ class AppsUtilisateurCrudController extends AbstractCrudController
         $fields[] = $password;
 
         return $fields;
+    }
+
+    
+    public function persistEntity(EntityManagerInterface $em, $entityInstance): void
+    {
+        if (!$entityInstance instanceof DefAppsUtilisateur) return;
+
+        parent::persistEntity($em, $entityInstance);
+    }
+
+    public function deleteEntity(EntityManagerInterface $em, $entityInstance): void
+    {
+        if (!$entityInstance instanceof DefAppsUtilisateur) return;
+
+        foreach ($entityInstance->getComptes() as $user) {
+            $em->remove($user);
+        }
+
+        parent::deleteEntity($em, $entityInstance);
     }
 
     public function createNewFormBuilder(EntityDto $entityDto, KeyValueStore $formOptions, AdminContext $context): FormBuilderInterface

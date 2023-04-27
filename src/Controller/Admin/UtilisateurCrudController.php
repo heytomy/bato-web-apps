@@ -11,6 +11,8 @@ use EasyCorp\Bundle\EasyAdminBundle\Field\BooleanField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\TextareaField;
 use EasyCorp\Bundle\EasyAdminBundle\Context\AdminContext;
 use EasyCorp\Bundle\EasyAdminBundle\Field\TelephoneField;
+use App\Controller\Admin\DefAppsUtilisateurCrudController;
+use EasyCorp\Bundle\EasyAdminBundle\Field\AssociationField;
 use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractCrudController;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\Form\{FormBuilderInterface, FormEvent, FormEvents};
@@ -47,7 +49,6 @@ class UtilisateurCrudController extends AbstractCrudController
             TextField::new('Nom_utilisateur'),
             ArrayField::new('roles'),
             BooleanField::new('is_verified'),
-            IdField::new('id')->hideOnForm(),
             TextField::new('Nom'),
             TextField::new('Prenom'),
             TextareaField::new('Adresse'),
@@ -57,6 +58,12 @@ class UtilisateurCrudController extends AbstractCrudController
             TelephoneField::new('Tel_2'),
             EmailField::new('Mail'),
         ];
+
+        $fields[] =
+            AssociationField::new('ID_Utilisateur')
+            ->setCrudController(DefAppsUtilisateurCrudController::class)
+            ->autocomplete();
+
 
         $password = TextField::new('Mot_de_passe')
             ->setFormType(RepeatedType::class)

@@ -138,6 +138,7 @@ class ChantierAppsType extends AbstractType
             ])
             ->add('dateDebut', DateType::class, [
                 'required'      =>  true,
+                'format'        => 'dd-mm-YY',
                 'label'         =>  'Date de début du chantier',
                 'widget'        =>  'single_text',
                 'attr'          =>  [
@@ -151,6 +152,7 @@ class ChantierAppsType extends AbstractType
             ])
             ->add('dateFin', DateType::class, [
                 'required'      =>  true,
+                'format'        => 'dd-mm-YY',
                 'label'         =>  'Date de fin du chantier',
                 'widget'        =>  'single_text',
                 'attr'          =>  [

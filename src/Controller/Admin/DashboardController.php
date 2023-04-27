@@ -12,7 +12,9 @@ use App\Controller\Admin\ClientDefCrudController;
 use EasyCorp\Bundle\EasyAdminBundle\Config\MenuItem;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Dashboard;
 use App\Controller\Admin\AppsUtilisateurCrudController;
-use App\Controller\AppelsController;
+use App\Entity\Appels;
+use App\Entity\Calendrier;
+use App\Entity\ChantierApps;
 use EasyCorp\Bundle\EasyAdminBundle\Router\AdminUrlGenerator;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractDashboardController;
@@ -50,11 +52,9 @@ class DashboardController extends AbstractDashboardController
         yield MenuItem::linkToDashboard('Dashboard', 'fa-solid fa-gear');
 
         yield MenuItem::linkToCrud('Clients', 'fa fa-plus', ClientDef::class);
-
-        yield menuItem::section('Users');
-        yield MenuItem::linkToCrud('Utilisateurs', 'fa fa-plus', AppsUtilisateur::class);
-        yield MenuItem::linkToCrud('DefUtilisateurs', 'fa fa-plus', DefAppsUtilisateur::class);
-
-
+        yield MenuItem::linkToCrud('Utilisateurs', 'fa fa-user', AppsUtilisateur::class);
+        yield MenuItem::linkToCrud('DefUtilisateurs', 'fa fa-user', DefAppsUtilisateur::class);
+        yield MenuItem::linkToCrud('Appels', 'fa fa-phone', Appels::class);
+        yield MenuItem::linkToCrud('Calendrier', 'fa fa-calendar', Calendrier::class);
     }
 }

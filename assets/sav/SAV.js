@@ -136,7 +136,7 @@ function createClientModal(client, clientElement) {
         <div class="modal-body">
           <div class="row">
             <div class="col-md-6">
-              <p><strong>Code du chantier:</strong>    ${client.codeChantier}</p>
+              <p><strong>Code Contrat:</strong>    ${client.codeContrat}</p>
               <p><strong>Code Client:</strong>         ${client.codeClient}</p>
             </div>
               <div class="col-md-6">

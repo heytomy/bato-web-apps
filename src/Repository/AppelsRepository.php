@@ -101,7 +101,7 @@ class AppelsRepository extends ServiceEntityRepository
                 'email'                 =>  $appel->getEmail(),
                 'dateDebut'             =>  $appel->getRdv()->getDateDebut(),
                 'dateFin'               =>  $appel->getRdv()->getDateFin(),
-                'technicien'            =>  $appel->getIDUtilisateur()->getIdUtilisateur()->getNom(),
+                'technicien'            =>  $appel->getIDUtilisateur()->getIdUtilisateur()->getNom() .' '. $appel->getIDUtilisateur()->getIdUtilisateur()->getPrenom(),
                 'statut'                =>  $appel->getStatut()->getStatut(),
                 'isUrgent'              =>  $appel->isUrgent(),
             ];

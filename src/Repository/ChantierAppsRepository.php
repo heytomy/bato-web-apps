@@ -98,6 +98,7 @@ class ChantierAppsRepository extends ServiceEntityRepository
                 'dateDebut'             =>  $client->getDateDebut(),
                 'dateFin'               =>  $client->getDateFin(),
                 'statut'                =>  $client->getStatut()->getStatut(),
+                'technicien'            =>  $client->getIDUtilisateur()->getIDUtilisateur()->getNom() . ' ' . $client->getIDUtilisateur()->getIDUtilisateur()->getPrenom(),
             ];
         }
         

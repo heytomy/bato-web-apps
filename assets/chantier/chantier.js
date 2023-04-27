@@ -103,12 +103,24 @@ function infiniteScrollHandler() {
 
 // function to create a new client element
 function createClientElement(client) {
+  const dateFormatOptions = { day: 'numeric', month: 'numeric', year: 'numeric' };
+  const formattedDateDebut = new Date(client.dateDebut).toLocaleDateString('fr-FR', dateFormatOptions);
+  const formattedDateFin = new Date(client.dateFin).toLocaleDateString('fr-FR', dateFormatOptions);
+
   const clientElement = document.createElement('div');
   clientElement.classList.add('row', 'border', 'border-light', 'rounded', 'bg-client', 'm-2', 'p-2', 'client');
   clientElement.innerHTML = `
-    <h1>                        ${client.nom}</h1>
-    <div>Code du chantier:      ${client.codeChantier}</div>
-    <div>Code du client:        ${client.codeClient}</div>
+    <div class='col'>
+      <h1 class='row'>                        ${client.nom}</h1>
+      <div class='row'>Code du chantier:      ${client.codeChantier}</div>
+      <div class='row'>Code du client:        ${client.codeClient}</div>
+    </div>
+    <div class='col'>
+      <div class='row'><p><strong>Date debut du chantier:</strong>   ${formattedDateDebut}</p></div>
+      <div class='row'><p><strong>Fin prévu le:</strong>             ${formattedDateFin}</p></div>
+      <div class='row text-primary'><p><strong>Technicien: </strong>${client.technicien}</p></div>
+    </div>
+
   `;
   return clientElement;
 }
@@ -155,6 +167,7 @@ function createClientModal(client, clientElement) {
               </div>
               <div class="col-md-6">
                 <p><strong>Libellé:</strong>                  ${client.libelle}</p>
+                <p><strong>Technicien: </strong>              ${client.technicien}</p>
               </div>
           </div>
         </div>

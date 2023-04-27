@@ -61,22 +61,40 @@ class CalendarSubscriber implements EventSubscriberInterface
              * For more information see: https://fullcalendar.io/docs/event-object
              * and: https://github.com/fullcalendar/fullcalendar/blob/master/src/core/options.ts
              */
+
+             /**
+              * 'backgroundColor' => '#26d4ae',
+              * 'borderColor' => $booking->get,
+              */
             
-            $bookingEvent->setOptions([
-                'backgroundColor' => '#26d4ae',
-                'borderColor' => '#26d4ae',
-                'id' => $booking->getId(),
-                'allDay' => $booking->isAllDay(),
-            ]);
             if (null !== $booking->getChantier()) {
+                $color = $booking->getChantier()->getIDUtilisateur()->getColorCode();
+
+                $bookingEvent->setOptions([
+                    'id' => $booking->getId(),
+                    'allDay' => $booking->isAllDay(),
+                    'backgroundColor' => $color,
+                    'borderColor' => $color,
+                ]);
+
                 $bookingEvent->addOption(
                     'url',
                     $this->router->generate('app_chantier_show', [
                         'id' => $booking->getChantier()->getId(),
                     ])
-                );
+                );  
             }
+            
             if (null !== $booking->getAppels()) {
+                $color = $booking->getAppels()->getIDUtilisateur()->getColorCode();
+
+                $bookingEvent->setOptions([
+                    'id' => $booking->getId(),
+                    'allDay' => $booking->isAllDay(),
+                    'backgroundColor' => $color,
+                    'borderColor' => $color,
+                ]);
+
                 $bookingEvent->addOption(
                     'url',
                     $this->router->generate('app_appels_show', [

@@ -51,7 +51,10 @@ class SAVController extends AbstractController
         PhotosSAVRepository $photosSAVRepository
         ): Response
     {
-        $comments = $commentairesSAVRepository->findBy(['codeContrat' => $contrat->getId()]);
+        $comments = $commentairesSAVRepository->findBy(
+            ['codeContrat'  =>  $contrat->getId()],
+            ['date_com'     =>  'DESC'],
+        );
         $user = $this->getUser() ?? null;
         $nom = $user->getIdUtilisateur()->getNom() ." ". $user->getIdUtilisateur()->getPrenom();
         /**
@@ -80,7 +83,10 @@ class SAVController extends AbstractController
          * Partie Réponses
          */
         // On récupère toutes les réponses liées à ce contrat
-        $replies = $repCommentairesSAVRepository->findBy(['codeClient' => $contrat->getCodeClient()->getId()]) ?? null;
+        $replies = $repCommentairesSAVRepository->findBy(
+            ['codeClient' => $contrat->getCodeClient()->getId()],
+            ['date_com'     =>  'DESC'],
+            ) ?? null;
 
         // On crée le formulaires pour les réponses
         $reply = new RepCommentairesSAV();

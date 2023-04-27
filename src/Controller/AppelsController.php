@@ -160,7 +160,7 @@ class AppelsController extends AbstractController
         ): Response
     {
         $user = $this->getUser() ?? null;
-        $comments = $commentairesAppelsRepository->findBy(['codeAppels' => $appel->getId()]);
+        $comments = $commentairesAppelsRepository->findBy(['codeAppels' => $appel]);
         $nom = $user->getIdUtilisateur()->getNom() ." ". $user->getIdUtilisateur()->getPrenom();
 
         /**
@@ -174,7 +174,7 @@ class AppelsController extends AbstractController
             $comment
                 ->setDateCom(new DateTime())
                 ->setNom($nom)
-                ->setCodeAppels($appel->getId())
+                ->setCodeAppels($appel)
                 ->setOwner($user->getIDUtilisateur())
                 ;
             if ($appel->getCodeClient()) {

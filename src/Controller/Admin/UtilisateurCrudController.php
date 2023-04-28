@@ -37,7 +37,7 @@ class UtilisateurCrudController extends AbstractCrudController
     public function configureActions(Actions $actions): Actions
     {
         return $actions
-            ->add(Crud::PAGE_EDIT, Action::INDEX)
+            ->add(Crud::PAGE_NEW, Action::NEW)
             ->add(Crud::PAGE_INDEX, Action::DETAIL)
             ->add(Crud::PAGE_EDIT, Action::DETAIL)
             ;
@@ -47,12 +47,12 @@ class UtilisateurCrudController extends AbstractCrudController
     {
 
         $fields = [
-        AssociationField::new('ID_Utilisateur')
+        AssociationField::new('ID_Utilisateur')->hideOnForm()->hideOnIndex()
         ->setCrudController(DefAppsUtilisateurCrudController::class)
         ->autocomplete(),
 
             IdField::new('id')->hideOnForm()->hideOnIndex(),
-            TextField::new('Nom_utilisateur'),
+            TextField::new('Nom_Utilisateur'),
             ChoiceField::new('roles')
             ->allowMultipleChoices()
             ->renderAsBadges([
@@ -63,11 +63,11 @@ class UtilisateurCrudController extends AbstractCrudController
                 'ROLE_TECH_CHANTIER' => 'success',
             ])
             ->setChoices([
+                'Utilisateur' => 'ROLE_USER',
                 'Administrateur' => 'ROLE_ADMIN',
                 'Technicien SAV' => 'ROLE_TECH_SAV',
                 'Technicien Chantier' => 'ROLE_TECH_CHANTIER',
                 'Gestion' => 'ROLE_GESTION',
-                'Utilisateur' => 'ROLE_USER',
             ]),
             TextField::new('ID_Utilisateur.Nom', 'Nom'),
             TextField::new('ID_Utilisateur.Prenom', 'Prénom'),
@@ -84,9 +84,11 @@ class UtilisateurCrudController extends AbstractCrudController
             ->setFormType(RepeatedType::class)
             ->setFormTypeOptions([
                 'type' => PasswordType::class,
-                'first_options' => ['label' => 'Password'],
-                'second_options' => ['label' => '(Repeat)'],
-                'mapped' => false,
+                'invalid_message' => 'Les mots de passe doivent correspondre.',
+                'options' => ['attr' => ['class' => 'password-field']],
+                'required' => true,
+                'first_options'  => ['label' => 'Mot de passe'],
+                'second_options' => ['label' => 'Répétez le mot de passe'],
             ])
             ->setRequired($pageName === Crud::PAGE_NEW)
             ->onlyOnForms()
@@ -95,6 +97,12 @@ class UtilisateurCrudController extends AbstractCrudController
         $fields[] = $password;
 
         return $fields;
+    }
+
+    public function createEntity(string $entityFqcn)
+    {
+        $user = new DefAppsUtilisateur();
+        return $user;
     }
 
     

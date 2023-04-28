@@ -3,9 +3,12 @@
 namespace App\Controller\Admin;
 
 use App\Entity\DefAppsUtilisateur;
+use EasyCorp\Bundle\EasyAdminBundle\Field\IdField;
+use EasyCorp\Bundle\EasyAdminBundle\Field\TextField;
+use EasyCorp\Bundle\EasyAdminBundle\Field\EmailField;
+use EasyCorp\Bundle\EasyAdminBundle\Field\TextareaField;
+use EasyCorp\Bundle\EasyAdminBundle\Field\TelephoneField;
 use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractCrudController;
-use EasyCorp\Bundle\EasyAdminBundle\Field\{CollectionField, IdField, EmailField, TextField, TelephoneField, TextareaField};
-use EasyCorp\Bundle\EasyAdminBundle\Config\{Action, Actions, Crud, KeyValueStore};
 
 class DefAppsUtilisateurCrudController extends AbstractCrudController
 {
@@ -14,19 +17,11 @@ class DefAppsUtilisateurCrudController extends AbstractCrudController
         return DefAppsUtilisateur::class;
     }
 
-    public function configureActions(Actions $actions): Actions
-    {
-        return $actions
-            ->add(Crud::PAGE_EDIT, Action::INDEX)
-            ->add(Crud::PAGE_INDEX, Action::DETAIL)
-            ->add(Crud::PAGE_EDIT, Action::DETAIL);
-    }
-
 
     public function configureFields(string $pageName): iterable
     {
-        $fields = [
-            IdField::new('id')->hideOnForm(),
+        return [
+            IdField::new('id')->hideOnForm()->hideOnIndex(),
             TextField::new('Nom'),
             TextField::new('Prenom'),
             TextareaField::new('Adresse'),
@@ -36,7 +31,6 @@ class DefAppsUtilisateurCrudController extends AbstractCrudController
             TelephoneField::new('Tel_2'),
             EmailField::new('Mail'),
         ];
-
-        return $fields;
     }
+
 }

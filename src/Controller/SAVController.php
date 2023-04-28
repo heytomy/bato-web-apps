@@ -26,7 +26,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 class SAVController extends AbstractController
 {
     #[Route('/', name: 'app_sav')]
-    public function index(Request $request, ContratRepository $contratRepository): Response
+    public function index(Request $request): Response
     {
         $savSearch = new SAVSearch;
         $searchForm = $this->createForm(SAVSearchType::class, $savSearch);

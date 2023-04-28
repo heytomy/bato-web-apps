@@ -7,23 +7,26 @@
 <main role="main">
     <div class="container">
     
-            {% for message in app.flashes('success') %}
-            <div class="alert alert-success alert-dismissible fade show mt-1" role="alert">
-                {{ message }}
-                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-            </div>
+{% for message in app.flashes('success') %}
+    {% if loop.first %}
+        <div class="alert alert-success alert-dismissible fade show mt-1" role="alert">
+            {{ message }}
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
 
-            <script>
+        <script>
+            setTimeout(function () {
+                var alert = document.querySelector('.alert');
+                alert.classList.remove('show');
+                alert.classList.add('hide');
                 setTimeout(function () {
-        var alert = document.querySelector('.alert');
-        alert.classList.remove('show');
-        alert.classList.add('hide');
-        setTimeout(function () {
-        alert.remove();
-        }, 1000);
-        }, 5000);
-            </script>
-        {% endfor %}
+                    alert.remove();
+                }, 1000);
+            }, 5000);
+        </script>
+    {% endif %}
+{% endfor %}
+
 
         <div class="row border border-light rounded bg-light m-2 p-1">
     {% if app.user %}

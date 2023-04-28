@@ -35,7 +35,7 @@ class ChantierController extends AbstractController
     }
 
     #[Route('/new', name: 'app_chantier_new', methods: ['GET', 'POST'])]
-    public function new(Request $request, ChantierAppsRepository $chantierAppsRepository, EntityManagerInterface $em, StatutChantierRepository $statutChantierRepository): Response
+    public function new(Request $request, EntityManagerInterface $em, StatutChantierRepository $statutChantierRepository): Response
     {
         $statutEnCours = $statutChantierRepository->findOneBy(['statut' => 'EN_COURS']);
         
@@ -49,6 +49,8 @@ class ChantierController extends AbstractController
 
         if ($form->isSubmitted() && $form->isValid()) {
             $chantier->setStatut($statutEnCours);
+            $cleanDescription = strip_tags($form->get('description')->getData());
+
             $rdv
                 ->setTitre($chantier->getCodeClient()->getNom())
                 ->setDateDebut($chantier->getDateDebut())
@@ -57,7 +59,9 @@ class ChantierController extends AbstractController
                 ->setChantier($chantier)
                 ;
 
-            dd($chantier);
+            $chantier
+                ->setDescription($cleanDescription);
+            
 
             $em->persist($chantier);
             $em->flush($chantier);

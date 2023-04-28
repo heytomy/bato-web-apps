@@ -68,9 +68,7 @@ class RegistrationController extends AbstractController
                     )
                 )
                 ->setIDUtilisateur($DefAppsUser);
-        
-            // dd($AppsUser);
-            
+                    
             $entityManager->persist($DefAppsUser);
             $entityManager->persist($AppsUser);
             $entityManager->flush();

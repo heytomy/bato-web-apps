@@ -12,8 +12,12 @@
 
 {% block list %}
     <h1 class="text-center font-weight-bold" style="font-size: 3em;">Modifier les information du Chantier</h1>
-
-    {{ include('chantier/_form.html.twig') }}
+    {% if chantier.getStatut.statut == 'EN_COURS' %} 
+        {{ include('chantier/_form.html.twig') }}
+    {% elseif chantier.getStatut.statut == 'TERMINE' %}
+        {{ include('chantier/_form_termine.html.twig') }}
+    {% endif %}
+    
     {% include '_inc/flatpickr.html.twig' %}
 
 {% endblock %}

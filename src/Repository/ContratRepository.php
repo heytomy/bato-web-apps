@@ -61,9 +61,11 @@ class ContratRepository extends ServiceEntityRepository
      */
     public function findByLimit(?int $offset = 0, int $limit = 10)
     {
-        $qb = $this->createQueryBuilder('c');
+        $qb = $this->createQueryBuilder('contrat');
 
         $qb->select()
+            ->innerJoin('contrat.CodeClient', 'client')
+            ->orderBy('client.Nom', 'ASC')
             ->setFirstResult($offset)
             ->setMaxResults($limit)
         ;

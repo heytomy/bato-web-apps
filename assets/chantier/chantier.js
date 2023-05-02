@@ -14,6 +14,8 @@ const limit = 10;
 let isFetching = false;
 let inputValue = '';
 
+let isTermine = false;
+
 
 // add event listener to hide the "Back to top" button when the user scrolls back to the top of the page
 window.addEventListener('scroll', function() {
@@ -42,7 +44,8 @@ function fetchClients() {
         body: JSON.stringify({
         offset: offset,
         limit: limit,
-        search: inputValue
+        search: inputValue,
+        isTermine: isTermine,
         })
     })
     .then(response => response.json())
@@ -210,22 +213,24 @@ backToTopButton.addEventListener('click', backToTop)
 // fetch initial set of clients
 fetchClients();
 
-// const form = document.querySelector('#search-form');
-// form.addEventListener('submit', event => {
-//   event.preventDefault();
+const form = document.querySelector('#search-form');
+form.addEventListener('submit', event => {
+  event.preventDefault();
 
-//   removeElementsByClass('client');
+  removeElementsByClass('client');
 
-//   inputValue = document.querySelector('#nom').value;
-//   url = '/ajax/chantier/search';
+  inputValue = document.querySelector('#nom').value;
+  url = '/ajax/chantier/search';
 
-//   fetchClients();
-// })
+  fetchClients();
+})
 
 const statutHeader = document.querySelector('.statut');
 const chantierEnCours = document.querySelector('#chantierEnCours');
 chantierEnCours.addEventListener('click', event => {
   statutHeader.textContent = 'Les chantiers en cours';
+
+  isTermine = false;
 
   offset = 0;
   removeElementsByClass('client');
@@ -237,6 +242,8 @@ chantierEnCours.addEventListener('click', event => {
 const chantierTermine = document.querySelector('#chantierTermine');
 chantierTermine.addEventListener('click', event => {
   statutHeader.textContent = 'Les chantiers archivés';
+
+  isTermine = true;
 
   offset = 0;
   removeElementsByClass('client');

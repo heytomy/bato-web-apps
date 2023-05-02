@@ -3,10 +3,14 @@
 namespace App\Controller\Admin;
 
 use App\Entity\AppsUtilisateur;
+use Doctrine\ORM\EntityManager;
 use App\Entity\DefAppsUtilisateur;
+use App\Form\RegistrationFormType;
 use Doctrine\ORM\EntityManagerInterface;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
+use Doctrine\Common\Collections\ArrayCollection;
 use EasyCorp\Bundle\EasyAdminBundle\Dto\EntityDto;
-use EasyCorp\Bundle\EasyAdminBundle\Field\ArrayField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\ChoiceField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\BooleanField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\TextareaField;
@@ -18,15 +22,17 @@ use EasyCorp\Bundle\EasyAdminBundle\Field\AssociationField;
 use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractCrudController;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\Form\{FormBuilderInterface, FormEvent, FormEvents};
-use EasyCorp\Bundle\EasyAdminBundle\Field\{IdField, EmailField, TextField};
 use Symfony\Component\Form\Extension\Core\Type\{PasswordType, RepeatedType};
 use EasyCorp\Bundle\EasyAdminBundle\Config\{Action, Actions, Crud, KeyValueStore};
+use EasyCorp\Bundle\EasyAdminBundle\Field\{ColorField, IdField, EmailField, TextField};
 
 class UtilisateurCrudController extends AbstractCrudController
 {
+    
     public function __construct(
         private EntityRepository $entityRepo,
-        public UserPasswordHasherInterface $userPasswordHasher
+        private UserPasswordHasherInterface $userPasswordHasher,
+        private EntityManagerInterface $em,
     ) {}
     
     public static function getEntityFqcn(): string
@@ -34,36 +40,46 @@ class UtilisateurCrudController extends AbstractCrudController
         return AppsUtilisateur::class;
     }
 
+    public function createEntity(string $entityFqcn)
+    {
+        // $appsUser = new AppsUtilisateur();
+        // return $appsUser;
+    }
+
     public function configureActions(Actions $actions): Actions
     {
         return $actions
             ->add(Crud::PAGE_NEW, Action::NEW)
             ->add(Crud::PAGE_INDEX, Action::DETAIL)
-            ->add(Crud::PAGE_EDIT, Action::DETAIL)
+            ->add(Crud::PAGE_EDIT, Action::EDIT)
             ;
+    }
+
+    public function configureCrud(Crud $crud): Crud
+    {
+        return $crud
+            ->setPageTitle('index', 'Gestion des utilisateurs')
+            ->setPageTitle('edit', 'Modification de l\'utilisateur')
+            ->setPageTitle('new', 'Création d\'un utilisateur');
     }
 
     public function configureFields(string $pageName): iterable
     {
-
         $fields = [
         AssociationField::new('ID_Utilisateur')->hideOnForm()->hideOnIndex()
         ->setCrudController(DefAppsUtilisateurCrudController::class)
         ->autocomplete(),
-
+        
             IdField::new('id')->hideOnForm()->hideOnIndex(),
-            TextField::new('Nom_Utilisateur'),
+            TextField::new('Nom_utilisateur'),
             ChoiceField::new('roles')
-            ->allowMultipleChoices()
             ->renderAsBadges([
                 'ROLE_ADMIN' => 'danger',
-                'ROLE_USER' => 'success',
                 'ROLE_GESTION' => 'warning',
                 'ROLE_TECH_SAV' => 'success',
                 'ROLE_TECH_CHANTIER' => 'success',
             ])
             ->setChoices([
-                'Utilisateur' => 'ROLE_USER',
                 'Administrateur' => 'ROLE_ADMIN',
                 'Technicien SAV' => 'ROLE_TECH_SAV',
                 'Technicien Chantier' => 'ROLE_TECH_CHANTIER',
@@ -78,6 +94,7 @@ class UtilisateurCrudController extends AbstractCrudController
             TelephoneField::new('ID_Utilisateur.Tel_2', 'Tel-2'),
             EmailField::new('ID_Utilisateur.Mail', 'E-Mail'),
             BooleanField::new('is_verified'),
+            ColorField::new('colorCode'),
         ];
 
         $password = TextField::new('Mot_de_passe')
@@ -99,12 +116,56 @@ class UtilisateurCrudController extends AbstractCrudController
         return $fields;
     }
 
-    public function createEntity(string $entityFqcn)
-    {
-        $user = new DefAppsUtilisateur();
-        return $user;
-    }
+    public function new(AdminContext $context)
+    {   
 
+        $appsUser = new AppsUtilisateur();
+        $form = $this->createForm(RegistrationFormType::class, $appsUser);
+        $form->handleRequest($context->getRequest());
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $DefAppsUser = new DefAppsUtilisateur();
+            $DefAppsUser
+                ->setPrenom($form->get('Prenom')->getData())
+                ->setNom($form->get('Nom')->getData())
+                ->setAdresse($form->get('Adresse')->getData())
+                ->setCP($form->get('CP')->getData())
+                ->setVille($form->get('Ville')->getData())
+                ->setMail($form->get('Mail')->getData())
+                ->setTel1($form->get('Tel_1')->getData())
+                ->setTel2($form->get('Tel_2')->getData());
+
+            $roles = $form->get('roles')->getData()->toArray();
+
+            dd($form->get('roles'));
+
+
+            $appsUser
+                ->setNomUtilisateur($form->get('Nom_utilisateur')->getData())
+                ->setColorCode($form->get('colorCode')->getData())
+                ->addRole($roles)
+                ->setIsVerified(true)
+                ->setPassword(
+                    $this->userPasswordHasher->hashPassword(
+                        $appsUser,
+                        $form->get('plainPassword')->getData()
+                    )
+                )
+                ->setIDUtilisateur($DefAppsUser);
+
+            
+            $this->em->persist($DefAppsUser);
+            $this->em->persist($appsUser);
+            $this->em->flush();
+
+
+            $this->addFlash('success', 'L\'utilisateur à été crée avec succès! ');
+            return $this->redirectToRoute('admin');
+        }
+
+        return parent::new($context);
+
+    }
     
     public function persistEntity(EntityManagerInterface $em, $entityInstance): void
     {

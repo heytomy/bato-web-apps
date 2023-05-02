@@ -4,7 +4,13 @@
 
 {% block search %}
     <div class="p-2 col d-flex flex-row-reverse">
-        <a class="btn btn-secondary p-2" href="{{ path('app_chantier_edit', {'id': chantier.id}) }}">
+        <a class="btn btn-secondary p-2"
+            {% if chantier.getStatut.statut == 'EN_COURS' %} 
+                href="{{ path('app_chantier_edit', {'id': chantier.id}) }}"
+            {% elseif chantier.getStatut.statut == 'TERMINE' %}
+                href="{{ path('app_chantier_edit_termine', {'id': chantier.id}) }}"
+            {% endif %}
+        >
             <i class="fa-solid fa-pen-to-square"></i>
             Modifier
         </a>

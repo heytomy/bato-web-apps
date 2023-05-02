@@ -8,6 +8,7 @@ use App\Entity\ChantierApps;
 use App\Form\ChantierAppsType;
 use App\Entity\CommentairesChantier;
 use App\Entity\RepCommentairesChantier;
+use App\Form\ChantierTermineType;
 use App\Form\CommentairesChantierType;
 use App\Form\RepCommentairesChantierType;
 use Doctrine\ORM\EntityManagerInterface;
@@ -19,6 +20,7 @@ use Symfony\Component\Routing\Annotation\Route;
 use App\Repository\CommentairesChantierRepository;
 use App\Repository\RepCommentairesChantierRepository;
 use App\Repository\StatutChantierRepository;
+use Exception;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
@@ -168,10 +170,15 @@ class ChantierController extends AbstractController
     public function edit(
         Request $request, 
         ChantierApps $chantier, 
-        ChantierAppsRepository $chantierAppsRepository, 
-        EntityManagerInterface $em
+        EntityManagerInterface $em,
+        StatutChantierRepository $statutChantierRepository,
         ): Response
     {
+        $statutEnCours = $statutChantierRepository->findOneBy(['statut' => 'EN_COURS']);
+        if ($chantier->getStatut() !== $statutEnCours) {
+            throw new Exception('Le statut du chantier n\'est pas le bon', 406);
+        }
+
         $form = $this->createForm(ChantierAppsType::class, $chantier);
         $form->handleRequest($request);
         $rdv = $chantier->getRdv();
@@ -190,6 +197,35 @@ class ChantierController extends AbstractController
 
             $em->persist($rdv);
             $em->flush($rdv);
+            return $this->redirectToRoute('app_chantier_show', ['id' => $chantier->getId()], Response::HTTP_SEE_OTHER);
+        }
+
+        return $this->renderForm('chantier/edit.html.twig', [
+            'chantier'      =>  $chantier,
+            'form'          =>  $form,
+            'current_page'  =>  'app_chantier',
+        ]);
+    }
+
+    #[Route('/{id}/edit/termine', name: 'app_chantier_edit_termine', methods: ['GET', 'POST'])]
+    public function editTermine(
+        Request $request, 
+        ChantierApps $chantier, 
+        EntityManagerInterface $em,
+        StatutChantierRepository $statutChantierRepository,
+        ): Response
+    {
+        $statutTermine = $statutChantierRepository->findOneBy(['statut' => 'TERMINE']);
+        if ($chantier->getStatut() !== $statutTermine) {
+            throw new Exception('Le statut du chantier n\'est pas le bon', 406);
+        }
+
+        $form = $this->createForm(ChantierTermineType::class, $chantier);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $em->persist($chantier);
+            $em->flush($chantier);
             return $this->redirectToRoute('app_chantier_show', ['id' => $chantier->getId()], Response::HTTP_SEE_OTHER);
         }
 

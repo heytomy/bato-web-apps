@@ -44,7 +44,8 @@ class ChantierAppsRepository extends ServiceEntityRepository
         $qb = $this->createQueryBuilder('c')
                 ->innerJoin('c.statut', 's')
                 ->andWhere('s.statut = :statut')
-                ->setParameter('statut', $statut);;
+                ->setParameter('statut', $statut)
+                ;
 
         $qb->select(
             $qb->expr()->count(x: 'c.id')
@@ -103,6 +104,22 @@ class ChantierAppsRepository extends ServiceEntityRepository
         }
         
         return $data;
+    }
+
+    public function findBySearchQuery(string $nom, ?string $statut = 'EN_COURS')
+    {
+        $query = $this->createQueryBuilder('chantier');
+        if ($nom !== null) {
+            $query
+                ->innerJoin('chantier.statut', 's')
+                ->andWhere('s.statut = :statut')
+                ->setParameter('statut', $statut)
+                ->innerJoin('chantier.codeClient', 'client')
+                ->andWhere('client.Nom LIKE :nom')
+                ->setParameter(':nom', '%'.$nom.'%')
+            ;
+        }
+        return $query->getQuery()->getResult();
     }
 
 //    /**

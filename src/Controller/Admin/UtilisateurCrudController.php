@@ -2,16 +2,11 @@
 
 namespace App\Controller\Admin;
 
-use App\Entity\Roles;
 use App\Entity\AppsUtilisateur;
-use Doctrine\ORM\EntityManager;
 use App\Entity\DefAppsUtilisateur;
-use App\Form\RegistrationFormType;
 use App\Repository\RolesRepository;
 use Doctrine\ORM\EntityManagerInterface;
-use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpFoundation\Response;
-use Doctrine\Common\Collections\ArrayCollection;
+use Symfony\Component\Form\CallbackTransformer;
 use EasyCorp\Bundle\EasyAdminBundle\Dto\EntityDto;
 use EasyCorp\Bundle\EasyAdminBundle\Field\ChoiceField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\BooleanField;
@@ -46,8 +41,12 @@ class UtilisateurCrudController extends AbstractCrudController
     public function createEntity(string $entityFqcn)
     {
         // $appsUser = new AppsUtilisateur();
+        // $defAppsUser = new DefAppsUtilisateur();
+        // $appsUser->setIDUtilisateur($defAppsUser);
+
         // return $appsUser;
     }
+
 
     public function configureActions(Actions $actions): Actions
     {
@@ -120,55 +119,54 @@ class UtilisateurCrudController extends AbstractCrudController
         return $fields;
     }
 
-    public function new(AdminContext $context)
-    {   
+    // public function new(AdminContext $context)
+    // {   
+    //     $AppsUser = new AppsUtilisateur();
+    //     $DefAppsUser = new DefAppsUtilisateur();
 
-        $AppsUser = new AppsUtilisateur();
-        $DefAppsUser = new DefAppsUtilisateur();
+    //     $form = $this->createForm($AppsUser);
+    //     $form->handleRequest($context->getRequest());
 
-        $form = $this->createForm(RegistrationFormType::class, $AppsUser);
-        $form->handleRequest($context->getRequest());
+    //     if ($form->isSubmitted() && $form->isValid()) {
 
-        if ($form->isSubmitted() && $form->isValid()) {
+    //         $selectedRoles = $form->get('roles')->getData();
 
-            $selectedRoles = $form->get('roles')->getData();
+    //         $AppsUser
+    //             ->setNomUtilisateur($form->get('AppsUtilisateur_Nom_utilisateur')->getData())
+    //             ->setColorCode($form->get('colorCode')->getData())
+    //             ->addRole($selectedRoles)
+    //             ->setIsVerified(true)
+    //             ->setPassword(
+    //                 $this->userPasswordHasher->hashPassword(
+    //                     $AppsUser,
+    //                     $form->get('plainPassword')->getData()
+    //                 )
+    //             )
+    //             ->setIDUtilisateur($DefAppsUser);
 
-            $AppsUser
-                ->setNomUtilisateur($form->get('AppsUtilisateur_Nom_utilisateur')->getData())
-                ->setColorCode($form->get('colorCode')->getData())
-                // ->addRole($selectedRoles)
-                ->setIsVerified(true)
-                ->setPassword(
-                    $this->userPasswordHasher->hashPassword(
-                        $AppsUser,
-                        $form->get('plainPassword')->getData()
-                    )
-                )
-                ->setIDUtilisateur($DefAppsUser);
-
-            $DefAppsUser
-                ->setPrenom($form->get('Prenom')->getData())
-                ->setNom($form->get('AppsUtilisateur_ID_Utilisateur_Nom')->getData())
-                ->setAdresse($form->get('Adresse')->getData())
-                ->setCP($form->get('CP')->getData())
-                ->setVille($form->get('Ville')->getData())
-                ->setMail($form->get('Mail')->getData())
-                ->setTel1($form->get('Tel_1')->getData())
-                ->setTel2($form->get('Tel_2')->getData());
+    //         $DefAppsUser
+    //             ->setPrenom($form->get('Prenom')->getData())
+    //             ->setNom($form->get('AppsUtilisateur_ID_Utilisateur_Nom')->getData())
+    //             ->setAdresse($form->get('Adresse')->getData())
+    //             ->setCP($form->get('CP')->getData())
+    //             ->setVille($form->get('Ville')->getData())
+    //             ->setMail($form->get('Mail')->getData())
+    //             ->setTel1($form->get('Tel_1')->getData())
+    //             ->setTel2($form->get('Tel_2')->getData());
 
             
-            $this->em->persist($DefAppsUser);
-            $this->em->persist($AppsUser);
-            $this->em->flush();
+    //         $this->em->persist($DefAppsUser);
+    //         $this->em->persist($AppsUser);
+    //         $this->em->flush();
 
 
-            $this->addFlash('success', 'L\'utilisateur à été crée avec succès! ');
-            return $this->redirectToRoute('admin');
-        }
+    //         $this->addFlash('success', 'L\'utilisateur à été crée avec succès! ');
+    //         return $this->redirectToRoute('admin');
+    //     }
 
-        return parent::new($context);
+    //     return parent::new($context);
 
-    }
+    // }
     
     public function persistEntity(EntityManagerInterface $em, $entityInstance): void
     {

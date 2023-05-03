@@ -2,10 +2,12 @@
 
 namespace App\Controller\Admin;
 
+use App\Entity\Roles;
 use App\Entity\AppsUtilisateur;
 use Doctrine\ORM\EntityManager;
 use App\Entity\DefAppsUtilisateur;
 use App\Form\RegistrationFormType;
+use App\Repository\RolesRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -33,6 +35,7 @@ class UtilisateurCrudController extends AbstractCrudController
         private EntityRepository $entityRepo,
         private UserPasswordHasherInterface $userPasswordHasher,
         private EntityManagerInterface $em,
+        private RolesRepository $rolesRepository
     ) {}
     
     public static function getEntityFqcn(): string
@@ -70,9 +73,9 @@ class UtilisateurCrudController extends AbstractCrudController
         ->setCrudController(DefAppsUtilisateurCrudController::class)
         ->autocomplete(),
         
-            IdField::new('id')->hideOnForm()->hideOnIndex(),
-            TextField::new('Nom_utilisateur'),
-            ChoiceField::new('roles')
+            yield IdField::new('id')->hideOnForm()->hideOnIndex(),
+            yield TextField::new('Nom_utilisateur'),
+            yield ChoiceField::new('roles')
             ->renderAsBadges([
                 'ROLE_ADMIN' => 'danger',
                 'ROLE_GESTION' => 'warning',
@@ -85,19 +88,20 @@ class UtilisateurCrudController extends AbstractCrudController
                 'Technicien Chantier' => 'ROLE_TECH_CHANTIER',
                 'Gestion' => 'ROLE_GESTION',
             ]),
-            TextField::new('ID_Utilisateur.Nom', 'Nom'),
-            TextField::new('ID_Utilisateur.Prenom', 'Prénom'),
-            TextareaField::new('ID_Utilisateur.Adresse', 'Adresse'),
-            TextField::new('ID_Utilisateur.CP', 'Code Postal'),
-            TextField::new('ID_Utilisateur.Ville', 'Ville'),
-            TelephoneField::new('ID_Utilisateur.Tel_1', 'Tel-1'),
-            TelephoneField::new('ID_Utilisateur.Tel_2', 'Tel-2'),
-            EmailField::new('ID_Utilisateur.Mail', 'E-Mail'),
-            BooleanField::new('is_verified'),
-            ColorField::new('colorCode'),
+
+            yield TextField::new('ID_Utilisateur.Nom', 'Nom'),
+            yield TextField::new('ID_Utilisateur.Prenom', 'Prénom'),
+            yield TextareaField::new('ID_Utilisateur.Adresse', 'Adresse'),
+            yield TextField::new('ID_Utilisateur.CP', 'Code Postal'),
+            yield TextField::new('ID_Utilisateur.Ville', 'Ville'),
+            yield TelephoneField::new('ID_Utilisateur.Tel_1', 'Tel-1'),
+            yield TelephoneField::new('ID_Utilisateur.Tel_2', 'Tel-2'),
+            yield EmailField::new('ID_Utilisateur.Mail', 'E-Mail'),
+            yield BooleanField::new('is_verified'),
+            yield ColorField::new('colorCode'),
         ];
 
-        $password = TextField::new('Mot_de_passe')
+        $password = yield TextField::new('Mot_de_passe')
             ->setFormType(RepeatedType::class)
             ->setFormTypeOptions([
                 'type' => PasswordType::class,
@@ -119,15 +123,32 @@ class UtilisateurCrudController extends AbstractCrudController
     public function new(AdminContext $context)
     {   
 
-        $appsUser = new AppsUtilisateur();
-        $form = $this->createForm(RegistrationFormType::class, $appsUser);
+        $AppsUser = new AppsUtilisateur();
+        $DefAppsUser = new DefAppsUtilisateur();
+
+        $form = $this->createForm(RegistrationFormType::class, $AppsUser);
         $form->handleRequest($context->getRequest());
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $DefAppsUser = new DefAppsUtilisateur();
+
+            $selectedRoles = $form->get('roles')->getData();
+
+            $AppsUser
+                ->setNomUtilisateur($form->get('AppsUtilisateur_Nom_utilisateur')->getData())
+                ->setColorCode($form->get('colorCode')->getData())
+                // ->addRole($selectedRoles)
+                ->setIsVerified(true)
+                ->setPassword(
+                    $this->userPasswordHasher->hashPassword(
+                        $AppsUser,
+                        $form->get('plainPassword')->getData()
+                    )
+                )
+                ->setIDUtilisateur($DefAppsUser);
+
             $DefAppsUser
                 ->setPrenom($form->get('Prenom')->getData())
-                ->setNom($form->get('Nom')->getData())
+                ->setNom($form->get('AppsUtilisateur_ID_Utilisateur_Nom')->getData())
                 ->setAdresse($form->get('Adresse')->getData())
                 ->setCP($form->get('CP')->getData())
                 ->setVille($form->get('Ville')->getData())
@@ -135,27 +156,9 @@ class UtilisateurCrudController extends AbstractCrudController
                 ->setTel1($form->get('Tel_1')->getData())
                 ->setTel2($form->get('Tel_2')->getData());
 
-            $roles = $form->get('roles')->getData()->toArray();
-
-            dd($form->get('roles'));
-
-
-            $appsUser
-                ->setNomUtilisateur($form->get('Nom_utilisateur')->getData())
-                ->setColorCode($form->get('colorCode')->getData())
-                ->addRole($roles)
-                ->setIsVerified(true)
-                ->setPassword(
-                    $this->userPasswordHasher->hashPassword(
-                        $appsUser,
-                        $form->get('plainPassword')->getData()
-                    )
-                )
-                ->setIDUtilisateur($DefAppsUser);
-
             
             $this->em->persist($DefAppsUser);
-            $this->em->persist($appsUser);
+            $this->em->persist($AppsUser);
             $this->em->flush();
 
 

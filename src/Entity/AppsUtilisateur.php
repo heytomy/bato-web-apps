@@ -167,7 +167,7 @@ class AppsUtilisateur implements UserInterface, PasswordAuthenticatedUserInterfa
 
         return $this;
     }
-
+    
     /**
      * Cette fonction a été modifié pour qu'elle soit conforme avec la configuration de la base de donnée
      * Elle cherche si le rôle exist déjà, sinon elle le rajoute dans la liste des rôle

@@ -2,11 +2,17 @@
 
 namespace App\Controller\Admin;
 
+use App\Entity\Roles;
 use App\Entity\AppsUtilisateur;
+use Doctrine\ORM\EntityManager;
 use App\Entity\DefAppsUtilisateur;
+use App\Form\RegistrationFormType;
+use App\Repository\RolesRepository;
 use Doctrine\ORM\EntityManagerInterface;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
+use Doctrine\Common\Collections\ArrayCollection;
 use EasyCorp\Bundle\EasyAdminBundle\Dto\EntityDto;
-use EasyCorp\Bundle\EasyAdminBundle\Field\ArrayField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\ChoiceField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\BooleanField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\TextareaField;
@@ -18,15 +24,18 @@ use EasyCorp\Bundle\EasyAdminBundle\Field\AssociationField;
 use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractCrudController;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\Form\{FormBuilderInterface, FormEvent, FormEvents};
-use EasyCorp\Bundle\EasyAdminBundle\Field\{IdField, EmailField, TextField};
 use Symfony\Component\Form\Extension\Core\Type\{PasswordType, RepeatedType};
 use EasyCorp\Bundle\EasyAdminBundle\Config\{Action, Actions, Crud, KeyValueStore};
+use EasyCorp\Bundle\EasyAdminBundle\Field\{ColorField, IdField, EmailField, TextField};
 
 class UtilisateurCrudController extends AbstractCrudController
 {
+    
     public function __construct(
         private EntityRepository $entityRepo,
-        public UserPasswordHasherInterface $userPasswordHasher
+        private UserPasswordHasherInterface $userPasswordHasher,
+        private EntityManagerInterface $em,
+        private RolesRepository $rolesRepository
     ) {}
     
     public static function getEntityFqcn(): string
@@ -34,30 +43,41 @@ class UtilisateurCrudController extends AbstractCrudController
         return AppsUtilisateur::class;
     }
 
+    public function createEntity(string $entityFqcn)
+    {
+        // $appsUser = new AppsUtilisateur();
+        // return $appsUser;
+    }
+
     public function configureActions(Actions $actions): Actions
     {
         return $actions
-            ->add(Crud::PAGE_EDIT, Action::INDEX)
+            ->add(Crud::PAGE_NEW, Action::NEW)
             ->add(Crud::PAGE_INDEX, Action::DETAIL)
-            ->add(Crud::PAGE_EDIT, Action::DETAIL)
+            ->add(Crud::PAGE_EDIT, Action::EDIT)
             ;
+    }
+
+    public function configureCrud(Crud $crud): Crud
+    {
+        return $crud
+            ->setPageTitle('index', 'Gestion des utilisateurs')
+            ->setPageTitle('edit', 'Modification de l\'utilisateur')
+            ->setPageTitle('new', 'Création d\'un utilisateur');
     }
 
     public function configureFields(string $pageName): iterable
     {
-
         $fields = [
-        AssociationField::new('ID_Utilisateur')
+        AssociationField::new('ID_Utilisateur')->hideOnForm()->hideOnIndex()
         ->setCrudController(DefAppsUtilisateurCrudController::class)
         ->autocomplete(),
-
-            IdField::new('id')->hideOnForm()->hideOnIndex(),
-            TextField::new('Nom_utilisateur'),
-            ChoiceField::new('roles')
-            ->allowMultipleChoices()
+        
+            yield IdField::new('id')->hideOnForm()->hideOnIndex(),
+            yield TextField::new('Nom_utilisateur'),
+            yield ChoiceField::new('roles')
             ->renderAsBadges([
                 'ROLE_ADMIN' => 'danger',
-                'ROLE_USER' => 'success',
                 'ROLE_GESTION' => 'warning',
                 'ROLE_TECH_SAV' => 'success',
                 'ROLE_TECH_CHANTIER' => 'success',
@@ -67,26 +87,29 @@ class UtilisateurCrudController extends AbstractCrudController
                 'Technicien SAV' => 'ROLE_TECH_SAV',
                 'Technicien Chantier' => 'ROLE_TECH_CHANTIER',
                 'Gestion' => 'ROLE_GESTION',
-                'Utilisateur' => 'ROLE_USER',
             ]),
-            TextField::new('ID_Utilisateur.Nom', 'Nom'),
-            TextField::new('ID_Utilisateur.Prenom', 'Prénom'),
-            TextareaField::new('ID_Utilisateur.Adresse', 'Adresse'),
-            TextField::new('ID_Utilisateur.CP', 'Code Postal'),
-            TextField::new('ID_Utilisateur.Ville', 'Ville'),
-            TelephoneField::new('ID_Utilisateur.Tel_1', 'Tel-1'),
-            TelephoneField::new('ID_Utilisateur.Tel_2', 'Tel-2'),
-            EmailField::new('ID_Utilisateur.Mail', 'E-Mail'),
-            BooleanField::new('is_verified'),
+
+            yield TextField::new('ID_Utilisateur.Nom', 'Nom'),
+            yield TextField::new('ID_Utilisateur.Prenom', 'Prénom'),
+            yield TextareaField::new('ID_Utilisateur.Adresse', 'Adresse'),
+            yield TextField::new('ID_Utilisateur.CP', 'Code Postal'),
+            yield TextField::new('ID_Utilisateur.Ville', 'Ville'),
+            yield TelephoneField::new('ID_Utilisateur.Tel_1', 'Tel-1'),
+            yield TelephoneField::new('ID_Utilisateur.Tel_2', 'Tel-2'),
+            yield EmailField::new('ID_Utilisateur.Mail', 'E-Mail'),
+            yield BooleanField::new('is_verified'),
+            yield ColorField::new('colorCode'),
         ];
 
-        $password = TextField::new('Mot_de_passe')
+        $password = yield TextField::new('Mot_de_passe')
             ->setFormType(RepeatedType::class)
             ->setFormTypeOptions([
                 'type' => PasswordType::class,
-                'first_options' => ['label' => 'Password'],
-                'second_options' => ['label' => '(Repeat)'],
-                'mapped' => false,
+                'invalid_message' => 'Les mots de passe doivent correspondre.',
+                'options' => ['attr' => ['class' => 'password-field']],
+                'required' => true,
+                'first_options'  => ['label' => 'Mot de passe'],
+                'second_options' => ['label' => 'Répétez le mot de passe'],
             ])
             ->setRequired($pageName === Crud::PAGE_NEW)
             ->onlyOnForms()
@@ -97,6 +120,55 @@ class UtilisateurCrudController extends AbstractCrudController
         return $fields;
     }
 
+    public function new(AdminContext $context)
+    {   
+
+        $AppsUser = new AppsUtilisateur();
+        $DefAppsUser = new DefAppsUtilisateur();
+
+        $form = $this->createForm(RegistrationFormType::class, $AppsUser);
+        $form->handleRequest($context->getRequest());
+
+        if ($form->isSubmitted() && $form->isValid()) {
+
+            $selectedRoles = $form->get('roles')->getData();
+
+            $AppsUser
+                ->setNomUtilisateur($form->get('AppsUtilisateur_Nom_utilisateur')->getData())
+                ->setColorCode($form->get('colorCode')->getData())
+                // ->addRole($selectedRoles)
+                ->setIsVerified(true)
+                ->setPassword(
+                    $this->userPasswordHasher->hashPassword(
+                        $AppsUser,
+                        $form->get('plainPassword')->getData()
+                    )
+                )
+                ->setIDUtilisateur($DefAppsUser);
+
+            $DefAppsUser
+                ->setPrenom($form->get('Prenom')->getData())
+                ->setNom($form->get('AppsUtilisateur_ID_Utilisateur_Nom')->getData())
+                ->setAdresse($form->get('Adresse')->getData())
+                ->setCP($form->get('CP')->getData())
+                ->setVille($form->get('Ville')->getData())
+                ->setMail($form->get('Mail')->getData())
+                ->setTel1($form->get('Tel_1')->getData())
+                ->setTel2($form->get('Tel_2')->getData());
+
+            
+            $this->em->persist($DefAppsUser);
+            $this->em->persist($AppsUser);
+            $this->em->flush();
+
+
+            $this->addFlash('success', 'L\'utilisateur à été crée avec succès! ');
+            return $this->redirectToRoute('admin');
+        }
+
+        return parent::new($context);
+
+    }
     
     public function persistEntity(EntityManagerInterface $em, $entityInstance): void
     {

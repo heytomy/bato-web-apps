@@ -29,7 +29,6 @@ Encore
     .addEntry('calendrier', './assets/calendrier/index.js')
     .addEntry('calendrierDashboard', './assets/calendrier/calendrierDashboard.js')
     .addEntry('test', './assets/calendrier/test.js')
-    .addEntry('datePicker', './assets/datepicker.js')
     .addEntry('appels', './assets/styles/appels.scss')
     .addEntry('togglePassword', './assets/togglePassword.js')
     // .addEntry('replyForm',      './assets/replyForm.js')

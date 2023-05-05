@@ -133,6 +133,21 @@ class AppelsRepository extends ServiceEntityRepository
         return $qb->getQuery()->getSingleScalarResult();
     }
 
+    public function findBySearchQuery(string $nom, ?string $statut = 'EN_COURS')
+    {
+        $query = $this->createQueryBuilder('appel');
+        if ($nom !== null) {
+            $query
+                ->innerJoin('appel.statut', 's')
+                ->andWhere('s.statut = :statut')
+                ->setParameter('statut', $statut)
+                ->andWhere('appel.Nom LIKE :nom')
+                ->setParameter(':nom', '%'.$nom.'%')
+            ;
+        }
+        return $query->getQuery()->getResult();
+    }
+
 //    /**
 //     * @return Appels[] Returns an array of Appels objects
 //     */

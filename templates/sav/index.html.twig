@@ -7,14 +7,14 @@
 {% endblock %}
 
 {% block search %}
-    {{ form_start(searchForm, {'attr': {'class': 'd-flex justify-content-end col p-2', 'id': 'search-form'}}) }}
+    <form method="get" class="d-flex justify-content-end col p-2" id="search-form">
         <div class="">
-            {{ form_row(searchForm.nom) }}
+            <div><input type="text" id="nom" name="nom" placeholder="Recherchez ici" class="form-control search-input mr-sm-2" aria-label="Search" autocomplete="off" spellcheck="false"></div>
         </div>
         <div class="px-2">
-            {{ form_row(searchForm.submit) }}
+            <div><button type="submit" id="submit" name="submit" class="btn btn-outline-secondary">Submit</button></div>
         </div>
-    {{ form_end(searchForm) }}
+    </form>
 {% endblock %}
 
 {% block list %}

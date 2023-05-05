@@ -14,6 +14,8 @@ const limit = 10;
 let isFetching = false;
 let inputValue = '';
 
+let isTermine = false;
+
 
 // add event listener to hide the "Back to top" button when the user scrolls back to the top of the page
 window.addEventListener('scroll', function() {
@@ -42,7 +44,8 @@ function fetchClients() {
         body: JSON.stringify({
         offset: offset,
         limit: limit,
-        search: inputValue
+        search: inputValue,
+        isTermine: isTermine,
         })
     })
     .then(response => response.json())
@@ -209,22 +212,24 @@ backToTopButton.addEventListener('click', backToTop)
 // fetch initial set of clients
 fetchClients();
 
-// const form = document.querySelector('#search-form');
-// form.addEventListener('submit', event => {
-//   event.preventDefault();
+const form = document.querySelector('#search-form');
+form.addEventListener('submit', event => {
+  event.preventDefault();
 
-//   removeElementsByClass('client');
+  removeElementsByClass('client');
 
-//   inputValue = document.querySelector('#nom').value;
-//   url = '/ajax/appels/search';
+  inputValue = document.querySelector('#nom').value;
+  url = '/ajax/appels/search';
 
-//   fetchClients();
-// })
+  fetchClients();
+})
 
 const statutHeader = document.querySelector('.statut');
 const appelsEnCours = document.querySelector('#appelsEnCours');
 appelsEnCours.addEventListener('click', event => {
   statutHeader.textContent = 'Les appels en cours';
+
+  isTermine = false;
 
   offset = 0;
   removeElementsByClass('client');
@@ -236,6 +241,8 @@ appelsEnCours.addEventListener('click', event => {
 const appelsTermine = document.querySelector('#appelsTermine');
 appelsTermine.addEventListener('click', event => {
   statutHeader.textContent = 'Les appels archivés';
+
+  isTermine = true;
 
   offset = 0;
   removeElementsByClass('client');

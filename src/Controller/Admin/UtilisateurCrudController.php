@@ -119,54 +119,10 @@ class UtilisateurCrudController extends AbstractCrudController
         return $fields;
     }
 
-    // public function new(AdminContext $context)
-    // {   
-    //     $AppsUser = new AppsUtilisateur();
-    //     $DefAppsUser = new DefAppsUtilisateur();
-
-    //     $form = $this->createForm($AppsUser);
-    //     $form->handleRequest($context->getRequest());
-
-    //     if ($form->isSubmitted() && $form->isValid()) {
-
-    //         $selectedRoles = $form->get('roles')->getData();
-
-    //         $AppsUser
-    //             ->setNomUtilisateur($form->get('AppsUtilisateur_Nom_utilisateur')->getData())
-    //             ->setColorCode($form->get('colorCode')->getData())
-    //             ->addRole($selectedRoles)
-    //             ->setIsVerified(true)
-    //             ->setPassword(
-    //                 $this->userPasswordHasher->hashPassword(
-    //                     $AppsUser,
-    //                     $form->get('plainPassword')->getData()
-    //                 )
-    //             )
-    //             ->setIDUtilisateur($DefAppsUser);
-
-    //         $DefAppsUser
-    //             ->setPrenom($form->get('Prenom')->getData())
-    //             ->setNom($form->get('AppsUtilisateur_ID_Utilisateur_Nom')->getData())
-    //             ->setAdresse($form->get('Adresse')->getData())
-    //             ->setCP($form->get('CP')->getData())
-    //             ->setVille($form->get('Ville')->getData())
-    //             ->setMail($form->get('Mail')->getData())
-    //             ->setTel1($form->get('Tel_1')->getData())
-    //             ->setTel2($form->get('Tel_2')->getData());
-
-            
-    //         $this->em->persist($DefAppsUser);
-    //         $this->em->persist($AppsUser);
-    //         $this->em->flush();
-
-
-    //         $this->addFlash('success', 'L\'utilisateur à été crée avec succès! ');
-    //         return $this->redirectToRoute('admin');
-    //     }
-
-    //     return parent::new($context);
-
-    // }
+        public function new(AdminContext $context)
+    {
+        return $this->redirectToRoute('app_register');
+    }
     
     public function persistEntity(EntityManagerInterface $em, $entityInstance): void
     {

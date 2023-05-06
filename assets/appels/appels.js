@@ -106,24 +106,48 @@ function infiniteScrollHandler() {
 
 // function to create a new client element
 function createClientElement(client) {
-  const dateFormatOptions = { day: 'numeric', month: 'numeric', year: 'numeric' };
+  const dateFormatOptions = { day: 'numeric', month: 'numeric', year: 'numeric', hour: 'numeric', minute: 'numeric' };
   const formattedDateDebut = new Date(client.dateDebut).toLocaleDateString('fr-FR', dateFormatOptions);
   const formattedDateFin = new Date(client.dateFin).toLocaleDateString('fr-FR', dateFormatOptions);
+
 
   const clientElement = document.createElement('div');
   clientElement.classList.add('row', 'border', 'border-light', 'rounded', 'bg-client', 'm-2', 'p-2', 'client');
   clientElement.innerHTML = `
-    <div class='col'>
-      <h1 class='row'>                        ${client.nom}</h1>
-      <div class='row'>${client.codeContrat ? `<p><strong>Code Contrat:</strong> ${client.codeContrat}</p> ` : '<p>N\'a pas de contrat d\'entretien</p>'}</div>
-      <div class='row'>${client.codeClient ? `<p><strong>Code Client:</strong> ${client.codeClient}</p> `  : '<p><strong style="color: #B60E0E;">Nouveau client !</strong></p>'}</div>
+  <div class="row justify-content-md-center">
+  <div class="col-12 col-lg-6">
+    <h1>${client.nom}</h1>
+    <div>${
+      client.codeContrat
+        ? `<strong>Code Contrat:</strong> ${client.codeContrat}`
+        : `<p>N'a pas de contrat d'entretien</p>`
+    }  </div>
+
+    <div>${
+      client.codeClient
+        ? `<strong>Code Client:</strong> ${client.codeClient}`
+        : `<p><strong style="color: #B60E0E;">Nouveau client !</strong></p>`
+    }  </div>
+
+  </div>
+
+  <div class="col-12 col-lg-3">
+    <div class="row">
+      <div class="col"><strong>Date debut du chantier:</strong> ${formattedDateDebut}</div>
     </div>
-    <div class='col'>
-      <div class='row'><p><strong>Date debut du chantier:</strong>    ${formattedDateDebut}</p></div>
-      <div class='row'><p><strong>Fin prévu le:</strong>              ${formattedDateFin}</p></div>
-      <div class='row text-primary'><p><strong>Technicien: </strong>               ${client.technicien}</p></div>
+    <div class="row">
+      <div class="col"><strong>Fin prévu le:</strong> ${formattedDateFin}</div>
     </div>
-  `;
+  </div>
+
+  <div class="col-12 col-lg-3">
+    <div class="row text-primary">
+      <div class="col"><p><strong>Technicien:</strong> ${client.technicien}</p></div>
+    </div>
+  </div>
+</div>
+
+`;
   return clientElement;
 }
 
@@ -140,9 +164,10 @@ function createClientModal(client, clientElement) {
   clientModal.setAttribute('aria-hidden','true');
   clientModal.setAttribute('aria-labelledby',`clientModalLabel-${client.codeAppel}`);
 
-  const dateFormatOptions = { day: 'numeric', month: 'numeric', year: 'numeric' };
+  const dateFormatOptions = { day: 'numeric', month: 'numeric', year: 'numeric', hour: 'numeric', minute: 'numeric' };
   const formattedDateDebut = new Date(client.dateDebut).toLocaleDateString('fr-FR', dateFormatOptions);
   const formattedDateFin = new Date(client.dateFin).toLocaleDateString('fr-FR', dateFormatOptions);
+
 
   clientModal.innerHTML = 
   `

@@ -1,12 +1,12 @@
+<link rel="stylesheet" type="text/css" href="https://npmcdn.com/flatpickr/dist/themes/material_red.css">
 <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
 <script src="https://npmcdn.com/flatpickr/dist/l10n/fr.js"></script>
 
 <script>
-
 flatpickr('#appels_rdvDateTime', {
     enableTime: true,
     time_24hr: true,
-	minTime: "07:00",
+    minTime: "07:00",
     maxTime: "20:00",
     defaultHour: "07:00",
     altInput: true,
@@ -19,13 +19,23 @@ flatpickr('#appels_rdvDateTime', {
             return (date.getDay() === 6 || date.getDay() === 0);
         }
     ],
-	"locale": "fr",
+    "locale": "fr",
+    onChange: function(selectedDates, dateStr, instance) {
+        var minToAdd = 1; // add 2 hours
+        var maxTime = instance.config.maxTime;
+        var selectedDate = new Date(selectedDates);
+        selectedDate.setHours(selectedDate.getHours() + minToAdd);
+
+        var endDatePicker = document.querySelector('#appels_rdvDateTimeFin');
+        var endDatePickerInstance = endDatePicker._flatpickr;
+        endDatePickerInstance.setDate(selectedDate, false, 'd-m-Y H:i');
+    }
 });
 
 flatpickr('#appels_rdvDateTimeFin', {
     enableTime: true,
     time_24hr: true,
-	minTime: "07:00",
+    minTime: "07:00",
     maxTime: "20:00",
     defaultHour: "07:00",
     altInput: true,
@@ -38,34 +48,7 @@ flatpickr('#appels_rdvDateTimeFin', {
             return (date.getDay() === 6 || date.getDay() === 0);
         }
     ],
-	"locale": "fr",
+    "locale": "fr",
 });
-
-// flatpickr('#chantier_apps_dateDebut', {
-//     enableTime: false,
-//     dateFormat: "d-m-Y",
-//     minDate: "today",
-//     disable: [
-//         function(date) {
-//             // Disable weekends (Saturday = 6, Sunday = 0)
-//             return (date.getDay() === 6 || date.getDay() === 0);
-//         }
-//     ],
-//     "locale": "fr",
-// });
-
-
-// flatpickr('#chantier_apps_dateFin', {
-//     enableTime: false,
-//     dateFormat: "d-m-Y",
-//     minDate: "today",
-//     disable: [
-//         function(date) {
-//             // Disable weekends (Saturday = 6, Sunday = 0)
-//             return (date.getDay() === 6 || date.getDay() === 0);
-//         }
-//     ],
-// 	locale: "fr",
-// });
 
 </script>

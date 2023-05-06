@@ -13,11 +13,15 @@ use App\Repository\AppsUtilisateurRepository;
 use Eckinox\TinymceBundle\Form\Type\TinymceType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
+use Symfony\Component\Validator\Constraints\Email;
+use Symfony\Component\Validator\Constraints\Regex;
 use Symfony\Component\Validator\Constraints\NotBlank;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Validator\Constraints as Assert;
+use Symfony\Component\Form\Extension\Core\Type\TelType;
 use Symfony\Component\Form\Extension\Core\Type\DateType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
+use Symfony\Component\Form\Extension\Core\Type\EmailType;
 use Symfony\Component\Form\Extension\Core\Type\HiddenType;
 use Symfony\Component\Form\Extension\Core\Type\DateTimeType;
 
@@ -95,6 +99,34 @@ class ChantierAppsType extends AbstractType
                     new Assert\NotBlank(['message' => 'Veuillez saisir un Libellé']),
                     new Assert\Length(['max' => 50, 'maxMessage' => 'Le libellé ne doit pas dépasser {{ limit }} caractères']),
                 ],
+            ])
+            ->add('Tel', TelType::class, [
+                'mapped' => false, // le temps d'update la db
+                'required' => true,
+                'label' => 'Numéro de téléphone',
+                'empty_data' => null,
+                'attr' => [
+                    'placeholder' => 'Numéro de téléphone',
+                    'class' => 'form-control',
+                ],
+                'constraints' => [
+                    new NotBlank(['message' => 'Veuillez saisir un numéro de téléphone']),
+                    new Regex(['pattern' => '/^0[1-9]([-. ]?\d{2}){4}$/', 'message' => 'Veuillez saisir un numéro de téléphone valide']),
+                ],
+            ])
+            ->add('Email', EmailType::class, [
+                'mapped' => false, // le temps d'update la db
+                'required' => true,
+                'label' => 'Adresse email',
+                'empty_data' => null,
+                'attr' => [
+                    'placeholder' => 'Entrez votre adresse email',
+                    'class' => 'form-control',
+                ],
+                'constraints' => [
+                    new NotBlank(['message' => 'Veuillez entrer l\'adresse email du client.']),
+                    new Email(['message' => 'L\'adresse email "{{ value }}" n\'est pas valide.'])
+                ]
             ])
             ->add('adresse', TextType::class, [
                 'required'      =>  true,

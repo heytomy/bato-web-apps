@@ -50,7 +50,7 @@ class RegistrationFormType extends AbstractType
                 'class' => Roles::class,
                 'choices' => $this->rolesRepository->findAll(),
                 'required' => true,
-                'multiple' => false,
+                'multiple' => true,
                 'label' => 'Rôles',
                 'choice_label' => function(Roles $roles){
                     return $roles->getLibelle();

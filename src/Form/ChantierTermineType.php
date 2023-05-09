@@ -4,7 +4,6 @@ namespace App\Form;
 
 use App\Entity\ChantierApps;
 use Symfony\Component\Form\AbstractType;
-use Eckinox\TinymceBundle\Form\Type\TinymceType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Validator\Constraints as Assert;
@@ -28,7 +27,7 @@ class ChantierTermineType extends AbstractType
                     new Assert\Length(['max' => 50, 'maxMessage' => 'Le libellé ne doit pas dépasser {{ limit }} caractères']),
                 ],
             ])
-            ->add('description', TinymceType::class, [
+            ->add('description', CKEditorType::class, [
                 'required'      =>  true,
                 'label'         =>  'Description',
                 'attr'          =>  [

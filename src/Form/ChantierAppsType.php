@@ -4,13 +4,12 @@ namespace App\Form;
 
 use App\Entity\ClientDef;
 use App\Entity\ChantierApps;
-use App\Entity\StatutChantier;
 use App\Entity\AppsUtilisateur;
 use App\Repository\ClientDefRepository;
 use Symfony\Component\Form\AbstractType;
 use App\Repository\StatutChantierRepository;
 use App\Repository\AppsUtilisateurRepository;
-use Eckinox\TinymceBundle\Form\Type\TinymceType;
+use FOS\CKEditorBundle\Form\Type\CKEditorType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Validator\Constraints\Email;
@@ -22,8 +21,6 @@ use Symfony\Component\Form\Extension\Core\Type\TelType;
 use Symfony\Component\Form\Extension\Core\Type\DateType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\Extension\Core\Type\EmailType;
-use Symfony\Component\Form\Extension\Core\Type\HiddenType;
-use Symfony\Component\Form\Extension\Core\Type\DateTimeType;
 
 class ChantierAppsType extends AbstractType
 {
@@ -116,7 +113,7 @@ class ChantierAppsType extends AbstractType
             ])
             ->add('Email', EmailType::class, [
                 'mapped' => false, // le temps d'update la db
-                'required' => true,
+                'required' => false,
                 'label' => 'Adresse email',
                 'empty_data' => null,
                 'attr' => [
@@ -124,7 +121,7 @@ class ChantierAppsType extends AbstractType
                     'class' => 'form-control',
                 ],
                 'constraints' => [
-                    new NotBlank(['message' => 'Veuillez entrer l\'adresse email du client.']),
+                    // new NotBlank(['message' => 'Veuillez entrer l\'adresse email du client.']),
                     new Email(['message' => 'L\'adresse email "{{ value }}" n\'est pas valide.'])
                 ]
             ])
@@ -196,7 +193,7 @@ class ChantierAppsType extends AbstractType
                     new Assert\NotBlank()
                 ],
             ])
-            ->add('description', TinymceType::class, [
+            ->add('description', CKEditorType::class, [
                 'required'      =>  true,
                 'label'         =>  'Description',
                 'attr'          =>  [

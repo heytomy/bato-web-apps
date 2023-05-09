@@ -11,7 +11,6 @@ use App\Repository\ClientDefRepository;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\Routing\RouterInterface;
-use Eckinox\TinymceBundle\Form\Type\TinymceType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Validator\Constraints\Email;
@@ -202,7 +201,7 @@ class AppelsType extends AbstractType
                     'class' => 'form-control',
                 ],
                 'constraints' => [
-                    new NotBlank(['message' => 'Veuillez saisir un numéro de téléphone']),
+                    // new NotBlank(['message' => 'Veuillez saisir un numéro de téléphone']),
                     new Regex(['pattern' => '/^0[1-9]([-. ]?\d{2}){4}$/', 'message' => 'Veuillez saisir un numéro de téléphone valide']),
                 ],
             ])
@@ -215,11 +214,11 @@ class AppelsType extends AbstractType
                     'class' => 'form-control',
                 ],
                 'constraints' => [
-                    new NotBlank(['message' => 'Veuillez entrer l\'adresse email du client.']),
+                    // new NotBlank(['message' => 'Veuillez entrer l\'adresse email du client.']),
                     new Email(['message' => 'L\'adresse email "{{ value }}" n\'est pas valide.'])
                 ]
             ])
-            ->add('description', TinymceType::class, [
+            ->add('description', CKEditorType::class, [
                 'required' => true,
                 'label' => 'Description',
                 'attr' => [

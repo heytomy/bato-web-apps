@@ -51,4 +51,46 @@ flatpickr('#appels_rdvDateTimeFin', {
     "locale": "fr",
 });
 
+flatpickr('#chantier_apps_dateDebut', {
+    altInput: true,
+    altFormat: 'd-m-Y',
+    dateFormat: 'Y-m-d',
+    minDate: 'today',
+    disable: [
+        function(date) {
+            // Disable weekends (Saturday = 6, Sunday = 0)
+            return (date.getDay() === 6 || date.getDay() === 0);
+        }
+    ],
+    "locale": "fr",
+    onChange: function(selectedDates, dateStr, instance) {
+        var selectedDate = new Date(selectedDates);
+        var endDatePicker = document.querySelector('#chantier_apps_dateFin');
+        var endDatePickerInstance = endDatePicker._flatpickr;
+
+        // If endDatePicker is empty or its value is before the selected date, update it
+        if (endDatePicker.value === '' || new Date(endDatePicker.value) <= selectedDate) {
+            var nextValidDate = new Date(selectedDate);
+            while (nextValidDate.getDay() === 6 || nextValidDate.getDay() === 0) {
+                nextValidDate.setDate(nextValidDate.getDate() + 2);
+            }
+            endDatePickerInstance.setDate(nextValidDate, false, 'Y-m-d');
+        }
+    }
+});
+
+flatpickr('#chantier_apps_dateFin', {
+    altInput: true,
+    altFormat: 'd-m-Y',
+    dateFormat: 'Y-m-d',
+    minDate: "today",
+    disable: [
+        function(date) {
+            // Disable weekends (Saturday = 6, Sunday = 0)
+            return (date.getDay() === 6 || date.getDay() === 0);
+        }
+    ],
+    "locale": "fr",
+});
+
 </script>

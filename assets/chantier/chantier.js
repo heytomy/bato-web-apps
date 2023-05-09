@@ -113,17 +113,38 @@ function createClientElement(client) {
   const clientElement = document.createElement('div');
   clientElement.classList.add('row', 'border', 'border-light', 'rounded', 'bg-client', 'm-2', 'p-2', 'client');
   clientElement.innerHTML = `
-    <div class='col'>
-      <h1 class='row'>                        ${client.nom}</h1>
-      <div class='row'>Code du chantier:      ${client.codeChantier}</div>
-      <div class='row'>Code du client:        ${client.codeClient}</div>
-    </div>
-    <div class='col'>
-      <div class='row'><p><strong>Date debut du chantier:</strong>   ${formattedDateDebut}</p></div>
-      <div class='row'><p><strong>Fin prévu le:</strong>             ${formattedDateFin}</p></div>
-      <div class='row text-primary'><p><strong>Technicien: </strong>${client.technicien}</p></div>
-    </div>
+  <div class="row justify-content-md-center">
+  <div class="col-12 col-lg-6">
+    <h1>${client.nom}</h1>
+    <div>${
+      client.codeChantier
+        ? `<strong>Code du chantier:</strong> ${client.codeChantier}`
+        : `<p>N'a pas de contrat d'entretien</p>`
+    }  </div>
 
+    <div>${
+      client.codeClient
+        ? `<strong>Code Client:</strong> ${client.codeClient}`
+        : `<p><strong style="color: #B60E0E;">Nouveau client !</strong></p>`
+    }  </div>
+
+  </div>
+
+  <div class="col-12 col-lg-3">
+    <div class="row">
+      <div class="col"><strong>Date debut du chantier:</strong> ${formattedDateDebut}</div>
+    </div>
+    <div class="row">
+      <div class="col"><strong>Fin prévu le:</strong> ${formattedDateFin}</div>
+    </div>
+  </div>
+
+  <div class="col-12 col-lg-3">
+    <div class="row text-primary">
+      <div class="col"><p><strong>Chef de chantier:</strong> ${client.technicien}</p></div>
+    </div>
+  </div>
+</div>
   `;
   return clientElement;
 }

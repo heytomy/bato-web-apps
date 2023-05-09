@@ -16,20 +16,19 @@
 						</div>
 						<script>
 							setTimeout(function () {
-var alert = document.querySelector('.alert');
-alert.classList.remove('show');
-alert.classList.add('hide');
-setTimeout(function () {
-alert.remove();
-}, 1000);
-}, 5000);
+								var alert = document.querySelector('.alert');
+								alert.classList.remove('show');
+								alert.classList.add('hide');
+								setTimeout(function () {
+								alert.remove();
+								}, 1000);
+								}, 5000);
 						</script>
 					{% endfor %}
 
 					{% for flash_error in app.flashes('verify_email_error') %}
 						<div class="alert alert-danger" role="alert">{{ flash_error }}</div>
 					{% endfor %}
-
 
 					<div class="card border rounded-5 bg-light">
 						<h5 class="card-title align-self-center mt-4 mb-4">

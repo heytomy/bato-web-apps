@@ -13,6 +13,8 @@ clientField.addEventListener('change', function() {
         $('#chantier_apps_adresse').val('');
         $('#chantier_apps_cp').val('');
         $('#chantier_apps_ville').val('');
+        $('#chantier_apps_Tel').val('');
+        $('#chantier_apps_Email').val('');
         $('#chantier_apps_description').val('');
     });
 
@@ -21,6 +23,8 @@ clientField.addEventListener('change', function() {
         $('#chantier_apps_adresse').val('');
         $('#chantier_apps_cp').val('');
         $('#chantier_apps_ville').val('');
+        $('#chantier_apps_Tel').val('');
+        $('#chantier_apps_Email').val('');
 
         return; // exit the function early
     }
@@ -33,6 +37,9 @@ clientField.addEventListener('change', function() {
         $('#chantier_apps_adresse').val(response.adr);
         $('#chantier_apps_cp').val(response.cp);
         $('#chantier_apps_ville').val(response.ville);
+        $('#chantier_apps_Tel').val(response.tel);
+        $('#chantier_apps_Email').val(response.email);
+
 
         },
         error: function(jqXHR, textStatus, errorThrown) {

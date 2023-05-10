@@ -31,6 +31,7 @@ Encore
     .addEntry('test', './assets/calendrier/test.js')
     .addEntry('appels', './assets/styles/appels.scss')
     .addEntry('togglePassword', './assets/togglePassword.js')
+    .addEntry('flash', './assets/flash.js')
     // .addEntry('replyForm',      './assets/replyForm.js')
 
     // enables the Symfony UX Stimulus bridge (used in assets/bootstrap.js)

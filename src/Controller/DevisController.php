@@ -9,13 +9,13 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
 class DevisController extends AbstractController
 {
-    #[Route('/devis', name: 'app_devis')]
-    public function index(): Response
-    {
-        return $this->render('devis/index.html.twig', [
-            'controller_name' => 'DevisController',
-        ]);
-    }
+    // #[Route('/devis', name: 'app_devis')]
+    // public function index(): Response
+    // {
+    //     return $this->render('devis/index.html.twig', [
+    //         'controller_name' => 'DevisController',
+    //     ]);
+    // }
 
     #[Route('/devis/{id}/{filename}', name: 'app_devis', methods: ['POST', 'GET'])]
     public function devis($id, $filename)
@@ -23,6 +23,7 @@ class DevisController extends AbstractController
         $devispath = $this->getParameter('devis_chemin').$id;
 
         $filePath = $devispath .'/'.$filename;
+        dd($filePath);
         return new BinaryFileResponse($filePath);
     }
 }

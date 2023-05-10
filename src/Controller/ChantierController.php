@@ -70,6 +70,11 @@ class ChantierController extends AbstractController
 
             $em->persist($rdv);
             $em->flush($rdv);
+
+            $this->addFlash(
+                'success',
+                'Chantier enregistré avec succès !'
+            );
             // $chantierAppsRepository->save($chantier, true);
 
             return $this->redirectToRoute('app_chantier', [], Response::HTTP_SEE_OTHER);

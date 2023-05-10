@@ -10,20 +10,23 @@
 			<div class="row justify-content-center">
 				<div class="col-md-10 ">
 					{% for flash_success in app.flashes('success') %}
-						<div class="alert alert-success alert-dismissible fade show mt-1" role="alert">
-							{{ flash_success }}
-							<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-						</div>
-						<script>
-							setTimeout(function () {
-								var alert = document.querySelector('.alert');
-								alert.classList.remove('show');
-								alert.classList.add('hide');
+						{% if loop.first %}
+							<div class="alert alert-success alert-dismissible fade show mt-1" role="alert">
+								{{ flash_success }}
+								<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+							</div>
+
+							<script>
 								setTimeout(function () {
-								alert.remove();
-								}, 1000);
+									var alert = document.querySelector('.alert');
+									alert.classList.remove('show');
+									alert.classList.add('hide');
+									setTimeout(function () {
+										alert.remove();
+									}, 1000);
 								}, 5000);
-						</script>
+							</script>
+						{% endif %}
 					{% endfor %}
 
 					{% for flash_error in app.flashes('verify_email_error') %}

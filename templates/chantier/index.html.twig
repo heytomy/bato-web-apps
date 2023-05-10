@@ -13,12 +13,12 @@
 	</a>
 {% endblock %}
 
-{% block search %}
+{# {% block search %}
     <div class="p-2 col d-flex flex-row-reverse">
             <button class="btn btn-danger ms-1" id='chantierTermine'>Chantiers archivés</button>
             <button class="btn btn-danger" id='chantierEnCours'>Chantiers en cours</button>
     </div>
-{% endblock %}
+{% endblock %} #}
 
 {# {% block search %}
     {{ form_start(searchForm, {'attr': {'class': 'd-flex justify-content-end col p-2', 'id': 'search-form'}}) }}
@@ -32,21 +32,39 @@
 {% endblock %} #}
 
 {% block list %}
-    <div class="d-flex justify-content-between container flex-sm-row flex-column">
-        <div class="col p-2">
-            <h1 class="font-weight-bold statut" style="font-size: 3em;">Les chantiers en cours</h1>
-        </div>
-        <div class="col p-2 d-flex flex-row-reverse">
-            <form method="get" class="d-flex justify-content-end col p-2" id="search-form">
-                <div class="">
-                    <div><input type="text" id="nom" name="nom" placeholder="Recherchez ici" class="form-control search-input mr-sm-2" aria-label="Search" autocomplete="off" spellcheck="false"></div>
-                </div>
-                <div class="px-2">
-                    <div><button type="submit" id="submit" name="submit" class="btn btn-outline-secondary">Submit</button></div>
-                </div>
-            </form>
-        </div>
-    </div>
+
+	{% for message in app.flashes('success') %}
+		<div class="alert alert-success alert-dismissible fade show mt-5" role="alert">
+			{{ message }}
+			<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+		</div>
+	{% endfor %}
+
+	<div class="d-flex justify-content-center container mt-5 mb-5">
+		<h1 class="font-weight-bold statut" style="font-size: 3em;">Les chantiers en cours</h1>
+	</div>
+
+
+	<div class="d-flex justify-content-between container flex-sm-row flex-column mb-3">
+
+		<div class="col d-flex flex-row align-items-center">
+			<button class="btn btn-secondary mx-1" id='chantierTermine'>Chantiers archivés</button>
+			<button class="btn btn-secondary" id='chantierEnCours'>Chantiers en cours</button>
+		</div>
+
+		<div class="col d-flex flex-row">
+			<form method="get" class="d-flex justify-content-end col" id="search-form">
+				<div class="">
+					<div><input type="text" id="nom" name="nom" placeholder="Recherchez ici" class="form-control search-input mr-sm-2" aria-label="Search" autocomplete="off" spellcheck="false"></div>
+				</div>
+				<div class="px-2">
+					<div>
+						<button type="submit" id="submit" name="submit" class="btn btn-secondary">Chercher</button>
+					</div>
+				</div>
+			</form>
+		</div>
+	</div>
     <div class="client-container border rounded container bg-light p-2"></div>
 {% endblock %}
 

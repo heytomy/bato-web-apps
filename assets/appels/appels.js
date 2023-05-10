@@ -120,13 +120,13 @@ function createClientElement(client) {
     <div>${
       client.codeContrat
         ? `<strong>Code Contrat:</strong> ${client.codeContrat}`
-        : `<p>N'a pas de contrat d'entretien</p>`
+        : `<strong>N'a pas de contrat d'entretien</strong>`
     }  </div>
 
     <div>${
       client.codeClient
         ? `<strong>Code Client:</strong> ${client.codeClient}`
-        : `<p><strong style="color: #B60E0E;">Nouveau client !</strong></p>`
+        : `<strong style="color: #B60E0E;">Nouveau client !</strong>`
     }  </div>
 
   </div>

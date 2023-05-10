@@ -2,20 +2,25 @@
 
 namespace App\Controller;
 
-use App\Entity\AppsUtilisateur;
+use App\Form\MyFormData;
+use App\Form\MyFormType;
 use App\Entity\ClientDef;
-use App\Repository\AppelsRepository;
-use App\Repository\AppsUtilisateurRepository;
-use App\Repository\CalendrierRepository;
-use App\Repository\ClientDefRepository;
-use App\Repository\ContratRepository;
-use App\Repository\DefAppsUtilisateurRepository;
+use App\Entity\AppsUtilisateur;
 use App\Repository\RolesRepository;
+use App\Repository\AppelsRepository;
+use App\Repository\ContratRepository;
+use App\Repository\ClientDefRepository;
+use App\Repository\CalendrierRepository;
 use Doctrine\ORM\EntityManagerInterface;
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use App\Repository\AppsUtilisateurRepository;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use App\Repository\DefAppsUtilisateurRepository;
+use Symfony\Component\HttpFoundation\BinaryFileResponse;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+
 /**
  * Ce controlleur existe pour faire les testes pendant le développement
  * Require ROLE_ADMIN for only this controller method.
@@ -23,6 +28,13 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 #[IsGranted('ROLE_ADMIN')]
 class TestController extends AbstractController
 {
+    #[Route('/devis/{id}/{filename}', name: 'app_devis', methods: ['POST', 'GET'])]
+    public function devis($id, $filename)
+    {
+        $filePath = $this->getParameter('kernel.project_dir').'/devis/'.$id.'/'.$filename.'.pdf';
+        return new BinaryFileResponse($filePath);
+    }
+
     #[IsGranted('ROLE_ADMIN')]
     #[Route('/test/{id}', name: 'app_test_1', methods: ['POST', 'GET'])]
     public function user(
@@ -31,13 +43,14 @@ class TestController extends AbstractController
         ContratRepository $contratRepository, 
         AppelsRepository $appelsRepository,
         CalendrierRepository $calendrierRepository,
-        ClientDefRepository $clientDefRepository
+        ClientDefRepository $clientDefRepository,
+        Request $request,
         ): Response
     {
         $contrat = $contratRepository->findOneBy(['libelle' => 'Gaz condensation']);
         $calendriers = $calendrierRepository ->findAll();
-        // $test = $contratRepository->find("00001");
-        dd($contrat->getLibelle());
+
+        
         // $this->denyAccessUnlessGranted('ROLE_ADMIN');
         return $this->render('test/test.html.twig', [
             'controller_name' => 'TestController',

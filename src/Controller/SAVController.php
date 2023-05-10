@@ -121,6 +121,24 @@ class SAVController extends AbstractController
          */
         $photos = $photosSAVRepository->findBy(['Code' => $contrat->getId()]) ?? null;
 
+        /**
+         * Partie Devis
+         */
+        $devis = [];
+        $prefix = "Devis_";
+        $devisPath = $this->getParameter('devis_chemin') . $contrat->getCodeClient()->getId() ?? null;
+        
+        try {
+            $files = scandir($devisPath);
+            foreach ($files as $file) {
+                if (strpos($file, $prefix) !== false) {
+                    $devis[] = $file;
+                }
+            }
+        } catch (\Throwable $th) {
+            
+        }
+
         return $this->render('sav/show.html.twig', [
             'current_page'      => 'app_sav',
             'contrat'           => $contrat,
@@ -130,6 +148,7 @@ class SAVController extends AbstractController
             'commentForm'       => $commentForm->createView(),
             'replyForm'         => $replyForm->createView(),
             'photos'            => $photos,
+            'devis'             => $devis,
         ]);
     }
 }

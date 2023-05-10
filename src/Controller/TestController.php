@@ -28,13 +28,6 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 #[IsGranted('ROLE_ADMIN')]
 class TestController extends AbstractController
 {
-    #[Route('/devis/{id}/{filename}', name: 'app_devis', methods: ['POST', 'GET'])]
-    public function devis($id, $filename)
-    {
-        $filePath = $this->getParameter('kernel.project_dir').'/devis/'.$id.'/'.$filename.'.pdf';
-        return new BinaryFileResponse($filePath);
-    }
-
     #[IsGranted('ROLE_ADMIN')]
     #[Route('/test/{id}', name: 'app_test_1', methods: ['POST', 'GET'])]
     public function user(

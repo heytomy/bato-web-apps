@@ -264,4 +264,9 @@ class AppsUtilisateur implements UserInterface, PasswordAuthenticatedUserInterfa
 
         return $this;
     }
+
+    public function __toString()
+    {
+        return $this->ID_Utilisateur;
+    }
 }

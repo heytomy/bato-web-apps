@@ -6,12 +6,12 @@ use App\Entity\Appels;
 use App\Entity\Contrat;
 use App\Entity\ClientDef;
 use App\Entity\AppsUtilisateur;
-use App\Repository\AppsUtilisateurRepository;
 use App\Repository\ClientDefRepository;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Bundle\SecurityBundle\Security;
+use App\Repository\AppsUtilisateurRepository;
+use FOS\CKEditorBundle\Form\Type\CKEditorType;
 use Symfony\Component\Routing\RouterInterface;
-use Eckinox\TinymceBundle\Form\Type\TinymceType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Validator\Constraints\Email;
@@ -194,7 +194,7 @@ class AppelsType extends AbstractType
                 ],
             ])
             ->add('Tel', TelType::class, [
-                'required' => true,
+                'required' => false,
                 'label' => 'Numéro de téléphone',
                 'empty_data' => null,
                 'attr' => [
@@ -202,12 +202,12 @@ class AppelsType extends AbstractType
                     'class' => 'form-control',
                 ],
                 'constraints' => [
-                    new NotBlank(['message' => 'Veuillez saisir un numéro de téléphone']),
+                    // new NotBlank(['message' => 'Veuillez saisir un numéro de téléphone']),
                     new Regex(['pattern' => '/^0[1-9]([-. ]?\d{2}){4}$/', 'message' => 'Veuillez saisir un numéro de téléphone valide']),
                 ],
             ])
             ->add('Email', EmailType::class, [
-                'required' => true,
+                'required' => false,
                 'label' => 'Adresse email',
                 'empty_data' => null,
                 'attr' => [
@@ -215,11 +215,11 @@ class AppelsType extends AbstractType
                     'class' => 'form-control',
                 ],
                 'constraints' => [
-                    new NotBlank(['message' => 'Veuillez entrer l\'adresse email du client.']),
+                    // new NotBlank(['message' => 'Veuillez entrer l\'adresse email du client.']),
                     new Email(['message' => 'L\'adresse email "{{ value }}" n\'est pas valide.'])
                 ]
             ])
-            ->add('description', TinymceType::class, [
+            ->add('description', CKEditorType::class, [
                 'required' => true,
                 'label' => 'Description',
                 'attr' => [

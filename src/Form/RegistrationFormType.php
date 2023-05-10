@@ -2,19 +2,19 @@
 
 namespace App\Form;
 
-use App\Entity\AppsUtilisateur;
-use App\Entity\DefAppsUtilisateur;
 use App\Entity\Roles;
+use App\Entity\AppsUtilisateur;
 use App\Repository\RolesRepository;
-use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
+use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Validator\Constraints\Callback;
 use Symfony\Component\Validator\Constraints\NotBlank;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Validator\Context\ExecutionContextInterface;
 use Symfony\Component\Form\Extension\Core\Type\{RepeatedType, PasswordType};
 use Symfony\Component\Form\Extension\Core\Type\{CheckboxType, EmailType, TextType, TelType, ColorType};
+use Symfony\Component\Validator\Constraints as Assert;
 
 class RegistrationFormType extends AbstractType
 {
@@ -152,7 +152,11 @@ class RegistrationFormType extends AbstractType
                         'class' => 'form-control',
                     ],
                     'constraints' => [
-                        new NotBlank(),
+                        new Assert\NotBlank(),
+                        new Assert\Regex([
+                            'pattern' => '/^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$/',
+                            'message' => 'Your password must be at least 8 characters long and contain at least one letter and one number.',
+                        ]),
                     ],
                 ],
                 'second_options' => [

@@ -7,6 +7,13 @@
 {% endblock %}
 
 {% block list %}
+
+    {# {% for message in app.flashes('noDevis') %}
+        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+            {{ message }}
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    {% endfor %} #}
     <div class="border rounded container bg-light p-2">
         <div class="row border border-light rounded bg-client m-2 p-2">
             <h1>{{contrat.getCodeClient().nom}}</h1>
@@ -16,6 +23,16 @@
 
         <h3 class="row border border-light rounded m-2 p-2">
             <strong>Devis :</strong>
+            <ul class='list-group p-4'>
+                {% for file in devis %}
+                    <li class='list-group-item'>
+                        <a class='btn' href="{{ path('app_devis', {'id': contrat.getCodeClient().id, 'filename': file}) }}" target="_blank">
+                            <i class="fa-solid fa-file-pdf text-primary"></i> 
+                            {{ file }}
+                        </a>
+                    </li>
+                {% endfor %}
+            </ul>
         </h3>
 
         <div class="row border border-light rounded m-2 p-2">
@@ -42,4 +59,9 @@
             {% include 'commentaireSAV/comment.html.twig' %}
         </div>
     </div>
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    {{ encore_entry_script_tags('flash') }}
 {% endblock %}

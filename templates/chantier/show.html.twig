@@ -45,6 +45,20 @@
         </div>
 
         <h3 class="row border border-light rounded m-2 p-2">
+            <strong>Devis :</strong>
+            <ul class='list-group p-4'>
+                {% for file in devis %}
+                    <li class='list-group-item'>
+                        <a class='btn' href="{{ path('app_devis', {'id': chantier.id, 'filename': file}) }}" target="_blank">
+                            <i class="fa-solid fa-file-pdf text-primary"></i> 
+                            {{ file }}
+                        </a>
+                    </li>
+                {% endfor %}
+            </ul>
+        </h3>
+
+        <h3 class="row border border-light rounded m-2 p-2">
             <strong>Description :</strong>
         </h3>
 

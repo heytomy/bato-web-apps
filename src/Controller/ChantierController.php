@@ -154,6 +154,39 @@ class ChantierController extends AbstractController
          */
         $photos = $photosChantierRepository->findBy(['codeChantier' => $chantier->getId()]) ?? null;
 
+        /**
+         * Partie Devis
+         */
+        //On crée une liste pour les devis
+        $devis = [];
+        
+        //On définit le prefix du pdf pour chercher dans le fichier
+        $prefix = "Devis_"; 
+        
+        //On définit le chemin du devis pour ce client. J'utilise la fonction "getParameter" qui prend le parametre pour le chemin
+        //qui est une variable globale dans le fichier service.yaml
+        $devisPath = $this->getParameter('devis_chantier_chemin') . $chantier->getId() ?? null;
+        // dd($devisPath);
+
+
+        /**
+         * Ici, on scan le dossier pour trouver tous les fichier. On filtre les fichier qu'on veut et les mettre dans la liste "devis"
+         * On va utiliser ces noms des fichiers dans le twig pour appeler le controller devis avec la Route 'app_devis'
+         */
+        try {
+            $files = scandir($devisPath);
+            foreach ($files as $file) {
+                if (strpos($file, $prefix) !== false) {
+                    $devis[] = $file;
+                }
+            }
+        } catch (\Throwable $th) {
+            $this->addFlash(
+               'noDevis',
+               'Pas de devis'
+            );
+        }
+
         return $this->render('chantier/show.html.twig',[
             'chantier'          =>  $chantier,
             'comments'          =>  $comments,
@@ -163,6 +196,7 @@ class ChantierController extends AbstractController
             'replies'           =>  $replies,
             'photos'            =>  $photos,
             'current_page'      =>  'app_chantier',
+            'devis'             =>  $devis
         ]);
     }
 

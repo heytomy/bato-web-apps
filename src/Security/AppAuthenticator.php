@@ -30,6 +30,8 @@ class AppAuthenticator extends AbstractLoginFormAuthenticator
     {
         $nomUtilisateur = $request->request->get('Nom_utilisateur', '');
 
+        TODO:// Sensible à la case a vérifier
+
         $request->getSession()->set(Security::LAST_USERNAME, $nomUtilisateur);
 
         return new Passport(

@@ -16,6 +16,8 @@ class DashboardController extends AbstractController
     {
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
 
+        $now = new DateTime();
+
         $currentUserId = $this->getUser()->getId();
 
         $appelsCurrentUser = $em->getRepository(Appels::class)->createQueryBuilder('a')
@@ -34,6 +36,7 @@ class DashboardController extends AbstractController
         return $this->render('dashboard/index.html.twig', [
             'current_page' => 'app_dashboard',
             'appelsCurrentUser' => $appelsCurrentUser,
+            'now' => $now
         ]);
     }
 }

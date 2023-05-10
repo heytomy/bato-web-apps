@@ -1,90 +1,111 @@
 {% extends '_inc/listPage.html.twig' %}
 
-{% block title %}Appels{% endblock %}
+{% block title %}Appels
+{% endblock %}
 
 {% block back_button %}
-    {{ path('app_appels') }}
+	{{ path('app_appels') }}
 {% endblock %}
 
 {% block search %}
-    <div class="p-2 col d-flex flex-row-reverse">
-        <a class="btn btn-secondary p-2" href="{{ path('app_appels_edit', {'id': appel.id}) }}">
-            <i class="fa-solid fa-pen-to-square"></i>
-            Modifier
-        </a>
-    </div>
+	<div class="p-2 col d-flex flex-row-reverse">
+		<a class="btn btn-secondary p-2" href="{{ path('app_appels_edit', {'id': appel.id}) }}">
+			<i class="fa-solid fa-pen-to-square"></i>
+			Modifier
+		</a>
+	</div>
 {% endblock %}
 
 {% block list %}
-    {% if appel.getStatut.statut == 'EN_COURS' %}
-        <div class="d-flex justify-content-between container flex-sm-row flex-column pb-2">
-            <div class="p-2 col d-flex flex-row-reverse">
-                {% include 'appels/_change_statut_form.html.twig' %}
-            </div>
-        </div>
-    {% endif %}
+	{% if appel.getStatut.statut == 'EN_COURS' %}
+		<div class="d-flex justify-content-between container flex-sm-row flex-column pb-2">
+			<div class="p-2 col d-flex flex-row-reverse">
+				{% include 'appels/_change_statut_form.html.twig' %}
+			</div>
+		</div>
+	{% endif %}
 
-    <div class="border rounded container bg-light p-2">
-        <div class="row border border-light rounded bg-client m-2 p-2"> 
-            <div class="d-flex justify-content-between">
-                <h1>{{appel.getRdv().titre}}</h1>
-                <div class="d-flex flex-column align-items-end">
-                    <h5>Le {{appel.getRdv().dateDebut | date('d/m/Y')}}</h5>
-                    <h5>à {{appel.getRdv().dateDebut | date('h:i')}}</h5>
-                </div>
-            </div>
-            {% if appel.CodeContrat %}  <div>Code du contrat: {{appel.CodeContrat}} - {{appel.CodeContrat.libelle}}</div>   {% endif %}
-            {% if appel.CodeClient %}  <div>Code du client: {{appel.CodeClient.getId()}}</div>   {% endif %}    
-                <div class="d-flex flex-column align-items-end">
-                    <h6>Fin prévu le {{appel.getRdv().dateFin | date('d/m/Y H:i')}}</h6>
+	<div class="border rounded container bg-light p-2">
+		<div class="row border border-light rounded bg-client m-2 p-2">
+			<div class="d-flex justify-content-between">
+				<h1>{{appel.getRdv().titre}}</h1>
+				<div class="d-flex flex-column align-items-end">
+					<h5>Le
+						{{appel.getRdv().dateDebut | date('d/m/Y')}}</h5>
+					<h5>à
+						{{appel.getRdv().dateDebut | date('h:i')}}</h5>
+				</div>
+			</div>
+			{% if appel.CodeContrat %}
+				<div>Code du contrat:
+					{{appel.CodeContrat}}
+					-
+					{{appel.CodeContrat.libelle}}</div>
+			{% else %}
+				<div>N'a pas de contrat d'entretien</div>
+			{% endif %}
+			{% if appel.CodeClient %}
+				<div>Code du client:
+					{{appel.CodeClient.getId()}}</div>
+			{% else %}
+				<div>Nouveau client !</div>
+			{% endif %}
 
-                    <h5 class='text-primary'><strong>Technicien: </strong>{{appel.IDUtilisateur.IDUtilisateur.nom}} {{appel.IDUtilisateur.IDUtilisateur.prenom}}</h5>
-                </div>   
+			<div class="d-flex flex-column align-items-end">
+				<h6>Fin prévu le
+					{{appel.getRdv().dateFin | date('d/m/Y H:i')}}</h6>
 
-        </div>
+				<h5 class='text-primary'>
+					<strong>Technicien:
+					</strong>
+					{{appel.IDUtilisateur.IDUtilisateur.nom}}
+					{{appel.IDUtilisateur.IDUtilisateur.prenom}}</h5>
+			</div>
 
-        <h3 class="row border border-light rounded m-2 p-2">
-            <strong>Description :</strong>
-        </h3>
+		</div>
 
-        <div class="row border border-light rounded m-2 p-2">
-            <section class="gradient-custom justify-content-center">
-                <div class="container justify-content-center">
-                    <div class="row d-flex justify-content-center">
-                        <div class="col-md-12">
-                            <div class="card">
-                                <div class="card-body p-4 bg-client">
-                                    <div class="row">
-                                        <div class="col">
-                                            {{ appel.description|raw }}
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </section>
-        </div>
+		<h3 class="row border border-light rounded m-2 p-2">
+			<strong>Description :</strong>
+		</h3>
 
-        <h3 class="row border border-light rounded m-2 p-2">
-            <strong>Gallerie Photos :</strong>
-        </h3>
-        
-        <div class="row border border-light rounded m-2 p-2">
-            {% if photos %}
-                {% include 'photoAppels/photo.html.twig' %}
-            {% else %}
-                
-            {% endif %}
-        </div>
+		<div class="row border border-light rounded m-2 p-2">
+			<section class="gradient-custom justify-content-center">
+				<div class="container justify-content-center">
+					<div class="row d-flex justify-content-center">
+						<div class="col-md-12">
+							<div class="card">
+								<div class="card-body p-4 bg-client">
+									<div class="row">
+										<div class="col">
+											{{ appel.description|raw }}
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</section>
+		</div>
 
-        <h3 class="row border border-light rounded m-2 p-2">
-            <strong>Commentaires :</strong>
-        </h3>
-        
-        <div class="row border border-light rounded m-2 p-2">
-            {% include 'commentaireAppels/comment.html.twig' %}
-        </div>
-    </div>
+		<h3 class="row border border-light rounded m-2 p-2">
+			<strong>Gallerie Photos :</strong>
+		</h3>
+
+		<div class="row border border-light rounded m-2 p-2">
+			{% if photos %}
+				{% include 'photoAppels/photo.html.twig' %}
+				{% else %}
+
+			{% endif %}
+		</div>
+
+		<h3 class="row border border-light rounded m-2 p-2">
+			<strong>Commentaires :</strong>
+		</h3>
+
+		<div class="row border border-light rounded m-2 p-2">
+			{% include 'commentaireAppels/comment.html.twig' %}
+		</div>
+	</div>
 {% endblock %}

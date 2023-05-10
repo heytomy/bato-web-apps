@@ -4,7 +4,6 @@
 {% endblock %}
 
 {% block body %}
-
 	<main role="main">
 		<div class="container">
 
@@ -28,31 +27,65 @@ alert.remove();
 				{% endif %}
 			{% endfor %}
 
-            <div class="row border border-light rounded bg-light m-2 p-1 mt-5">
-                {% if app.user %}
-                    <h1 class="display-3">Bonjour {{ app.user.getIDUtilisateur.prenom }}!</h1>
-                    <p>Voici un petit récapitulatif de votre journée :</p>
-                    <ul class="" style="margin-left: 2rem;">
-                        <li>Il y a X nouveaux devis.</li>
+			<div class="row border border-light rounded bg-light m-2 p-1 mt-5">
+				{% if app.user %}
+					<h1 class="display-3">Bonjour
+						{{ app.user.getIDUtilisateur.prenom }}!</h1>
+					<h4>Voici un petit récapitulatif de votre journée :</h4>
+					<ul
+						class="list-unstyled mt-2" style="margin-left: 0.5rem;">
+						{# <li class="">Il y a X nouveaux devis.</li> #}
 
-                        <li>
-                            {% if appelsCurrentUser|length > 0 %}
-                                {{ appelsCurrentUser|length }} rendez-vous aujourd'hui.
-                            {% else %}
-                                Aucun rendez-vous aujourd'hui.
-                            {% endif %}
-                        </li>
+						<li class="list-group-item">
+							{% if appelsCurrentUser|length > 0 %}
+								<a class="btn btn-secondary" data-bs-toggle="collapse" href="#rdvCollapse" role="button" aria-expanded="false" aria-controls="rdvCollapse">
+									{{ appelsCurrentUser|length }}
+									rendez-vous aujourd'hui.
+								</a>
 
-                            {% if appelsCurrentUser|length > 0 %}
-                                <ul>
-                                    {% for appels in appelsCurrentUser %}
-                                        <li>{{ appels.RDV.dateDebut|date('d/m/Y H:i') }} - {{ appels.nom }}</li>
-                                    {% endfor %}
-                                </ul>
-                            {% endif %}
-                    </ul>
-                {% endif %}
-            </div>
+								<div class="collapse col-md-7" id="rdvCollapse">
+									<div class="row rounded bg-white m-2 p-1">
+										<ul
+											class="list-group list-group-flush" style="max-height: 150px; overflow-y: auto;">
+                                                {# {% for appels in appelsCurrentUser|sort((a, b) => a.RDV.dateDebut <=> b.RDV.dateDebut) %}
+                                                    {% if appels.RDV.dateDebut >= now %}
+                                                        <li class="list-group-item d-flex justify-content-between align-items-center">
+                                                            <a class="text-decoration-none link-dark" href="{{ path('app_appels_show', {'id': appels.id}) }}">
+                                                                {{ appels.nom }}
+                                                            </a>
+                                                            <span class="badge bg-primary text-wrap">{{ appels.RDV.dateDebut|date('d/m/Y H:i') }}</span>
+                                                        </li>
+                                                    {% endif %}
+                                                {% endfor %} #}
+
+											{% set hasAppointment = false %}
+											{% for appels in appelsCurrentUser|sort((a, b) => a.RDV.dateDebut <=> b.RDV.dateDebut) %}
+												{% if appels.RDV.dateDebut|date_modify('+1 hour') >= now %}
+													{% set hasAppointment = true %}
+													<li class="list-group-item d-flex justify-content-between align-items-center">
+														{% if appels.RDV.dateDebut|date_modify('+1 hour') >= now %}
+															<a class="text-decoration-none link-dark" href="{{ path('app_appels_show', {'id': appels.id}) }}">{{ appels.nom }}</a>
+														{% else %}
+															{{ appels.nom }}
+														{% endif %}
+														<span class="badge bg-primary text-wrap">{{ appels.RDV.dateDebut|date('d/m/Y H:i') }}</span>
+													</li>
+												{% endif %}
+											{% endfor %}
+											{% if not hasAppointment %}
+												<li class="list-group-item">Plus aucun rendez-vous pour aujourd'hui !</li>
+											{% endif %}
+
+										</ul>
+									</div>
+								</div>
+							{% else %}
+								Aucun rendez-vous aujourd'hui.
+							{% endif %}
+						</li>
+					</ul>
+				{% endif %}
+			</div>
 
 			<div class="row border border-light rounded bg-light m-2 p-2">
 				<h1 class="display-3">Calendrier</h1>
@@ -60,10 +93,10 @@ alert.remove();
 					<div class="col calendar-holder p-2" id="calendar-holder-dashboard-0" data-events-url="{{ path('fc_load_events') }}"></div>
 				</div>
 				<div class="row">
-					<div class="col calendar-holder calendar-holder-rest p-2" id="calendar-holder-dashboard-1" data-events-url="{{ path('fc_load_events') }}"></div>
-					<div class="col calendar-holder calendar-holder-rest p-2" id="calendar-holder-dashboard-2" data-events-url="{{ path('fc_load_events') }}"></div>
-					<div class="col calendar-holder calendar-holder-rest p-2" id="calendar-holder-dashboard-3" data-events-url="{{ path('fc_load_events') }}"></div>
-					<div class="col calendar-holder calendar-holder-rest p-2" id="calendar-holder-dashboard-4" data-events-url="{{ path('fc_load_events') }}"></div>
+					<div class="col calendar-holder calendar-holder-rest" id="calendar-holder-dashboard-1" data-events-url="{{ path('fc_load_events') }}"></div>
+					<div class="col calendar-holder calendar-holder-rest" id="calendar-holder-dashboard-2" data-events-url="{{ path('fc_load_events') }}"></div>
+					<div class="col calendar-holder calendar-holder-rest" id="calendar-holder-dashboard-3" data-events-url="{{ path('fc_load_events') }}"></div>
+					<div class="col calendar-holder calendar-holder-rest" id="calendar-holder-dashboard-4" data-events-url="{{ path('fc_load_events') }}"></div>
 				</div>
 			</div>
 			<!-- Devis à réaliser -->
@@ -165,3 +198,4 @@ alert.remove();
 	{{ parent() }}
 	{{ encore_entry_script_tags('calendrierDashboard') }}
 {% endblock %}
+

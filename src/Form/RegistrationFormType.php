@@ -56,7 +56,7 @@ class RegistrationFormType extends AbstractType
                     return $roles->getLibelle();
                 },
                 'attr' => [
-                    'placeholder' => 'Choissiez un role pour l\'utilisateur',
+                    'placeholder' => 'Choisissiez un role pour l\'utilisateur',
                     'class' => 'form form-select',
                 ],
             ])

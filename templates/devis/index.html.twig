@@ -1,20 +1,73 @@
-{% extends 'base.html.twig' %}
+{% extends '_inc/listPage.html.twig' %}
 
-{% block title %}Hello DevisController!{% endblock %}
+{% block title %}Devis à réaliser{% endblock %}
 
-{% block body %}
-<style>
-    .example-wrapper { margin: 1em auto; max-width: 800px; width: 95%; font: 18px/1.5 sans-serif; }
-    .example-wrapper code { background: #F5F5F5; padding: 2px 6px; }
-</style>
+{% block back_button %}
+    {{ path('app_dashboard') }}
+{% endblock %}
 
-<div class="example-wrapper">
-    <h1>Hello {{ controller_name }}! ✅</h1>
 
-    This friendly message is coming from:
-    <ul>
-        <li>Your controller at <code><a href="{{ 'E:/MRB/BATO/bato_web_apps/src/Controller/DevisController.php'|file_link(0) }}">src/Controller/DevisController.php</a></code></li>
-        <li>Your template at <code><a href="{{ 'E:/MRB/BATO/bato_web_apps/templates/devis/index.html.twig'|file_link(0) }}">templates/devis/index.html.twig</a></code></li>
-    </ul>
-</div>
+{# {% block search %}
+    <div class="p-2 col d-flex flex-row-reverse">
+            <button class="btn btn-danger ms-1" id='chantierTermine'>Chantiers archivés</button>
+            <button class="btn btn-danger" id='chantierEnCours'>Chantiers en cours</button>
+    </div>
+{% endblock %} #}
+
+{# {% block search %}
+    {{ form_start(searchForm, {'attr': {'class': 'd-flex justify-content-end col p-2', 'id': 'search-form'}}) }}
+        <div class="">
+            {{ form_row(searchForm.nom) }}
+        </div>
+        <div class="px-2">
+            {{ form_row(searchForm.submit) }}
+        </div>
+    {{ form_end(searchForm) }}
+{% endblock %} #}
+
+{% block list %}
+	<div class="d-flex justify-content-center container mt-5 mb-5">
+		<h1 class="font-weight-bold statut" style="font-size: 3em;">Les devis en cours</h1>
+	</div>
+
+
+	<div class="d-flex justify-content-between container flex-sm-row flex-column mb-3">
+
+		<div class="col d-flex flex-row align-items-center">
+			<button class="btn btn-secondary mx-1" id='devisTermine'>Devis réalisés</button>
+			<button class="btn btn-secondary" id='devisEnCours'>Devis à réaliser</button>
+		</div>
+
+		<div class="col d-flex flex-row">
+			<form method="get" class="d-flex justify-content-end col" id="search-form">
+				<div class="">
+					<div><input type="text" id="nom" name="nom" placeholder="Recherchez ici" class="form-control search-input mr-sm-2" aria-label="Search" autocomplete="off" spellcheck="false"></div>
+				</div>
+				<div class="px-2">
+					<div>
+						<button type="submit" id="submit" name="submit" class="btn btn-secondary">Chercher</button>
+					</div>
+				</div>
+			</form>
+		</div>
+	</div>
+
+		{% for message in app.flashes('success') %}
+		<div class="alert alert-success alert-dismissible fade show mt-5" role="alert">
+			{{ message }}
+			<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+		</div>
+	{% endfor %}
+
+    <div class="client-container border rounded container bg-light p-2"></div>
+{% endblock %}
+
+{% block content %}
+    <button class="btn btn-primary back-to-top"><i class="fa-solid fa-angles-up"></i> Retour en haut</button>
+    {% include '_inc/chargementAnimation.html.twig' %}
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    {{ encore_entry_script_tags('devis_JS') }}
 {% endblock %}

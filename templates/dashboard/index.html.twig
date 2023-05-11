@@ -58,24 +58,21 @@ alert.remove();
                                                     {% endif %}
                                                 {% endfor %} #}
 
-											{% set hasAppointment = false %}
-											{% for appels in appelsCurrentUser|sort((a, b) => a.RDV.dateDebut <=> b.RDV.dateDebut) %}
-												{% if appels.RDV.dateDebut|date_modify('+1 hour') >= now %}
-													{% set hasAppointment = true %}
-													<li class="list-group-item d-flex justify-content-between align-items-center">
-														{% if appels.RDV.dateDebut|date_modify('+1 hour') >= now %}
-															<a class="text-decoration-none link-dark" href="{{ path('app_appels_show', {'id': appels.id}) }}">{{ appels.nom }}</a>
-														{% else %}
-															{{ appels.nom }}
-														{% endif %}
-														<span class="badge bg-primary text-wrap">{{ appels.RDV.dateDebut|date('d/m/Y H:i') }}</span>
-													</li>
-												{% endif %}
-											{% endfor %}
-											{% if not hasAppointment %}
-												<li class="list-group-item">Plus aucun rendez-vous pour aujourd'hui !</li>
-											{% endif %}
-
+                                            {% set hasAppointment = false %}
+                                            {% for appels in appelsCurrentUser|sort((a, b) => a.RDV.dateDebut <=> b.RDV.dateDebut) %}
+                                                {% if appels.RDV.dateDebut|date_modify('+1 hour') >= now %}
+                                                    {% set hasAppointment = true %}
+                                                    <li class="list-group-item d-flex justify-content-between align-items-center">
+                                                        <a class="text-decoration-none link-dark" href="{{ path('app_appels_show', {'id': appels.id}) }}">
+                                                            {{ appels.nom }}
+                                                        </a>
+                                                        <span class="badge bg-primary text-wrap">{{ appels.RDV.dateDebut|date('d/m/Y H:i') }}</span>
+                                                    </li>
+                                                {% endif %}
+                                            {% endfor %}
+                                            {% if not hasAppointment %}
+                                                <li class="list-group-item">Plus aucun rendez-vous pour aujourd'hui !</li>
+                                            {% endif %}
 										</ul>
 									</div>
 								</div>

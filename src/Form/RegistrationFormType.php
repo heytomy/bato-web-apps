@@ -21,8 +21,8 @@ class RegistrationFormType extends AbstractType
     private $rolesRepository;
 
     public function __construct(
-        RolesRepository $rolesRepository)
-    {
+        RolesRepository $rolesRepository
+    ) {
         $this->rolesRepository = $rolesRepository;
     }
 
@@ -34,6 +34,7 @@ class RegistrationFormType extends AbstractType
                 'label' => 'Nom d\'utilisateur',
                 'attr' => [
                     'placeholder' => 'Veuillez entrer un nom d\'utilisateur',
+                    'class' => 'form-control mb-3',
                 ],
             ])
 
@@ -41,7 +42,8 @@ class RegistrationFormType extends AbstractType
                 'required' => true,
                 'label' => 'Code Couleur',
                 'attr' => [
-                    'placeholder' => '',
+                    'placeholder' => 'Veuillez choisir une couleur',
+                    'class' => 'form-control mb-3',
                 ],
             ])
 
@@ -52,12 +54,12 @@ class RegistrationFormType extends AbstractType
                 'required' => true,
                 'multiple' => false,
                 'label' => 'Rôles',
-                'choice_label' => function(Roles $roles){
+                'choice_label' => function (Roles $roles) {
                     return $roles->getLibelle();
                 },
                 'attr' => [
                     'placeholder' => 'Choisissiez un role pour l\'utilisateur',
-                    'class' => 'form form-select',
+                    'class' => 'form form-select mb-3',
                 ],
             ])
 
@@ -67,6 +69,7 @@ class RegistrationFormType extends AbstractType
                 'label' => 'Nom',
                 'attr' => [
                     'placeholder' => 'Veuillez entrer un nom ',
+                    'class' => 'form-control mb-3',
                 ],
             ])
 
@@ -76,6 +79,7 @@ class RegistrationFormType extends AbstractType
                 'label' => 'Prénom',
                 'attr' => [
                     'placeholder' => 'Veuillez entrer un prénom ',
+                    'class' => 'form-control mb-3',
                 ],
             ])
 
@@ -85,6 +89,7 @@ class RegistrationFormType extends AbstractType
                 'label' => 'Adresse',
                 'attr' => [
                     'placeholder' => 'Veuillez entrer une adresse ',
+                    'class' => 'form-control mb-3',
                 ],
             ])
 
@@ -94,6 +99,7 @@ class RegistrationFormType extends AbstractType
                 'label' => 'Code Postal',
                 'attr' => [
                     'placeholder' => 'Veuillez entrer un code postal ',
+                    'class' => 'form-control mb-3',
                 ],
             ])
 
@@ -103,6 +109,7 @@ class RegistrationFormType extends AbstractType
                 'label' => 'Ville',
                 'attr' => [
                     'placeholder' => 'Veuillez entrer une ville ',
+                    'class' => 'form-control mb-3',
                 ],
             ])
 
@@ -112,6 +119,7 @@ class RegistrationFormType extends AbstractType
                 'label' => 'Téléphone',
                 'attr' => [
                     'placeholder' => 'Veuillez entrer un numéro ',
+                    'class' => 'form-control mb-3',
                 ],
             ])
 
@@ -121,6 +129,7 @@ class RegistrationFormType extends AbstractType
                 'label' => 'Téléphone 2',
                 'attr' => [
                     'placeholder' => 'Veuillez entrer un numéro ',
+                    'class' => 'form-control mb-3',
                 ],
             ])
 
@@ -130,6 +139,7 @@ class RegistrationFormType extends AbstractType
                 'label' => 'Email',
                 'attr' => [
                     'placeholder' => 'Veuillez entrer un email ',
+                    'class' => 'form-control mb-3',
                 ],
             ])
 
@@ -141,44 +151,88 @@ class RegistrationFormType extends AbstractType
             //     ],
             // ])
 
+            // ->add('plainPassword', RepeatedType::class, [
+            //     'type' => PasswordType::class,
+            //     'mapped' => false,
+            //     'required' => true,
+            //     'first_options' => [
+            //         'label' => 'Password',
+            //         'attr' => [
+            //             'placeholder' => 'Entrez le mot de passe',
+            //             'class' => 'form-control',
+            //         ],
+            //         'constraints' => [
+            //             new Assert\NotBlank(),
+            //             new Assert\Regex([
+            //                 'pattern' => '/^(?=.*[A-Z])(?=.*\d)[A-Za-z\d]{8,}$/',
+            //                 'message' => 'Votre mot de passe doit comporter au moins 8 caractères, une lettre majuscule et un chiffre.',
+            //             ]),
+            //         ],
+            //     ],
+            //     'second_options' => [
+            //         'label' => 'Repeat Password',
+            //         'attr' => [
+            //             'placeholder' => 'Confirmez le mot de passe',
+            //             'class' => 'form-control',
+            //         ],
+            //         'constraints' => [
+            //             new Callback([
+            //                 'callback' => function ($value, ExecutionContextInterface $context) use ($builder) {
+            //                     $password = $builder->get('plainPassword')->getData();
+            //                     $confirmPassword = $builder->get('plainPassword')->get('second')->getData();
+            //                     if ($password !== $confirmPassword) {
+            //                         $context->buildViolation('Les mots de passes ne correspondent pas.')
+            //                             ->atPath('second')
+            //                             ->addViolation();
+            //                     }
+            //                 }
+            //             ])
+            //         ]
+            //     ]
+            // ]);
+
             ->add('plainPassword', RepeatedType::class, [
                 'type' => PasswordType::class,
-                'mapped' => false,
+                'invalid_message' => 'Les mots de passes ne correspondent pas.',
                 'required' => true,
+                'mapped' => false,
                 'first_options' => [
-                    'label' => 'Password',
+                    'label' => 'Mot de passe',
                     'attr' => [
-                        'placeholder' => 'Entrez le mot de passe',
+                        'placeholder' => 'Veuillez entrer un mot de passe',
                         'class' => 'form-control',
                     ],
                     'constraints' => [
-                        new Assert\NotBlank(),
+                        new Assert\NotBlank([
+                            'message' => 'Le mot de passe ne doit pas être vide.',
+                        ]),
                         new Assert\Regex([
-                            'pattern' => '/^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$/',
-                            'message' => 'Your password must be at least 8 characters long and contain at least one letter and one number.',
+                            'pattern' => '/^(?=.*[A-Z])(?=.*\d).{8,}$/',
+                            'message' => 'Le mot de passe doit comporter au moins 8 caractères, une lettre majuscule et un chiffre.',
                         ]),
                     ],
+                    
                 ],
                 'second_options' => [
-                    'label' => 'Repeat Password',
+                    'label' => 'Confirmer le mot de passe',
                     'attr' => [
-                        'placeholder' => 'Confirmez le mot de passe',
+                        'placeholder' => 'Veuillez confirmer votre mot de passe',
                         'class' => 'form-control',
                     ],
-                    'constraints' => [
-                        new Callback([
-                            'callback' => function ($value, ExecutionContextInterface $context) use ($builder) {
-                                $password = $builder->get('plainPassword')->getData();
-                                $confirmPassword = $builder->get('plainPassword')->get('second')->getData();
-                                if ($password !== $confirmPassword) {
-                                    $context->buildViolation('The passwords do not match.')
-                                        ->atPath('second')
-                                        ->addViolation();
-                                }
+                ],
+                'constraints' => [
+                    new Callback(function ($data, ExecutionContextInterface $context) {
+                        if (is_array($data)) { // Check if $data is an array
+                            $password = $data['first'];
+                            $confirmPassword = $data['second'];
+                            if ($password !== $confirmPassword) {
+                                $context->buildViolation('Les mots de passes ne correspondent pas.')
+                                    ->atPath('second')
+                                    ->addViolation();
                             }
-                        ])
-                    ]
-                ]
+                        }
+                    })
+                ],                
             ]);
     }
 
@@ -186,9 +240,9 @@ class RegistrationFormType extends AbstractType
     {
         $resolver->setDefaults([
             'data_class' => AppsUtilisateur::class,
-             'csrf_protection' => true,
-             'csrf_field_name' => '_token',
-             'csrf_token_id'   => 'task_item',
+            'csrf_protection' => true,
+            'csrf_field_name' => '_token',
+            'csrf_token_id'   => 'task_item',
         ]);
     }
 }

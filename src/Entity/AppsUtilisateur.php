@@ -12,7 +12,8 @@ use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: AppsUtilisateurRepository::class)]
-#[UniqueEntity(fields: ['Nom_utilisateur'], message: 'There is already an account with this Nom_utilisateur')]
+#[UniqueEntity(fields: ['Nom_utilisateur'], message: 'Il existe déjà un compte avec ce nom d\'utilisateur')]
+#[UniqueEntity(fields: ['colorCode'], message: 'Choisissez un code couleur qui n\'est pas déjà utilisé')]
 class AppsUtilisateur implements UserInterface, PasswordAuthenticatedUserInterface
 {
     #[ORM\Id]
@@ -24,13 +25,6 @@ class AppsUtilisateur implements UserInterface, PasswordAuthenticatedUserInterfa
     #[ORM\Column(length: 50, unique: true,  nullable: true)]
     private ?string $Nom_utilisateur = null;
 
-    /**
-     * @var string The hashed password
-     */
-    #[Assert\Regex(
-        pattern: "/^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{8,}$/",
-        message: "Le mot de passe doit comporter au moins 8 caractères, une lettre majuscule, une lettre minuscule, un chiffre et un caractère spécial"
-        )]
     #[ORM\Column(length: 255,  nullable: true)]
     private ?string $Mot_de_passe = null;
 

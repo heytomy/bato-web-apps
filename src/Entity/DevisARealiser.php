@@ -20,17 +20,8 @@ class DevisARealiser
     #[ORM\Column(name: 'Nom', length: 50)]
     private ?string $nom = null;
 
-    #[ORM\Column(name: 'Prenom', length: 50)]
-    private ?string $prenom = null;
-
     #[ORM\Column(name: 'Adr', length: 100)]
     private ?string $adr = null;
-
-    #[ORM\Column(name: 'CP', length: 10)]
-    private ?string $cp = null;
-
-    #[ORM\Column(name: 'Ville', length: 100)]
-    private ?string $ville = null;
 
     #[ORM\Column(name: 'Tel', length: 50)]
     private ?string $tel = null;
@@ -47,6 +38,13 @@ class DevisARealiser
 
     #[ORM\OneToMany(mappedBy: 'codeDevis', targetEntity: PhotosDevis::class, orphanRemoval: true)]
     private Collection $photosDevis;
+
+    #[ORM\ManyToOne(inversedBy: 'devisARealisers')]
+    #[ORM\JoinColumn(nullable: false, name: 'Id_Statut', referencedColumnName: 'Id')]
+    private ?StatutChantier $statut = null;
+
+    #[ORM\Column(type: Types::TEXT, nullable: true)]
+    private ?string $description = null;
 
     public function __construct()
     {
@@ -70,18 +68,6 @@ class DevisARealiser
         return $this;
     }
 
-    public function getPrenom(): ?string
-    {
-        return $this->prenom;
-    }
-
-    public function setPrenom(string $prenom): self
-    {
-        $this->prenom = $prenom;
-
-        return $this;
-    }
-
     public function getAdr(): ?string
     {
         return $this->adr;
@@ -90,30 +76,6 @@ class DevisARealiser
     public function setAdr(string $adr): self
     {
         $this->adr = $adr;
-
-        return $this;
-    }
-
-    public function getCp(): ?string
-    {
-        return $this->cp;
-    }
-
-    public function setCp(string $cp): self
-    {
-        $this->cp = $cp;
-
-        return $this;
-    }
-
-    public function getVille(): ?string
-    {
-        return $this->ville;
-    }
-
-    public function setVille(string $ville): self
-    {
-        $this->ville = $ville;
 
         return $this;
     }
@@ -192,6 +154,30 @@ class DevisARealiser
                 $photosDevi->setCodeDevis(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getStatut(): ?StatutChantier
+    {
+        return $this->statut;
+    }
+
+    public function setStatut(?StatutChantier $statut): self
+    {
+        $this->statut = $statut;
+
+        return $this;
+    }
+
+    public function getDescription(): ?string
+    {
+        return $this->description;
+    }
+
+    public function setDescription(?string $description): self
+    {
+        $this->description = $description;
 
         return $this;
     }

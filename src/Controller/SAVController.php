@@ -133,7 +133,6 @@ class SAVController extends AbstractController
         //On définit le chemin du devis pour ce client. J'utilise la fonction "getParameter" qui prend le parametre pour le chemin
         //qui est une variable globale dans le fichier service.yaml
         $devisPath = $this->getParameter('devis_sav_chemin') . $contrat->getCodeClient()->getId() ?? null;
-        // dd($devisPath);
 
 
         /**

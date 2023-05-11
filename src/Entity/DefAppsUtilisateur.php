@@ -10,7 +10,6 @@ use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 
 #[ORM\Entity(repositoryClass: DefAppsUtilisateurRepository::class)]
-#[UniqueEntity(fields: ['Mail'], message: 'Il existe déjà un compte lié a cette adresse mail')]
 class DefAppsUtilisateur
 {
     #[ORM\Id]

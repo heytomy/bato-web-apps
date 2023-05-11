@@ -5,7 +5,7 @@
 {% block body %}
     <form method="post">
         {{ form_start(registrationForm) }}
-        <div class="container-fluid mt-5 p-5">
+        <div class="container-lg mt-5 p-5">
             <div class="row justify-content-center">
                 <div class="col-md-10 ">
                     {% for flash_success in app.flashes('success') %}
@@ -39,7 +39,8 @@
                         <div class="d-flex card-body flex-column px-5 pb-5">
                             <div class="row mt-2">
                                 <div class="col">
-                                    {{ form_row(registrationForm.Nom_utilisateur, { 'attr': {'class': 'form-control mb-3'} }) }}
+								    {{ form_label(registrationForm.Nom_utilisateur) }}
+                                    {{ form_widget(registrationForm.Nom_utilisateur) }}
                                     {% if registrationForm.Nom_utilisateur.vars.errors|length > 0 %}
                                         {% for error in registrationForm.Nom_utilisateur.vars.errors %}
                                             <div class="alert alert-danger" role="alert">{{ error.message }}</div>
@@ -49,7 +50,8 @@
                             </div>
                             <div class="row mt-2">
                                 <div class="col-md-6">
-                                    {{ form_row(registrationForm.roles) }}
+								    {{ form_label(registrationForm.roles) }}
+                                    {{ form_widget(registrationForm.roles) }}
                                     {% if registrationForm.roles.vars.errors|length > 0 %}
                                         {% for error in registrationForm.roles.vars.errors %}
                                             <div class="alert alert-danger" role="alert">{{ error.message }}</div>
@@ -57,7 +59,8 @@
                                     {% endif %}
                                 </div>
                                 <div class="col">
-                                    {{ form_row(registrationForm.colorCode, { 'attr': {'class': 'form-control mb-3'} }) }}
+								    {{ form_label(registrationForm.colorCode) }}
+                                    {{ form_widget(registrationForm.colorCode) }}
                                     {% if registrationForm.colorCode.vars.errors|length > 0 %}
                                         {% for error in registrationForm.colorCode.vars.errors %}
                                             <div class="alert alert-danger" role="alert">{{ error.message }}</div>
@@ -70,7 +73,8 @@
 
                             <div class="row mt-2">
                                 <div class="col-md-6">
-                                    {{ form_row(registrationForm.Nom, { 'attr': {'class': 'form-control mb-3'} }) }}
+								    {{ form_label(registrationForm.Nom) }}
+                                    {{ form_widget(registrationForm.Nom) }}
                                     {% if registrationForm.Nom.vars.errors|length > 0 %}
                                         {% for error in registrationForm.Nom.vars.errors %}
                                             <div class="alert alert-danger" role="alert">{{ error.message }}</div>
@@ -78,7 +82,8 @@
                                     {% endif %}
                                 </div>
                                 <div class="col-md-6">
-                                    {{ form_row(registrationForm.Prenom, { 'attr': {'class': 'form-control mb-3'} }) }}
+								    {{ form_label(registrationForm.Prenom) }}
+                                    {{ form_widget(registrationForm.Prenom) }}
                                     {% if registrationForm.Prenom.vars.errors|length > 0 %}
                                         {% for error in registrationForm.Prenom.vars.errors %}
                                             <div class="alert alert-danger" role="alert">{{ error.message }}</div>
@@ -88,14 +93,18 @@
                             </div>
 
                             <div class="row mt-2">
-                                {{ form_row(registrationForm.Adresse, { 'attr': {'class': 'form-control mb-3', 'placeholder': 'Adresse'} }) }}
+							    <div class="col-md-50">
+								{{ form_label(registrationForm.Adresse) }}
+                                {{ form_widget(registrationForm.Adresse) }}
                                 {% if registrationForm.Adresse.vars.errors|length > 0 %}
                                     {% for error in registrationForm.Adresse.vars.errors %}
                                         <div class="alert alert-danger" role="alert">{{ error.message }}</div>
                                     {% endfor %}
                                 {% endif %}
+								</div>
                                 <div class="col-md-6">
-                                    {{ form_row(registrationForm.CP, { 'attr': {'class': 'form-control mb-3'} }) }}
+                                	{{ form_label(registrationForm.CP) }}
+                                	{{ form_widget(registrationForm.CP) }}
                                     {% if registrationForm.CP.vars.errors|length > 0 %}
                                         {% for error in registrationForm.CP.vars.errors %}
                                             <div class="alert alert-danger" role="alert">{{ error.message }}</div>
@@ -103,7 +112,8 @@
                                     {% endif %}
                                 </div>
                                 <div class="col-md-6">
-                                    {{ form_row(registrationForm.Ville, { 'attr': {'class': 'form-control mb-3'} }) }}
+                                	{{ form_label(registrationForm.Ville) }}
+                                	{{ form_widget(registrationForm.Ville) }}
                                     {% if registrationForm.Ville.vars.errors|length > 0 %}
                                         {% for error in registrationForm.Ville.vars.errors %}
                                             <div class="alert alert-danger" role="alert">{{ error.message }}</div>
@@ -113,7 +123,8 @@
                             </div>
                             <div class="row mt-2">
                                 <div class="col-md-6">
-                                    {{ form_row(registrationForm.Tel_1, { 'attr': {'class': 'form-control mb-3'} }) }}
+                                	{{ form_label(registrationForm.Tel_1) }}
+                                	{{ form_widget(registrationForm.Tel_1) }}
                                     {% if registrationForm.Tel_1.vars.errors|length > 0 %}
                                         {% for error in registrationForm.Tel_1.vars.errors %}
                                             <div class="alert alert-danger" role="alert">{{ error.message }}</div>
@@ -121,7 +132,8 @@
                                     {% endif %}
                                 </div>
                                 <div class="col-md-6">
-                                    {{ form_row(registrationForm.Tel_2, { 'attr': {'class': 'form-control mb-3'} }) }}
+                                	{{ form_label(registrationForm.Tel_2) }}
+                                	{{ form_widget(registrationForm.Tel_2) }}
                                     {% if registrationForm.Tel_2.vars.errors|length > 0 %}
                                         {% for error in registrationForm.Tel_2.vars.errors %}
                                             <div class="alert alert-danger" role="alert">{{ error.message }}</div>
@@ -134,7 +146,8 @@
 
                             <div class="row mt-2">
                                 <div class="col">
-                                    {{ form_row(registrationForm.Mail, { 'attr': {'class': 'form-control mb-3', 'placeholder': 'Adresse e-mail'} }) }}
+                                	{{ form_label(registrationForm.Mail) }}
+                                	{{ form_widget(registrationForm.Mail) }}
                                     {% if registrationForm.Mail.vars.errors|length > 0 %}
                                         {% for error in registrationForm.Mail.vars.errors %}
                                             <div class="alert alert-danger" role="alert">{{ error.message }}</div>

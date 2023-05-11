@@ -2,13 +2,15 @@
 
 namespace App\Entity;
 
+use Doctrine\ORM\Mapping as ORM;
+use Doctrine\Common\Collections\Collection;
 use App\Repository\DefAppsUtilisateurRepository;
 use Doctrine\Common\Collections\ArrayCollection;
-use Doctrine\Common\Collections\Collection;
-use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 
 #[ORM\Entity(repositoryClass: DefAppsUtilisateurRepository::class)]
+#[UniqueEntity(fields: ['Mail'], message: 'Il existe déjà un compte lié a cette adresse mail')]
 class DefAppsUtilisateur
 {
     #[ORM\Id]

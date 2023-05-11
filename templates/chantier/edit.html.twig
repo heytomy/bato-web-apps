@@ -11,7 +11,9 @@
 {% endblock %}
 
 {% block list %}
-    <h1 class="text-center font-weight-bold" style="font-size: 3em;">Modifier les information du Chantier</h1>
+	<div class="d-flex justify-content-center container mt-5 mb-5">
+        <h1 class="text-center font-weight-bold" style="font-size: 3em;">Modifier les information du Chantier</h1>
+    </div>
     {% if chantier.getStatut.statut == 'EN_COURS' %} 
         {{ include('chantier/_form.html.twig') }}
     {% elseif chantier.getStatut.statut == 'TERMINE' %}

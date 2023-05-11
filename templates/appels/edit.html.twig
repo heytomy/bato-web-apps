@@ -1,20 +1,24 @@
 {% extends '_inc/listPage.html.twig' %}
 
-{% block title %}Modifier Appels{% endblock %}
+{% block title %}Modifier Appels
+{% endblock %}
 
-{% block back_button %}{{ path('app_appels') }}{% endblock %}
+{% block back_button %}
+	{{ path('app_appels') }}
+{% endblock %}
 
 {% block search %}
-    <div class="p-2 col d-flex flex-row-reverse">
-        {{ include('appels/_delete_form.html.twig') }}
-    </div>
+	<div class="p-2 col d-flex flex-row-reverse">
+		{{ include('appels/_delete_form.html.twig') }}
+	</div>
 {% endblock %}
 
 {% block list %}
-    <h1 class="text-center font-weight-bold" style="font-size: 3em;">Modifier les information de l'appel</h1>
-
-    {{ include('appels/_form.html.twig') }}
-    {% include '_inc/flatpickr.html.twig' %}
+	<div class="d-flex justify-content-center container mt-5 mb-5">
+	    <h1 class="text-center font-weight-bold" style="font-size: 3em;">Modifier les information de l'appel</h1>
+	</div>
+	{{ include('appels/_form.html.twig') }}
+	{% include '_inc/flatpickr.html.twig' %}
 {% endblock %}
 
 {% block javascripts %}

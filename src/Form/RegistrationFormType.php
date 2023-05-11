@@ -154,8 +154,8 @@ class RegistrationFormType extends AbstractType
                     'constraints' => [
                         new Assert\NotBlank(),
                         new Assert\Regex([
-                            'pattern' => '/^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$/',
-                            'message' => 'Your password must be at least 8 characters long and contain at least one letter and one number.',
+                            'pattern' => '/^(?=.*[A-Z])(?=.*\d)[A-Za-z\d]{8,}$/',
+                            'message' => 'Votre mot de passe doit comporter au moins 8 caractères, une lettre majuscule et un chiffre.',
                         ]),
                     ],
                 ],

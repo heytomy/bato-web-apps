@@ -1,121 +1,196 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Inscription
-{% endblock %}
+{% block title %}Inscription{% endblock %}
 
 {% block body %}
-	<form method="post">
-		{{ form_start(registrationForm) }}
-		<div class="container-fluid mt-5 p-5">
-			<div class="row justify-content-center">
-				<div class="col-md-10 ">
-					{% for flash_success in app.flashes('success') %}
-						{% if loop.first %}
-							<div class="alert alert-success alert-dismissible fade show mt-1" role="alert">
-								{{ flash_success }}
-								<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-							</div>
+    <form method="post">
+        {{ form_start(registrationForm) }}
+        <div class="container-fluid mt-5 p-5">
+            <div class="row justify-content-center">
+                <div class="col-md-10 ">
+                    {% for flash_success in app.flashes('success') %}
+                        {% if loop.first %}
+                            <div class="alert alert-success alert-dismissible fade show mt-1" role="alert">
+                                {{ flash_success }}
+                                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                            </div>
 
-							<script>
-								setTimeout(function () {
-									var alert = document.querySelector('.alert');
-									alert.classList.remove('show');
-									alert.classList.add('hide');
-									setTimeout(function () {
-										alert.remove();
-									}, 1000);
-								}, 5000);
-							</script>
-						{% endif %}
-					{% endfor %}
+                            <script>
+                                setTimeout(function () {
+                                    var alert = document.querySelector('.alert');
+                                    alert.classList.remove('show');
+                                    alert.classList.add('hide');
+                                    setTimeout(function () {
+                                        alert.remove();
+                                    }, 1000);
+                                }, 5000);
+                            </script>
+                        {% endif %}
+                    {% endfor %}
 
-					{% for flash_error in app.flashes('verify_email_error') %}
-						<div class="alert alert-danger" role="alert">{{ flash_error }}</div>
-					{% endfor %}
+                    {% for flash_error in app.flashes('verify_email_error') %}
+                        <div class="alert alert-danger" role="alert">{{ flash_error }}</div>
+                    {% endfor %}
 
-					<div class="card border rounded-5 bg-light">
-						<h5 class="card-title align-self-center mt-4 mb-4">
-							<strong>Inscription</strong>
-						</h5>
-						<div class="d-flex card-body flex-column px-5 pb-5">
-							<div class="row mt-2">
-								<div class="col">
-									{{ form_row(registrationForm.Nom_utilisateur, { 'attr': {'class': 'form-control mb-3'} }) }}
-								</div>
-							</div>
-							<div class="row mt-2">
-								<div class="col-md-6">
-									{{ form_row(registrationForm.roles) }}
-								</div>
-								<div class="col">
-									{{ form_row(registrationForm.colorCode, { 'attr': {'class': 'form-control mb-3'} }) }}
-								</div>
-							</div>
+                    <div class="card border rounded-5 bg-light">
+                        <h5 class="card-title align-self-center mt-4 mb-4">
+                            <strong>Inscription</strong>
+                        </h5>
+                        <div class="d-flex card-body flex-column px-5 pb-5">
+                            <div class="row mt-2">
+                                <div class="col">
+                                    {{ form_row(registrationForm.Nom_utilisateur, { 'attr': {'class': 'form-control mb-3'} }) }}
+                                    {% if registrationForm.Nom_utilisateur.vars.errors|length > 0 %}
+                                        {% for error in registrationForm.Nom_utilisateur.vars.errors %}
+                                            <div class="alert alert-danger" role="alert">{{ error.message }}</div>
+                                        {% endfor %}
+                                    {% endif %}
+                                </div>
+                            </div>
+                            <div class="row mt-2">
+                                <div class="col-md-6">
+                                    {{ form_row(registrationForm.roles) }}
+                                    {% if registrationForm.roles.vars.errors|length > 0 %}
+                                        {% for error in registrationForm.roles.vars.errors %}
+                                            <div class="alert alert-danger" role="alert">{{ error.message }}</div>
+                                        {% endfor %}
+                                    {% endif %}
+                                </div>
+                                <div class="col">
+                                    {{ form_row(registrationForm.colorCode, { 'attr': {'class': 'form-control mb-3'} }) }}
+                                    {% if registrationForm.colorCode.vars.errors|length > 0 %}
+                                        {% for error in registrationForm.colorCode.vars.errors %}
+                                            <div class="alert alert-danger" role="alert">{{ error.message }}</div>
+                                        {% endfor %}
+                                    {% endif %}
+                                </div>
+                            </div>
 
-							<hr class="hr"/>
+                            <hr class="hr"/>
 
-							<div class="row mt-2">
-								<div class="col-md-6">{{ form_row(registrationForm.Nom, { 'attr': {'class': 'form-control mb-3'} }) }}</div>
-								<div class="col-md-6">{{ form_row(registrationForm.Prenom, { 'attr': {'class': 'form-control mb-3'} }) }}</div>
-							</div>
+                            <div class="row mt-2">
+                                <div class="col-md-6">
+                                    {{ form_row(registrationForm.Nom, { 'attr': {'class': 'form-control mb-3'} }) }}
+                                    {% if registrationForm.Nom.vars.errors|length > 0 %}
+                                        {% for error in registrationForm.Nom.vars.errors %}
+                                            <div class="alert alert-danger" role="alert">{{ error.message }}</div>
+                                        {% endfor %}
+                                    {% endif %}
+                                </div>
+                                <div class="col-md-6">
+                                    {{ form_row(registrationForm.Prenom, { 'attr': {'class': 'form-control mb-3'} }) }}
+                                    {% if registrationForm.Prenom.vars.errors|length > 0 %}
+                                        {% for error in registrationForm.Prenom.vars.errors %}
+                                            <div class="alert alert-danger" role="alert">{{ error.message }}</div>
+                                        {% endfor %}
+                                    {% endif %}
+                                </div>
+                            </div>
 
-							<div class="row mt-2">
-								{{ form_row(registrationForm.Adresse, { 'attr': {'class': 'form-control mb-3', 'placeholder': 'Adresse'} }) }}
-								<div class="col-md-6">{{ form_row(registrationForm.CP, { 'attr': {'class': 'form-control mb-3'} }) }}</div>
-								<div class="col-md-6">{{ form_row(registrationForm.Ville, { 'attr': {'class': 'form-control mb-3'} }) }}</div>
-							</div>
-							<div class="row mt-2">
-								<div class="col-md-6">{{ form_row(registrationForm.Tel_1, { 'attr': {'class': 'form-control mb-3'} }) }}</div>
-								<div class="col-md-6">{{ form_row(registrationForm.Tel_2, { 'attr': {'class': 'form-control mb-3'} }) }}</div>
-							</div>
+                            <div class="row mt-2">
+                                {{ form_row(registrationForm.Adresse, { 'attr': {'class': 'form-control mb-3', 'placeholder': 'Adresse'} }) }}
+                                {% if registrationForm.Adresse.vars.errors|length > 0 %}
+                                    {% for error in registrationForm.Adresse.vars.errors %}
+                                        <div class="alert alert-danger" role="alert">{{ error.message }}</div>
+                                    {% endfor %}
+                                {% endif %}
+                                <div class="col-md-6">
+                                    {{ form_row(registrationForm.CP, { 'attr': {'class': 'form-control mb-3'} }) }}
+                                    {% if registrationForm.CP.vars.errors|length > 0 %}
+                                        {% for error in registrationForm.CP.vars.errors %}
+                                            <div class="alert alert-danger" role="alert">{{ error.message }}</div>
+                                        {% endfor %}
+                                    {% endif %}
+                                </div>
+                                <div class="col-md-6">
+                                    {{ form_row(registrationForm.Ville, { 'attr': {'class': 'form-control mb-3'} }) }}
+                                    {% if registrationForm.Ville.vars.errors|length > 0 %}
+                                        {% for error in registrationForm.Ville.vars.errors %}
+                                            <div class="alert alert-danger" role="alert">{{ error.message }}</div>
+                                        {% endfor %}
+                                    {% endif %}
+                                </div>
+                            </div>
+                            <div class="row mt-2">
+                                <div class="col-md-6">
+                                    {{ form_row(registrationForm.Tel_1, { 'attr': {'class': 'form-control mb-3'} }) }}
+                                    {% if registrationForm.Tel_1.vars.errors|length > 0 %}
+                                        {% for error in registrationForm.Tel_1.vars.errors %}
+                                            <div class="alert alert-danger" role="alert">{{ error.message }}</div>
+                                        {% endfor %}
+                                    {% endif %}
+                                </div>
+                                <div class="col-md-6">
+                                    {{ form_row(registrationForm.Tel_2, { 'attr': {'class': 'form-control mb-3'} }) }}
+                                    {% if registrationForm.Tel_2.vars.errors|length > 0 %}
+                                        {% for error in registrationForm.Tel_2.vars.errors %}
+                                            <div class="alert alert-danger" role="alert">{{ error.message }}</div>
+                                        {% endfor %}
+                                    {% endif %}
+                                </div>
+                            </div>
 
-							<hr class="hr"/>
+                            <hr class="hr"/>
 
-							<div class="row mt-2">
-								<div class="col">
-									{{ form_row(registrationForm.Mail, { 'attr': {'class': 'form-control mb-3', 'placeholder': 'Adresse e-mail'} }) }}
-								</div>
-							</div>
+                            <div class="row mt-2">
+                                <div class="col">
+                                    {{ form_row(registrationForm.Mail, { 'attr': {'class': 'form-control mb-3', 'placeholder': 'Adresse e-mail'} }) }}
+                                    {% if registrationForm.Mail.vars.errors|length > 0 %}
+                                        {% for error in registrationForm.Mail.vars.errors %}
+                                            <div class="alert alert-danger" role="alert">{{ error.message }}</div>
+                                        {% endfor %}
+                                    {% endif %}
+                                </div>
+                            </div>
 
-							<div class="row">
-								<div class="col">
-									{{ form_label(registrationForm.plainPassword.first) }}
-									<div class="input-group">
-										{{ form_widget(registrationForm.plainPassword.first) }}
-											<button class="btn btn-secondary" type="button" id="show-password-icon-1">
-												<i class="fas fa-eye"></i>
-											</button>
-									</div>
-								</div>
-								<div class="col">
-									{{ form_label(registrationForm.plainPassword.second) }}
-									<div class="input-group">
-										{{ form_widget(registrationForm.plainPassword.second) }}
-											<button class="btn btn-secondary" type="button" id="show-password-icon-2">
-												<i class="fas fa-eye"></i>
-											</button>
-									</div>
-								</div>
+                            <div class="row">
+                                <div class="col">
+                                    {{ form_label(registrationForm.plainPassword.first) }}
+                                    <div class="input-group">
+                                        {{ form_widget(registrationForm.plainPassword.first) }}
+                                        <button class="btn btn-secondary" type="button" id="show-password-icon-1">
+                                            <i class="fas fa-eye"></i>
+                                        </button>
+                                    </div>
+                                    {% if registrationForm.plainPassword.first.vars.errors|length > 0 %}
+                                        {% for error in registrationForm.plainPassword.first.vars.errors %}
+                                            <div class="alert alert-danger mt-2" role="alert">{{ error.message }}</div>
+                                        {% endfor %}
+                                    {% endif %}
+                                </div>
+                                <div class="col">
+                                    {{ form_label(registrationForm.plainPassword.second) }}
+                                    <div class="input-group">
+                                        {{ form_widget(registrationForm.plainPassword.second) }}
+                                        <button class="btn btn-secondary" type="button" id="show-password-icon-2">
+                                            <i class="fas fa-eye"></i>
+                                        </button>
+                                    </div>
+                                    {% if registrationForm.plainPassword.second.vars.errors|length > 0 %}
+                                        {% for error in registrationForm.plainPassword.second.vars.errors %}
+                                            <div class="alert alert-danger" role="alert">{{ error.message }}</div>
+                                        {% endfor %}
+                                    {% endif %}
+                                </div>
+                            </div>
 
-							</div>
+                            {{ form_widget(registrationForm._token) }}
 
-								{{ form_widget(registrationForm._token) }}
+                            <button type="submit" class="btn btn-dark mb-2 align-self-center py-2 mt-4">
+                                <strong>Inscrire l'utilisateur</strong>
+                            </button>
+                        </div>
 
-								<button type="submit" class="btn btn-dark mb-2 align-self-center py-2 mt-4">
-									<strong>Inscrire l'utilisateur</strong>
-								</button>
-							</div>
-
-						</div>
-					</div>
-				</div>
-				{{ form_end(registrationForm) }}
-			</div>
-		</form>
-	{% endblock %}
-
-	{% block javascripts %}
-	{{ parent() }}
-	{{ encore_entry_script_tags('togglePassword') }}
+                    </div>
+                </div>
+            </div>
+            {{ form_end(registrationForm) }}
+        </div>
+    </form>
 {% endblock %}
 
+
+{% block javascripts %}
+    {{ parent() }}
+    {{ encore_entry_script_tags('togglePassword') }}
+{% endblock %}

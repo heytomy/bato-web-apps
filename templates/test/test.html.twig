@@ -7,6 +7,9 @@
     {% for i in 0..2 %}
       {{ render(controller('App\\Controller\\SAVSearchController::index')) }}
     {% endfor %}
+
+      <a href="{{ path('app_devis', {'id': '00003', 'filename': 'Devis_0000011_00003_Schubnel'}) }}">View PDF</a>
+
     
         <p><a href="#" class="text-primary ">Primary link</a></p>
         <p><a href="#" class="text-secondary">Secondary link</a></p>

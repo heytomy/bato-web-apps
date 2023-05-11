@@ -17,13 +17,21 @@ class DevisController extends AbstractController
     //     ]);
     // }
 
-    #[Route('/devis/{id}/{filename}', name: 'app_devis', methods: ['POST', 'GET'])]
-    public function devis($id, $filename)
+    #[Route('/devis/sav/{id}/{filename}', name: 'app_devis_sav', methods: ['POST', 'GET'])]
+    public function devisSAV($id, $filename)
     {
-        $devispath = $this->getParameter('devis_chemin').$id;
+        $devispath = $this->getParameter('devis_sav_chemin').$id;
 
         $filePath = $devispath .'/'.$filename;
-        dd($filePath);
+        return new BinaryFileResponse($filePath);
+    }
+
+    #[Route('/devis/chantier/{id}/{filename}', name: 'app_devis_chantier', methods: ['POST', 'GET'])]
+    public function devisChantier($id, $filename)
+    {
+        $devispath = $this->getParameter('devis_chantier_chemin').$id;
+
+        $filePath = $devispath .'/'.$filename;
         return new BinaryFileResponse($filePath);
     }
 }

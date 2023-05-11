@@ -306,9 +306,10 @@ class AppelsController extends AbstractController
                     'success',
                     'Rendez-vous enregistré avec succès !'
                 );
-
-                return $this->redirectToRoute('app_appels_show');
             }
+
+            return $this->redirectToRoute('app_appels_show' , ['id' => $appel->getId()], Response::HTTP_SEE_OTHER);
+
         }
 
         return $this->renderForm('appels/edit.html.twig', [

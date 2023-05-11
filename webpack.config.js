@@ -24,6 +24,7 @@ Encore
     .addEntry('SAV_JS', './assets/sav/SAV.js')
     .addEntry('chantier_JS', './assets/chantier/chantier.js')
     .addEntry('appels_JS', './assets/appels/appels.js')
+    .addEntry('devis_JS', './assets/devis/devis.js')
     .addEntry('appelsAutocomplete', './assets/appels/appelsAutocomplete.js')
     .addEntry('chantierAutocomplete', './assets/chantier/chantierAutocomplete.js')
     .addEntry('calendrier', './assets/calendrier/index.js')

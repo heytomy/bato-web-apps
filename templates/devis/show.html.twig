@@ -1,0 +1,64 @@
+{% extends '_inc/listPage.html.twig' %}
+
+{% block title %}Devis{% endblock %}
+
+{% block back_button %}
+    {{ path('app_devis') }}
+{% endblock %}
+
+{% block list %}
+
+    {# {% if devis.getStatut.statut == 'EN_COURS' %}
+        <div class="d-flex justify-content-between container flex-sm-row flex-column pb-2">
+            <div class="p-2 col d-flex flex-row-reverse">
+                {% include 'devis/_change_statut_form.html.twig' %}
+            </div>
+        </div>
+    {% endif %} #}
+    
+    <div class="border rounded container bg-light p-2">
+        <div class="row border border-light rounded bg-client m-2 p-2"> 
+            <div class="d-flex justify-content-between">
+                <h1>{{devis.nom}}</h1>
+                <div class="d-flex flex-column align-items-end">
+                    <h5>Le {{devis.date | date('d/m/Y')}}</h5>
+                </div>
+            </div>
+        </div>
+
+        <h3 class="row border border-light rounded m-2 p-2">
+            <strong>Description :</strong>
+        </h3>
+
+        <div class="row border border-light rounded m-2 p-2">
+            <section class="gradient-custom justify-content-center">
+                <div class="container justify-content-center">
+                    <div class="row d-flex justify-content-center">
+                        <div class="col-md-12">
+                            <div class="card">
+                                <div class="card-body p-4 bg-client">
+                                    <div class="row">
+                                        <div class="col">
+                                            {{ devis.description }}
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </div>
+
+        <h3 class="row border border-light rounded m-2 p-2">
+            <strong>Gallerie Photos :</strong>
+        </h3>
+        
+        <div class="row border border-light rounded m-2 p-2">
+            {% if photos %}
+                {% include 'photoDevis/photo.html.twig' %}
+            {% else %}
+                
+            {% endif %}
+        </div>
+{% endblock %}

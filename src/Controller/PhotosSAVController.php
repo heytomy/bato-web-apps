@@ -13,7 +13,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 class PhotosSAVController extends AbstractController
 {
     #[Route('/{id}', name: 'app_sav_photo_delete', methods: ['POST'])]
-    public function deleteComment(
+    public function delete(
         Request $request,
         PhotosSAV $photo,
         PhotosSAVRepository $photosSAVRepository

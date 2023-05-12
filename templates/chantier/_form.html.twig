@@ -41,6 +41,15 @@
 		</div>
 
 		<div class="row mt-3">
+			{% if app.request.hasPreviousSession %}
+				{% for flashMessage in app.session.flashbag.get('error') %}
+					<div class="alert alert-danger alert-dismissible fade show" role="alert">
+						{{ flashMessage }}
+						<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+					</div>
+				{% endfor %}
+			{% endif %}
+
 			<div class="col-md-6">{{ form_row(form.dateDebut) }}</div>
 			<div class="col-md-6">{{ form_row(form.dateFin) }}</div>
 		</div>

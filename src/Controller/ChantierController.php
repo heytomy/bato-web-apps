@@ -40,46 +40,54 @@ class ChantierController extends AbstractController
     public function new(Request $request, EntityManagerInterface $em, StatutChantierRepository $statutChantierRepository): Response
     {
         $statutEnCours = $statutChantierRepository->findOneBy(['statut' => 'EN_COURS']);
-        
+
         $chantier = new ChantierApps();
-        
+
         $rdv = new Calendrier();
-        
+
         $form = $this->createForm(ChantierAppsType::class, $chantier);
-        
+
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+
+            $dateDebut = $form->get('dateDebut')->getData()->format('Y-m-d');;
+            $dateFin = $form->get('dateFin')->getData()->format('Y-m-d');;
+
             $chantier->setStatut($statutEnCours);
-            $cleanDescription = strip_tags($form->get('description')->getData());
 
-            $rdv
-                ->setTitre($chantier->getCodeClient()->getNom())
-                ->setDateDebut($chantier->getDateDebut())
-                ->setDateFin($chantier->getDateFin())
-                ->setAllDay(false)
-                ->setChantier($chantier)
-                ;
+            if ($dateFin !== null && new DateTime($dateDebut) > new DateTime($dateFin)) {
+                $this->addFlash(
+                    'error',
+                    'La date et heure de fin doit être postérieure à la date et heure de début.'
+                );
+            } else {
+                $rdv
+                    ->setTitre($chantier->getCodeClient()->getNom())
+                    ->setDateDebut($chantier->getDateDebut())
+                    ->setDateFin($chantier->getDateFin())
+                    ->setAllDay(false)
+                    ->setChantier($chantier);
 
-            $chantier
-                ->setDescription($cleanDescription);
-            
+                $chantier
+                    ->setDescription(strip_tags($form->get('description')->getData()));
 
-            $em->persist($chantier);
-            $em->flush($chantier);
 
-            $em->persist($rdv);
-            $em->flush($rdv);
+                $em->persist($chantier);
+                $em->flush($chantier);
 
-            $this->addFlash(
-                'success',
-                'Chantier enregistré avec succès !'
-            );
-            // $chantierAppsRepository->save($chantier, true);
+                $em->persist($rdv);
+                $em->flush($rdv);
 
-            return $this->redirectToRoute('app_chantier', [], Response::HTTP_SEE_OTHER);
+                $this->addFlash(
+                    'success',
+                    'Chantier enregistré avec succès !'
+                );
+                // $chantierAppsRepository->save($chantier, true);
+
+                return $this->redirectToRoute('app_chantier', [], Response::HTTP_SEE_OTHER);
+            }
         }
-
         return $this->render('chantier/new.html.twig', [
             'chantier'      =>  $chantier,
             'form'          =>  $form,
@@ -207,12 +215,11 @@ class ChantierController extends AbstractController
 
     #[Route('/{id}/edit', name: 'app_chantier_edit', methods: ['GET', 'POST'])]
     public function edit(
-        Request $request, 
-        ChantierApps $chantier, 
+        Request $request,
+        ChantierApps $chantier,
         EntityManagerInterface $em,
         StatutChantierRepository $statutChantierRepository,
-        ): Response
-    {
+    ): Response {
         $statutEnCours = $statutChantierRepository->findOneBy(['statut' => 'EN_COURS']);
         if ($chantier->getStatut() !== $statutEnCours) {
             throw new Exception('Le statut du chantier n\'est pas le bon', 406);
@@ -223,22 +230,31 @@ class ChantierController extends AbstractController
         $rdv = $chantier->getRdv();
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $rdv
-                ->setTitre($chantier->getCodeClient()->getNom())
-                ->setDateDebut($chantier->getDateDebut())
-                ->setDateFin($chantier->getDateFin())
-                ->setAllDay(false)
-                ->setChantier($chantier)
-                ;
+            
+            $dateDebut = $form->get('dateDebut')->getData()->format('Y-m-d');;
+            $dateFin = $form->get('dateFin')->getData()->format('Y-m-d');;
 
-            $em->persist($chantier);
-            $em->flush($chantier);
+            if ($dateFin !== null && new DateTime($dateDebut) > new DateTime($dateFin)) {
+                $this->addFlash(
+                    'error',
+                    'La date et heure de fin doit être postérieure à la date et heure de début.'
+                );
+            } else {
+                $rdv
+                    ->setTitre($chantier->getCodeClient()->getNom())
+                    ->setDateDebut($chantier->getDateDebut())
+                    ->setDateFin($chantier->getDateFin())
+                    ->setAllDay(false)
+                    ->setChantier($chantier);
 
-            $em->persist($rdv);
-            $em->flush($rdv);
-            return $this->redirectToRoute('app_chantier_show', ['id' => $chantier->getId()], Response::HTTP_SEE_OTHER);
+                $em->persist($chantier);
+                $em->flush($chantier);
+
+                $em->persist($rdv);
+                $em->flush($rdv);
+                return $this->redirectToRoute('app_chantier_show', ['id' => $chantier->getId()], Response::HTTP_SEE_OTHER);
+            }
         }
-
         return $this->render('chantier/edit.html.twig', [
             'chantier'      =>  $chantier,
             'form'          =>  $form,

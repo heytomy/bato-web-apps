@@ -1,28 +1,27 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Bato - Dashboard
+{% block title %}Bato - Tableau de bord
 {% endblock %}
 
 {% block body %}
 	<main role="main">
 		<div class="container">
-
 			{% for message in app.flashes('success') %}
 				{% if loop.first %}
-					<div class="alert alert-success alert-dismissible fade show mt-1" role="alert">
+					<div class="alert alert-success alert-dismissible fade show mb-1" role="alert">
 						{{ message }}
 						<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
 					</div>
 
 					<script>
 						setTimeout(function () {
-var alert = document.querySelector('.alert');
-alert.classList.remove('show');
-alert.classList.add('hide');
-setTimeout(function () {
-alert.remove();
-}, 1000);
-}, 5000);
+			var alert = document.querySelector('.alert');
+			alert.classList.remove('show');
+			alert.classList.add('hide');
+			setTimeout(function () {
+			alert.remove();
+			}, 1000);
+			}, 5000);
 					</script>
 				{% endif %}
 			{% endfor %}
@@ -32,11 +31,41 @@ alert.remove();
 					<h1 class="display-3">Bonjour
 						{{ app.user.getIDUtilisateur.prenom }}!</h1>
 					<h4>Voici un petit récapitulatif de votre journée :</h4>
-					<ul
-						class="list-unstyled mt-2" style="margin-left: 0.5rem;">
-						{# <li class="">Il y a X nouveaux devis.</li> #}
+					<ul class="list-unstyled mt-2" style="margin-left: 0.5rem;">
+						
+						<li class="list-group-item mb-2">
+							{% if devisARealiser|length > 0 %}
+								<a class="btn btn-secondary" data-bs-toggle="collapse" href="#devisCollapse" role="button" aria-expanded="false" aria-controls="devisCollapse">
+									{{ devisARealiser|length }}
+									devis à réaliser.
+								</a>
+								<div class="collapse col-md-7" id="devisCollapse">
+									<div class="row rounded bg-white m-2 p-1">
+										<ul class="list-group list-group-flush" style="max-height: 150px; overflow-y: auto;">
+											{% set hasDevis = false %}
+											{% for devis in devisARealiser %}
+													{% set hasDevis = true %}
+													<li class="list-group-item d-flex justify-content-between align-items-center">
+														{# <a class="text-decoration-none link-dark" href="{{ path('app_devis_show', {'id': devis.id}) }}"> #}
+															{{ devis.nom }}
+														{# </a> #}
+														<span class="badge bg-primary text-wrap">
+															{{ devis.statut|replace({'EN_COURS': 'A faire'}) }}
+															{{ devis.date|date('d/m/Y H:i') }}
+														</span>
+													</li>
+											{% endfor %}
+											{% if not hasDevis %}
+												<li class="list-group-item">Plus aucun devis à réaliser !</li>
+											{% endif %}
+										</ul>
+									</div>
+								</div>
+							{% else %}
+								<li class="list-group-item">Aucun devis à réaliser aujourd'hui.</li>
+							{% endif %}</li>
 
-						<li class="list-group-item">
+
 							{% if appelsCurrentUser|length > 0 %}
 								<a class="btn btn-secondary" data-bs-toggle="collapse" href="#rdvCollapse" role="button" aria-expanded="false" aria-controls="rdvCollapse">
 									{{ appelsCurrentUser|length }}
@@ -47,17 +76,6 @@ alert.remove();
 									<div class="row rounded bg-white m-2 p-1">
 										<ul
 											class="list-group list-group-flush" style="max-height: 150px; overflow-y: auto;">
-                                                {# {% for appels in appelsCurrentUser|sort((a, b) => a.RDV.dateDebut <=> b.RDV.dateDebut) %}
-                                                    {% if appels.RDV.dateDebut >= now %}
-                                                        <li class="list-group-item d-flex justify-content-between align-items-center">
-                                                            <a class="text-decoration-none link-dark" href="{{ path('app_appels_show', {'id': appels.id}) }}">
-                                                                {{ appels.nom }}
-                                                            </a>
-                                                            <span class="badge bg-primary text-wrap">{{ appels.RDV.dateDebut|date('d/m/Y H:i') }}</span>
-                                                        </li>
-                                                    {% endif %}
-                                                {% endfor %} #}
-
                                             {% set hasAppointment = false %}
                                             {% for appels in appelsCurrentUser|sort((a, b) => a.RDV.dateDebut <=> b.RDV.dateDebut) %}
                                                 {% if appels.RDV.dateDebut|date_modify('+1 hour') >= now %}
@@ -77,7 +95,7 @@ alert.remove();
 									</div>
 								</div>
 							{% else %}
-								Aucun rendez-vous aujourd'hui.
+								<li class="list-group-item">Aucun rendez-vous aujourd'hui.</li>
 							{% endif %}
 						</li>
 					</ul>

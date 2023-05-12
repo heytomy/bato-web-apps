@@ -127,7 +127,10 @@ class AppelsType extends AbstractType
                 'attr' => [
                     'placeholder' => 'Entrez le nom du client',
                     'class' => 'form-control'
-                ]
+                ],
+                'constraints' => [
+                    new NotBlank(['message' => 'Veuillez saisir le nom du client']),
+                ],
             ])
             ->add('CodeContrat', EntityType::class, [
                 'required' => false,
@@ -221,21 +224,15 @@ class AppelsType extends AbstractType
             ])
             ->add('description', CKEditorType::class, [
                 'required' => true,
+                'empty_data' => '',
                 'label' => 'Description',
-                'attr' => [
-                    'selector' => 'textarea',
-                    'toolbar' => 'undo redo | copy cut paste',
-                    'menubar' => 'false',
-                    'contextmenu' => 'false',
-                    'placeholder' => 'Décrivez le problème rencontré par le client',
-                ],
                 'constraints' => [
-                    new NotBlank(['message' => 'Veuillez entrer une description du problème rencontré par le client.']),
+                    new Length(['min' => 3, 'minMessage' => 'Le message doit faire au minimum {{ limit }} caractère']),
+                    new Assert\NotBlank(['message' => 'Veuillez entrer une description']),
                 ]
             ])
 
-            ->add('rdvDateTime', DateTimeType::class, [
-                'mapped' => false,
+            ->add('dateDebut', DateTimeType::class, [
                 'required' => true,
                 'label' => 'Date et heure du rendez-vous :',
                 'widget' => 'single_text',
@@ -246,24 +243,15 @@ class AppelsType extends AbstractType
                 ],
                 'html5' => false,
                 'constraints' => [
-                    new Assert\NotBlank(),
                     new Assert\GreaterThanOrEqual([
                         'value' => 'today',
                         'message' => 'Un rendez-vous ne peut pas être placé à une date antérieure !',
                     ]),
-                    new Assert\Callback(function ($dateTime, ExecutionContextInterface $context) {
-                        $time = $dateTime->format('H:i');
-                        if ($time < '07:00' || $time > '20:00') {
-                            $context->buildViolation('L\'heure de rendez-vous doit être comprise entre 7:00 et 20:00')
-                                ->atPath('rdvDateTime')
-                                ->addViolation();
-                        }
-                    })
+                    new Assert\NotBlank(['message' => 'Veuillez sélectionner une date et une heure.'])
                 ],
             ])
 
-            ->add('rdvDateTimeFin', DateTimeType::class, [
-                'mapped' => false,
+            ->add('dateFin', DateTimeType::class, [
                 'required' => false,
                 'label' => 'Fin de rendez-vous prévu :',
                 'widget' => 'single_text',

@@ -141,4 +141,9 @@ class StatutChantier
 
         return $this;
     }
+
+    public function __toString()
+    {
+        return $this->statut;
+    }
 }

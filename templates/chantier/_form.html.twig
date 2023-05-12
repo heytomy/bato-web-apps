@@ -1,10 +1,12 @@
 <div class="container-fluid">
 
-	{# <div class="row mb-4">
-		<div class="col d-flex justify-content-end">
-			<button class="btn btn-secondary" id="clear-fields-btn">Réinitialiser</button>
+	{% if app.request.attributes.get('_route') != 'app_chantier_edit' %}
+		<div class="row mb-4">
+			<div class="col d-flex justify-content-end">
+				<button class="btn btn-secondary" id="clear-fields-btn" onclick="return confirm('Êtes-vous sûr de vouloir réinitialiser les champs ?')">Réinitialiser</button>
+			</div>
 		</div>
-	</div> #}
+	{% endif %}
 
 	<div class="card border rounded-5 bg-light p-4 mt-4">
 		{{ form_start(form) }}

@@ -35,8 +35,8 @@ clientField.addEventListener('change', function() {
         $('#appels_Email').val('');
         $('#appels_Description').val('');
 
-        $('#appels_rdvDateTime').val('');
-        $('#appels_rdvDateTimeFin').val('');
+        $('#appels_dateDebut').val('');
+        $('#appels_dateFin').val('');
         $('#appels_allDay').prop('checked', false);
         $('#appels_isUrgent').prop('checked', false);
         $('#appels_status').addClass('d-none');

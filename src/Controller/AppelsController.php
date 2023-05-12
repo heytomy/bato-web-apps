@@ -44,8 +44,6 @@ class AppelsController extends AbstractController
     #[Route('/appels/new', name: 'app_appels_new')]
     public function new(Request $request, EntityManagerInterface $em, TicketUrgentsRepository $ticketUrgent, StatutChantierRepository $statutChantierRepository): Response
     {
-        //TODO: Bar de filtre pour la recherche de client
-
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
 
         $statutEnCours = $statutChantierRepository->findOneBy(['statut' => 'EN_COURS']);
@@ -57,35 +55,32 @@ class AppelsController extends AbstractController
 
         if ($form->isSubmitted() && $form->isValid()) {
 
-            $rdvDateTime = $form->get('rdvDateTime')->getData()->format('Y-m-d H:i:s');
-            $rdvDateTimeFin = $form->get('rdvDateTimeFin')->getData();
-            $cleanDescription = strip_tags($form->get('description')->getData());
-        
-            if ($rdvDateTimeFin !== null) {
-                $rdvDateTimeFin = $rdvDateTimeFin->format('Y-m-d H:i:s');
+            $dateDebut = $form->get('dateDebut')->getData()->format('Y-m-d H:i:s');;
+            $dateFin = $form->get('dateFin')->getData()->format('Y-m-d H:i:s');;
+
+            if ($dateFin !== null) {
+                $dateFin = $dateFin;
             } elseif ($form->get('allDay')->getData()) {
-                $rdvDateTimeFin = null;
-            } else {
-                $rdvDateTimeFin = (new DateTime($rdvDateTime))->modify('+1 hour')->format('Y-m-d H:i:s');
+                $dateFin = null;
             }
 
-            if ($rdvDateTimeFin !== null && new DateTime($rdvDateTime) > new DateTime($rdvDateTimeFin)) {
+            if ($dateFin !== null && new DateTime($dateDebut) > new DateTime($dateFin)) {
                 $this->addFlash(
                     'error',
                     'La date et heure de fin doit être postérieure à la date et heure de début.'
                 );
             } else {
                 $rdv
-                    ->setDateDebut(new DateTime($rdvDateTime))
-                    ->setDateFin($rdvDateTimeFin !== null ? new DateTime($rdvDateTimeFin) : null)
+                    ->setDateDebut($appel->getDateDebut())
+                    ->setDateFin($appel->getDateFin())
                     ->setAllDay($form->get('allDay')->getData())
                     ->setTitre($appel->getNom());
 
-            $appel
-                ->setStatut($statutEnCours)
-                ->setRdv($rdv)
-                ->setDescription($cleanDescription)
-                ->setCreatedAt(new \DateTimeImmutable());
+                $appel
+                    ->setStatut($statutEnCours)
+                    ->setRdv($rdv)
+                    ->setDescription(strip_tags('description'))
+                    ->setCreatedAt(new \DateTimeImmutable());
 
                 $em->persist($appel);
                 $em->flush($appel);
@@ -100,8 +95,7 @@ class AppelsController extends AbstractController
                     $ticketUrgent = new TicketUrgents();
                     $ticketUrgent
                         ->setAppelsUrgents($appel)
-                        ->setStatus($status)
-                    ;
+                        ->setStatus($status);
 
                     $em->persist($ticketUrgent);
                     $em->flush($ticketUrgent);
@@ -111,6 +105,7 @@ class AppelsController extends AbstractController
                     'success',
                     'Rendez-vous enregistré avec succès !'
                 );
+
 
                 return $this->redirectToRoute('app_appels');
             }
@@ -122,12 +117,13 @@ class AppelsController extends AbstractController
         ]);
     }
 
+
     #[IsGranted('ROLE_ADMIN')]
-    #[Route('/get-client-and-contrats-info/{id}', name:'get_client_and_contrats_info', methods:'GET')]
+    #[Route('/get-client-and-contrats-info/{id}', name: 'get_client_and_contrats_info', methods: 'GET')]
     public function getClientAndContratsInfo(ClientDefRepository $clientDefRepository, int $id): JsonResponse
     {
         $client = $clientDefRepository->find($id);
-    
+
         $contrats = [];
         foreach ($client->getContrats() as $contrat) {
             $contrats[] = [
@@ -135,7 +131,7 @@ class AppelsController extends AbstractController
                 'libelle' => $contrat->getLibelle(),
             ];
         }
-    
+
         $data = [
             'codeclient' => $client->getId(),
             'nom' => $client->getNom(),
@@ -146,22 +142,22 @@ class AppelsController extends AbstractController
             'email' => $client->getEMail(),
             'contrats' => $contrats,
         ];
-    
+
         return new JsonResponse($data);
     }
 
     #[Route('/appels/{id}', name: 'app_appels_show', methods: ['GET', 'POST'])]
     public function show(
-        Appels $appel, 
-        CommentairesAppelsRepository $commentairesAppelsRepository, 
-        Request $request, EntityManagerInterface $em, 
+        Appels $appel,
+        CommentairesAppelsRepository $commentairesAppelsRepository,
+        Request $request,
+        EntityManagerInterface $em,
         RepCommentairesAppelsRepository $repCommentairesAppelsRepository,
         PhotosAppelsRepository $photosAppelsRepository,
-        ): Response
-    {
+    ): Response {
         $user = $this->getUser() ?? null;
         $comments = $commentairesAppelsRepository->findBy(['codeAppels' => $appel]);
-        $nom = $user->getIdUtilisateur()->getNom() ." ". $user->getIdUtilisateur()->getPrenom();
+        $nom = $user->getIdUtilisateur()->getNom() . " " . $user->getIdUtilisateur()->getPrenom();
 
         /**
          * Partie commentaires
@@ -175,8 +171,7 @@ class AppelsController extends AbstractController
                 ->setDateCom(new DateTime())
                 ->setNom($nom)
                 ->setCodeAppels($appel)
-                ->setOwner($user->getIDUtilisateur())
-                ;
+                ->setOwner($user->getIDUtilisateur());
             if ($appel->getCodeClient()) {
                 $comment->setCodeClient($appel->getCodeClient()->getId());
             }
@@ -196,13 +191,12 @@ class AppelsController extends AbstractController
         $reply = new RepCommentairesAppels();
         $replyForm = $this->createForm(RepCommentairesAppelsType::class, $reply);
         $replyForm->handleRequest($request);
- 
+
         if ($replyForm->isSubmitted() && $replyForm->isValid()) {
             $reply
                 ->setDateCom(new DateTime())
                 ->setNom($nom)
-                ->setOwner($user->getIDUtilisateur())
-                ;
+                ->setOwner($user->getIDUtilisateur());
 
             // On récupère le contenu du champ parentid
             $parentid = $replyForm->get('parentid')->getData();
@@ -216,7 +210,7 @@ class AppelsController extends AbstractController
             if ($appel->getCodeClient()) {
                 $reply->setCodeClient($appel->getCodeClient()->getId());
             }
-            
+
             $em->persist($reply);
             $em->flush();
             return $this->redirectToRoute('app_appels_show', ['id' => $appel->getId()]);
@@ -227,7 +221,7 @@ class AppelsController extends AbstractController
          */
         $photos = $photosAppelsRepository->findBy(['idAppel' => $appel->getId()]) ?? null;
 
-        return $this->render('appels/show.html.twig',[
+        return $this->render('appels/show.html.twig', [
             'appel'             =>  $appel,
             'comments'          =>  $comments,
             'restCommentaires'  =>  null,
@@ -241,87 +235,68 @@ class AppelsController extends AbstractController
 
     #[Route('/appels/{id}/edit', name: 'app_appels_edit', methods: ['GET', 'POST'])]
     public function edit(
-        Request $request, 
-        Appels $appel, 
-        AppelsRepository $appelsRepository, 
+        Request $request,
+        Appels $appel,
+        AppelsRepository $appelsRepository,
         EntityManagerInterface $em
-        ): Response
-    {
+    ): Response {
         $form = $this->createForm(AppelsType::class, $appel);
         $form->handleRequest($request);
         $rdv = $appel->getRdv();
 
         if ($form->isSubmitted() && $form->isValid()) {
 
-            $rdvDateTime = $form->get('rdvDateTime')->getData()->format('Y-m-d H:i:s');
-            $rdvDateTimeFin = $form->get('rdvDateTimeFin')->getData();
-            $cleanDescription = strip_tags($form->get('description')->getData());
-        
-            if ($rdvDateTimeFin !== null) {
-                $rdvDateTimeFin = $rdvDateTimeFin->format('Y-m-d H:i:s');
-            } elseif ($form->get('allDay')->getData()) {
-                $rdvDateTimeFin = null;
-            } else {
-                $rdvDateTimeFin = (new DateTime($rdvDateTime))->modify('+1 hour')->format('Y-m-d H:i:s');
-            }
-
-            if ($rdvDateTimeFin !== null && new DateTime($rdvDateTime) > new DateTime($rdvDateTimeFin)) {
-                $this->addFlash(
-                    'error',
-                    'La date et heure de fin doit être postérieure à la date et heure de début.'
-                );
-            } else {
-                $rdv
-                    ->setDateDebut(new DateTime($rdvDateTime))
-                    ->setDateFin($rdvDateTimeFin !== null ? new DateTime($rdvDateTimeFin) : null)
-                    ->setAllDay($form->get('allDay')->getData())
-                    ->setTitre($appel->getNom());
+            $rdv
+                ->setDateDebut($appel->getDateDebut())
+                ->setDateFin($appel->getDateFin())
+                ->setAllDay($form->get('allDay')->getData())
+                ->setTitre($appel->getNom());
 
             $appel
                 ->setRdv($rdv)
-                ->setDescription($cleanDescription)
+                ->setDescription(strip_tags($form->get('description')->getData()))
                 ->setCreatedAt(new \DateTimeImmutable());
 
-                $em->persist($appel);
-                $em->flush($appel);
+            $em->persist($appel);
+            $em->flush($appel);
 
-                $em->persist($rdv);
-                $em->flush($rdv);
+            $em->persist($rdv);
+            $em->flush($rdv);
 
-                if ($form->get('isUrgent')->getData() && $form->get('status')->getData()) {
+            if ($form->get('isUrgent')->getData() && $form->get('status')->getData()) {
 
-                    $status = $form->get('status')->getData();
+                $status = $form->get('status')->getData();
 
-                    $ticketUrgent = new TicketUrgents();
-                    $ticketUrgent
-                        ->setAppelsUrgents($appel)
-                        ->setStatus($status)
-                    ;
+                $ticketUrgent = new TicketUrgents();
+                $ticketUrgent
+                    ->setAppelsUrgents($appel)
+                    ->setStatus($status);
 
-                    $em->persist($ticketUrgent);
-                    $em->flush($ticketUrgent);
-                }
-
-                $this->addFlash(
-                    'success',
-                    'Rendez-vous enregistré avec succès !'
-                );
-
-                return $this->redirectToRoute('app_appels_show');
+                $em->persist($ticketUrgent);
+                $em->flush($ticketUrgent);
             }
+
+            $this->addFlash(
+                'success',
+                'Rendez-vous modifié avec succès !'
+            );
+
+
+            return $this->redirectToRoute('app_appels');
         }
 
-        return $this->renderForm('appels/edit.html.twig', [
+        return $this->render('appels/edit.html.twig', [
             'appel'         =>  $appel,
             'form'          =>  $form,
             'current_page'  =>  'app_appels',
         ]);
     }
 
+
     #[Route('/appels/{id}/delete', name: 'app_appels_delete', methods: ['POST'])]
     public function delete(Request $request, Appels $appel, AppelsRepository $appelsRepository): Response
     {
-        if ($this->isCsrfTokenValid('delete'.$appel->getId(), $request->request->get('_token'))) {
+        if ($this->isCsrfTokenValid('delete' . $appel->getId(), $request->request->get('_token'))) {
             $appelsRepository->remove($appel, true);
         }
 

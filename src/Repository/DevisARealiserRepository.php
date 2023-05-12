@@ -78,6 +78,22 @@ class DevisARealiserRepository extends ServiceEntityRepository
     }
 
     /**
+     * @param string $stat le paramètre du statut en chaîne de charactère
+     * @return Devis[] Renvoie une liste des devis d'un statut particulier
+     */
+    public function findByStatut(string $stat)
+    {
+        return $this->createQueryBuilder('devis')
+            ->innerJoin('devis.statut', 's')
+            ->andWhere('s.statut = :stat')
+            ->orderBy('devis.date', 'DESC')
+            ->setParameter('stat', $stat)
+            ->getQuery()
+            ->getResult()
+            ;
+    }
+
+    /**
      * Cette fonction existe pour transformer une collection à un array JSON
      * @param array $clients c'est la variable de la liste des clients
      * @return array Renvoie une liste des clients transformer en array JSON

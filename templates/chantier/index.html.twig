@@ -58,11 +58,13 @@
 		</div>
 	</div>
 
-		{% for message in app.flashes('success') %}
-		<div class="alert alert-success alert-dismissible fade show mt-5" role="alert">
+	{% for message in app.flashes('success') %}
+	    {% if loop.first %}
+		<div class="alert alert-success alert-dismissible fade show mt-1" role="alert">
 			{{ message }}
 			<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
 		</div>
+		{% endif %}
 	{% endfor %}
 
     <div class="client-container border rounded container bg-light p-2"></div>

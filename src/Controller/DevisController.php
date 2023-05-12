@@ -2,6 +2,8 @@
 
 namespace App\Controller;
 
+use App\Entity\DevisARealiser;
+use App\Repository\PhotosDevisRepository;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\BinaryFileResponse;
@@ -15,6 +17,24 @@ class DevisController extends AbstractController
     {
         return $this->render('devis/index.html.twig', [
             'current_page' => 'app_devis',
+        ]);
+    }
+
+    #[Route('/{id}', name:'app_devis_show')]
+    public function show(
+        DevisARealiser $devis,
+        PhotosDevisRepository $photosDevisRepository
+    )
+    {
+        /**
+         * partie photos
+         */
+        $photos = $photosDevisRepository->findBy(['codeDevis' => $devis->getId()]) ?? null;
+
+        return $this->render('devis/show.html.twig', [
+            'current_page'  =>  'app_devis',
+            'devis'         =>  $devis,
+            'photos'        =>  $photos,
         ]);
     }
 

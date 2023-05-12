@@ -1,4 +1,4 @@
-<form method="post" action="{{ path('app_chantier_commentaire_delete', {'id': comment.id}) }}" onsubmit="return confirm('Are you sure you want to delete this item?');">
+<form method="post" action="{{ path('app_chantier_commentaire_delete', {'id': comment.id}) }}" onsubmit="return confirm('Êtes-vous sûr de vouloir supprimer cet élément ?');">
     <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ comment.id) }}">
     <button class="btn btn-danger p-2 m-2"><i class="fa-solid fa-trash-can"></i></button>
 </form>

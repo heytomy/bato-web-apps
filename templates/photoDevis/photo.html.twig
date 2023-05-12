@@ -1,0 +1,49 @@
+<div id="carouselExample" class="carousel slide carousel-dark" data-bs-ride="true">
+    <div class="carousel-indicators">
+        {% for key, photo in photos %}            
+                <button type="button" data-bs-target="#carouselExample" data-bs-slide-to="{{key}}" {% if key == 0 %}class="active" aria-current="true"{% endif %} aria-label="Slide {{key + 1}}"></button>           
+        {% endfor %}
+    </div>
+  
+  <div class="carousel-inner">
+    {% for key, photo in photos %}
+        <div class="carousel-item {% if key == 0 %}active{% endif %} bg-client">
+            <img src={{photo.urlPhoto}} class="responsive d-block" alt="..." >
+            <div class="carousel-caption d-none d-md-block outsideDiv">
+                <div class="myDiv">
+                    {# <h1 class="myTitle text-secondary">{{ photo.idAppel().getId() }}</h1> #}
+                    <button type="button" class="btn btn-outline-secondary" data-bs-toggle="modal" data-bs-target="#exampleModal-{{photo.id}}">
+                        Afficher
+                    </button>
+                </div>
+                <!-- Modal -->
+                <div class="modal fade" id="exampleModal-{{photo.id}}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                    <div class="modal-dialog modal-xl modal-dialog-centered modal-dialog-scrollable">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h1 class="modal-title fs-5" id="exampleModalLabel">{{ photo.codeDevis().getId() }}</h1>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                            </div>
+                            <div class="modal-body">
+                                <img src={{photo.urlPhoto}} class="responsive" alt="...">
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary p-2 m-2" data-bs-dismiss="modal"><i class="fa-solid fa-xmark"></i> Fermer</button>
+                                {{ include('photoDevis/_delete_photo_form.html.twig') }}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    {% endfor %}
+  </div>
+        <button class="carousel-control-prev" type="button" data-bs-target="#carouselExample" data-bs-slide="prev">
+            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+            <span class="visually-hidden">Previous</span>
+        </button>
+        <button class="carousel-control-next" type="button" data-bs-target="#carouselExample" data-bs-slide="next">
+            <span class="carousel-control-next-icon" aria-hidden="true"></span>
+            <span class="visually-hidden">Next</span>
+        </button>
+</div>

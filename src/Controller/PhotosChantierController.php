@@ -13,7 +13,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 class PhotosChantierController extends AbstractController
 {
     #[Route('/{id}', name: 'app_chantier_photo_delete', methods: ['POST'])]
-    public function deleteComment(
+    public function delete(
         Request $request,
         PhotosChantier $photo,
         PhotosChantierRepository $photosChantierRepository

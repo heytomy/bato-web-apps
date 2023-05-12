@@ -133,7 +133,7 @@ function createClientElement(client) {
 
   <div class="col-12 col-lg-3">
     <div class="row">
-      <div class="col"><strong>Date debut du chantier:</strong> ${formattedDateDebut}</div>
+      <div class="col"><strong>Date du rendez-vous:</strong> ${formattedDateDebut}</div>
     </div>
     <div class="row">
       <div class="col"><strong>Fin prévu le:</strong> ${formattedDateFin}</div>

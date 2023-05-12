@@ -3,7 +3,7 @@
 <script src="https://npmcdn.com/flatpickr/dist/l10n/fr.js"></script>
 
 <script>
-flatpickr('#appels_rdvDateTime', {
+flatpickr('#appels_dateDebut', {
     enableTime: true,
     time_24hr: true,
     minTime: "07:00",
@@ -26,13 +26,13 @@ flatpickr('#appels_rdvDateTime', {
         var selectedDate = new Date(selectedDates);
         selectedDate.setHours(selectedDate.getHours() + minToAdd);
 
-        var endDatePicker = document.querySelector('#appels_rdvDateTimeFin');
+        var endDatePicker = document.querySelector('#appels_dateFin');
         var endDatePickerInstance = endDatePicker._flatpickr;
         endDatePickerInstance.setDate(selectedDate, false, 'd-m-Y H:i');
     }
 });
 
-flatpickr('#appels_rdvDateTimeFin', {
+flatpickr('#appels_dateFin', {
     enableTime: true,
     time_24hr: true,
     minTime: "07:00",

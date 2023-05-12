@@ -80,7 +80,7 @@ class ChantierController extends AbstractController
             return $this->redirectToRoute('app_chantier', [], Response::HTTP_SEE_OTHER);
         }
 
-        return $this->renderForm('chantier/new.html.twig', [
+        return $this->render('chantier/new.html.twig', [
             'chantier'      =>  $chantier,
             'form'          =>  $form,
             'current_page'  =>  'app_chantier',
@@ -239,7 +239,7 @@ class ChantierController extends AbstractController
             return $this->redirectToRoute('app_chantier_show', ['id' => $chantier->getId()], Response::HTTP_SEE_OTHER);
         }
 
-        return $this->renderForm('chantier/edit.html.twig', [
+        return $this->render('chantier/edit.html.twig', [
             'chantier'      =>  $chantier,
             'form'          =>  $form,
             'current_page'  =>  'app_chantier',
@@ -268,7 +268,7 @@ class ChantierController extends AbstractController
             return $this->redirectToRoute('app_chantier_show', ['id' => $chantier->getId()], Response::HTTP_SEE_OTHER);
         }
 
-        return $this->renderForm('chantier/edit.html.twig', [
+        return $this->render('chantier/edit.html.twig', [
             'chantier'      =>  $chantier,
             'form'          =>  $form,
             'current_page'  =>  'app_chantier',

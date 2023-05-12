@@ -39,6 +39,12 @@ class Appels
     #[ORM\Column(type: Types::TEXT)]
     private ?string $description = null;
 
+    #[ORM\Column(name: 'Date_debut', type: Types::DATETIME_MUTABLE)]
+    private ?\DateTimeInterface $dateDebut = null;
+
+    #[ORM\Column(name: 'Date_Fin', type: Types::DATETIME_MUTABLE)]
+    private ?\DateTimeInterface $dateFin = null;
+
     #[ORM\Column(nullable: true)]
     private ?bool $isUrgent = null;
 
@@ -125,6 +131,30 @@ class Appels
     public function setVille(string $Ville): self
     {
         $this->Ville = $Ville;
+
+        return $this;
+    }
+
+    public function getDateDebut(): ?\DateTimeInterface
+    {
+        return $this->dateDebut;
+    }
+
+    public function setDateDebut(\DateTimeInterface $dateDebut): self
+    {
+        $this->dateDebut = $dateDebut;
+
+        return $this;
+    }
+
+    public function getDateFin(): ?\DateTimeInterface
+    {
+        return $this->dateFin;
+    }
+
+    public function setDateFin(\DateTimeInterface $dateFin): self
+    {
+        $this->dateFin = $dateFin;
 
         return $this;
     }

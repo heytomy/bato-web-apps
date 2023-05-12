@@ -29,10 +29,6 @@ class DevisARealiser
     #[ORM\Column(name: 'Mail', length: 255, nullable: true)]
     private ?string $mail = null;
 
-    #[ORM\ManyToOne(inversedBy: 'devisARealisers')]
-    #[ORM\JoinColumn(nullable: true, name: "CodeClient", referencedColumnName: "Code")]
-    private ?ClientDef $codeClient = null;
-
     #[ORM\Column(type: Types::DATE_MUTABLE)]
     private ?\DateTimeInterface $date = null;
 
@@ -100,18 +96,6 @@ class DevisARealiser
     public function setMail(?string $mail): self
     {
         $this->mail = $mail;
-
-        return $this;
-    }
-
-    public function getCodeClient(): ?ClientDef
-    {
-        return $this->codeClient;
-    }
-
-    public function setCodeClient(?ClientDef $codeClient): self
-    {
-        $this->codeClient = $codeClient;
 
         return $this;
     }

@@ -7,17 +7,18 @@ use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\BinaryFileResponse;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
+#[Route('/devis')]
 class DevisController extends AbstractController
 {
-    // #[Route('/devis', name: 'app_devis')]
-    // public function index(): Response
-    // {
-    //     return $this->render('devis/index.html.twig', [
-    //         'controller_name' => 'DevisController',
-    //     ]);
-    // }
+    #[Route('/', name: 'app_devis')]
+    public function index(): Response
+    {
+        return $this->render('devis/index.html.twig', [
+            'current_page' => 'app_devis',
+        ]);
+    }
 
-    #[Route('/devis/sav/{id}/{filename}', name: 'app_devis_sav', methods: ['POST', 'GET'])]
+    #[Route('/sav/{id}/{filename}', name: 'app_devis_sav', methods: ['POST', 'GET'])]
     public function devisSAV($id, $filename)
     {
         $devispath = $this->getParameter('devis_sav_chemin').$id;
@@ -26,7 +27,7 @@ class DevisController extends AbstractController
         return new BinaryFileResponse($filePath);
     }
 
-    #[Route('/devis/chantier/{id}/{filename}', name: 'app_devis_chantier', methods: ['POST', 'GET'])]
+    #[Route('/chantier/{id}/{filename}', name: 'app_devis_chantier', methods: ['POST', 'GET'])]
     public function devisChantier($id, $filename)
     {
         $devispath = $this->getParameter('devis_chantier_chemin').$id;

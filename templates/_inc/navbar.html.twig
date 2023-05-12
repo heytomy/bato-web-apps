@@ -60,8 +60,9 @@
                          Appels
                     </a>
                 </li>
-                <li class="p-2 nav-item">
-                    <a class="nav-link text-dark" href="#">
+                <li class="p-2 nav-item {% if current_page is defined and current_page == 'app_devis' %}active text-primary{% endif %}">
+                    <a class="nav-link {% if current_page is defined and current_page == 'app_devis' %}text-primary{% endif %}" 
+                        href="{{ path('app_devis') }}">
                         <i class="fa-regular fa-file-lines"></i>
                          Devis
                     </a>

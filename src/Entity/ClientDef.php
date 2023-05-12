@@ -40,9 +40,6 @@ class ClientDef
     #[ORM\OneToMany(mappedBy: 'CodeClient', targetEntity: Appels::class)]
     private Collection $appels;
 
-    #[ORM\OneToMany(mappedBy: 'codeClient', targetEntity: DevisARealiser::class)]
-    private Collection $devisARealisers;
-
     #[ORM\OneToMany(mappedBy: 'codeClient', targetEntity: ChantierApps::class)]
     private Collection $chantierApps;
 
@@ -50,7 +47,6 @@ class ClientDef
     {
         $this->contrats = new ArrayCollection();
         $this->appels = new ArrayCollection();
-        $this->devisARealisers = new ArrayCollection();
         $this->chantierApps = new ArrayCollection();
     }
 
@@ -191,36 +187,6 @@ class ClientDef
             // set the owning side to null (unless already changed)
             if ($appel->getCodeClient() === $this) {
                 $appel->setCodeClient(null);
-            }
-        }
-
-        return $this;
-    }
-
-    /**
-     * @return Collection<int, DevisARealiser>
-     */
-    public function getDevisARealisers(): Collection
-    {
-        return $this->devisARealisers;
-    }
-
-    public function addDevisARealiser(DevisARealiser $devisARealiser): self
-    {
-        if (!$this->devisARealisers->contains($devisARealiser)) {
-            $this->devisARealisers->add($devisARealiser);
-            $devisARealiser->setCodeClient($this);
-        }
-
-        return $this;
-    }
-
-    public function removeDevisARealiser(DevisARealiser $devisARealiser): self
-    {
-        if ($this->devisARealisers->removeElement($devisARealiser)) {
-            // set the owning side to null (unless already changed)
-            if ($devisARealiser->getCodeClient() === $this) {
-                $devisARealiser->setCodeClient(null);
             }
         }
 

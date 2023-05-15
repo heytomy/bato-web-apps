@@ -6,6 +6,7 @@ use DateTime;
 use App\Entity\Appels;
 use App\Form\AppelsType;
 use App\Entity\Calendrier;
+use App\Form\AppelsEditType;
 use App\Entity\TicketUrgents;
 use App\Entity\CommentairesAppels;
 use App\Form\CommentairesAppelsType;
@@ -13,16 +14,16 @@ use App\Repository\AppelsRepository;
 use App\Entity\RepCommentairesAppels;
 use App\Form\RepCommentairesAppelsType;
 use App\Repository\ClientDefRepository;
-use App\Repository\PhotosAppelsRepository;
 use Doctrine\ORM\EntityManagerInterface;
+use App\Repository\PhotosAppelsRepository;
 use App\Repository\TicketUrgentsRepository;
+use App\Repository\StatutChantierRepository;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use App\Repository\CommentairesAppelsRepository;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use App\Repository\RepCommentairesAppelsRepository;
-use App\Repository\StatutChantierRepository;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
@@ -79,7 +80,7 @@ class AppelsController extends AbstractController
                 $appel
                     ->setStatut($statutEnCours)
                     ->setRdv($rdv)
-                    ->setDescription(strip_tags('description'))
+                    ->setDescription(strip_tags($form->get('description')->getData()))
                     ->setCreatedAt(new \DateTimeImmutable());
 
                 $em->persist($appel);
@@ -115,6 +116,77 @@ class AppelsController extends AbstractController
             'form' => $form->createView(),
             'current_page' => 'app_appels',
         ]);
+    }
+
+    #[Route('/appels/{id}/edit', name: 'app_appels_edit', methods: ['GET', 'POST'])]
+    public function edit(
+        Request $request,
+        Appels $appel,
+        AppelsRepository $appelsRepository,
+        EntityManagerInterface $em
+    ): Response {
+        $form = $this->createForm(AppelsEditType::class, $appel);
+        $form->handleRequest($request);
+        $rdv = $appel->getRdv();
+
+        if ($form->isSubmitted() && $form->isValid()) {
+
+            if($form->get('allDay'))
+            $rdv
+                ->setDateDebut($appel->getDateDebut())
+                ->setDateFin($appel->getDateFin())
+                ->setAllDay($form->get('allDay')->getData())
+                ->setTitre($appel->getNom());
+
+            $appel
+                ->setRdv($rdv)
+                ->setDescription(strip_tags($form->get('description')->getData()))
+                ->setCreatedAt(new \DateTimeImmutable());
+
+            $em->persist($appel);
+            $em->flush($appel);
+
+            $em->persist($rdv);
+            $em->flush($rdv);
+
+            if ($form->get('isUrgent')->getData() && $form->get('status')->getData()) {
+
+                $status = $form->get('status')->getData();
+
+                $ticketUrgent = new TicketUrgents();
+                $ticketUrgent
+                    ->setAppelsUrgents($appel)
+                    ->setStatus($status);
+
+                $em->persist($ticketUrgent);
+                $em->flush($ticketUrgent);
+            }
+
+            $this->addFlash(
+                'success',
+                'Rendez-vous modifié avec succès !'
+            );
+
+
+            return $this->redirectToRoute('app_appels');
+        }
+
+        return $this->render('appels/edit.html.twig', [
+            'appel'         =>  $appel,
+            'form'          =>  $form,
+            'current_page'  =>  'app_appels',
+        ]);
+    }
+
+
+    #[Route('/appels/{id}/delete', name: 'app_appels_delete', methods: ['POST'])]
+    public function delete(Request $request, Appels $appel, AppelsRepository $appelsRepository): Response
+    {
+        if ($this->isCsrfTokenValid('delete' . $appel->getId(), $request->request->get('_token'))) {
+            $appelsRepository->remove($appel, true);
+        }
+
+        return $this->redirectToRoute('app_appels', [], Response::HTTP_SEE_OTHER);
     }
 
 
@@ -231,75 +303,5 @@ class AppelsController extends AbstractController
             'photos'            =>  $photos,
             'current_page'      =>  'app_appels',
         ]);
-    }
-
-    #[Route('/appels/{id}/edit', name: 'app_appels_edit', methods: ['GET', 'POST'])]
-    public function edit(
-        Request $request,
-        Appels $appel,
-        AppelsRepository $appelsRepository,
-        EntityManagerInterface $em
-    ): Response {
-        $form = $this->createForm(AppelsType::class, $appel);
-        $form->handleRequest($request);
-        $rdv = $appel->getRdv();
-
-        if ($form->isSubmitted() && $form->isValid()) {
-
-            $rdv
-                ->setDateDebut($appel->getDateDebut())
-                ->setDateFin($appel->getDateFin())
-                ->setAllDay($form->get('allDay')->getData())
-                ->setTitre($appel->getNom());
-
-            $appel
-                ->setRdv($rdv)
-                ->setDescription(strip_tags($form->get('description')->getData()))
-                ->setCreatedAt(new \DateTimeImmutable());
-
-            $em->persist($appel);
-            $em->flush($appel);
-
-            $em->persist($rdv);
-            $em->flush($rdv);
-
-            if ($form->get('isUrgent')->getData() && $form->get('status')->getData()) {
-
-                $status = $form->get('status')->getData();
-
-                $ticketUrgent = new TicketUrgents();
-                $ticketUrgent
-                    ->setAppelsUrgents($appel)
-                    ->setStatus($status);
-
-                $em->persist($ticketUrgent);
-                $em->flush($ticketUrgent);
-            }
-
-            $this->addFlash(
-                'success',
-                'Rendez-vous modifié avec succès !'
-            );
-
-
-            return $this->redirectToRoute('app_appels');
-        }
-
-        return $this->render('appels/edit.html.twig', [
-            'appel'         =>  $appel,
-            'form'          =>  $form,
-            'current_page'  =>  'app_appels',
-        ]);
-    }
-
-
-    #[Route('/appels/{id}/delete', name: 'app_appels_delete', methods: ['POST'])]
-    public function delete(Request $request, Appels $appel, AppelsRepository $appelsRepository): Response
-    {
-        if ($this->isCsrfTokenValid('delete' . $appel->getId(), $request->request->get('_token'))) {
-            $appelsRepository->remove($appel, true);
-        }
-
-        return $this->redirectToRoute('app_appels', [], Response::HTTP_SEE_OTHER);
     }
 }

@@ -26,7 +26,7 @@ alert.remove();
 				{% endif %}
 			{% endfor %}
 
-			<div class="row border border-light rounded bg-light m-2 p-1 mt-5">
+			<div class="row border border-light rounded rounded-lg bg-light m-2 p-1 mt-5">
 				{% if app.user %}
 					<h1 class="display-3">Bonjour
 						{{ app.user.getIDUtilisateur.prenom }}!</h1>
@@ -40,7 +40,7 @@ alert.remove();
 									devis à réaliser.
 								</a>
 								<div class="collapse col-md-7" id="devisCollapse">
-									<div class="row rounded bg-white m-2 p-1">
+									<div class="row rounded rounded-lg bg-white m-2 p-1">
 										<ul class="list-group list-group-flush" style="max-height: 150px; overflow-y: auto;">
 											{% set hasDevis = false %}
 											{% for devis in devisARealiser %}
@@ -74,7 +74,7 @@ alert.remove();
 							</a>
 
 							<div class="collapse col-md-7" id="rdvCollapse">
-								<div class="row rounded bg-white m-2 p-1">
+								<div class="row rounded rounded-lg bg-white m-2 p-1">
 									<ul class="list-group list-group-flush" style="max-height: 150px; overflow-y: auto;">
 										{% set hasAppointment = false %}
 										{% for appels in appelsCurrentUser|sort((a, b) => a.RDV.dateDebut <=> b.RDV.dateDebut) %}
@@ -102,28 +102,36 @@ alert.remove();
 			{% endif %}
 		</div>
 
-		<div class="row border border-light rounded bg-light m-2 p-2">
+		<div class="row border border-light rounded rounded-lg bg-light m-2 p-2">
 			<h1 class="display-3">Calendrier</h1>
+			
 			<div class="row">
 				<div class="col calendar-holder p-2" id="calendar-holder-dashboard-0" data-events-url="{{ path('fc_load_events') }}"></div>
 			</div>
+
 			<div class="row">
 				<div class="col calendar-holder calendar-holder-rest" id="calendar-holder-dashboard-1" data-events-url="{{ path('fc_load_events') }}"></div>
 				<div class="col calendar-holder calendar-holder-rest" id="calendar-holder-dashboard-2" data-events-url="{{ path('fc_load_events') }}"></div>
 				<div class="col calendar-holder calendar-holder-rest" id="calendar-holder-dashboard-3" data-events-url="{{ path('fc_load_events') }}"></div>
 				<div class="col calendar-holder calendar-holder-rest" id="calendar-holder-dashboard-4" data-events-url="{{ path('fc_load_events') }}"></div>
 			</div>
+
 		</div>
 
 		<!-- Devis à réaliser -->
-		<div class="row border border-light rounded bg-light m-2 p-2">
-			{% if devisARealiser|length > 0 %}
-				<h1 class="display-3">Devis à réaliser</h1>
+		{% if devisARealiser is not null and devisARealiser|length > 0 %}
+		<div class="row border border-light rounded rounded-lg bg-light m-2 p-2">
+			<h1 class="display-3">Devis à réaliser</h1>
 				{% set sortedDevis = devisARealiser|sort((a, b) => a.date <=> b.date)|slice(-3) %}
 				{% for devis in sortedDevis %}
-					<div class="col-md-4">
-						<h2>{{ devis.nom }}</h2>
-						<p>{{ devis.description }}</p>
+					<div class="col-md-4 mt-2">
+						<a class="text-decoration-none link-dark" href="{{ path('app_devis_show', {'id': devis.id}) }}">
+							<h2>{{ devis.nom }}</h2>
+						</a>
+						<p>
+							<span class="badge bg-primary text-wrap">{{ devis.date|date('d/m/Y H:i') }}</span>
+						</p>
+						<p>{{ devis.description|striptags|slice(0, 130) ~ '...' }}</p>
 						<p>
 							<a class="btn btn-secondary" href="{{ path('app_devis_show', {'id': devis.id}) }}" role="button">Voir les détails »</a>
 						</p>
@@ -131,20 +139,33 @@ alert.remove();
 				{% endfor %}
 			</div>
 		{% else %}
-			<li class="list-group-item">Aucun devis à réaliser.</li>
+			<div class="row border border-light rounded rounded-lg bg-light m-2 p-2">
+				<h1 class="display-3">Chantier client</h1>
+				<div class="col-md-4 mt-2">
+					<li class="list-group-item d-flex justify-content-between align-items-center">
+						Aucun devis à réaliser.
+					</li>
+				</div>
+			</div>
 		{% endif %}
 
 		<!-- Chantier client -->
-		<div class="row border border-light rounded bg-light m-2 p-2">
-			{% if chantierEnCours|length > 0 %}
+		{% if chantierEnCours is not null and chantierEnCours|length > 0 %}
+			<div class="row border border-light rounded rounded-lg bg-light m-2 p-2">
 				<h1 class="display-3">Chantier client</h1>
-				{% set sortedChantier = chantierEnCours|sort((a, b) => a.date <=> b.date)|slice(-3) %}
+				{% set sortedChantier = chantierEnCours|sort((a, b) => a.dateDebut <=> b.dateDebut)|slice(-3) %}
 				{% for chantier in sortedChantier %}
-					<div class="col-md-4">
-						<h2>{{ chantier.CodeClient }}</h2>
-						<h4>{{ chantier.libelle }}</h4>
-						<p>{{ chantier.description }}
-							{{ chantier.statut|replace({'EN_COURS': 'En cours'})}}</p>
+					<div class="col-md-4 mt-2">
+						<a class="text-decoration-none link-dark" href="{{ path('app_chantier_show', {'id': chantier.id}) }}">
+							<h2>{{ chantier.CodeClient }}</h2>
+						</a>
+						<p>
+							<span class="badge bg-primary text-wrap">{{ chantier.dateDebut|date('d/m/Y H:i') }}</span>
+						</p>
+						<li class="list-group-item d-flex justify-content-between align-items-center">
+							<h4>{{ chantier.libelle|striptags|slice(0, 35) ~ '...' }}</h4>
+						</li>
+						<p>{{ chantier.description|striptags|slice(0, 130) ~ '...' }}</p>
 						<p>
 							<a class="btn btn-secondary" href="{{ path('app_chantier_show', {'id': chantier.id}) }}" role="button">Voir les détails »</a>
 						</p>
@@ -152,43 +173,41 @@ alert.remove();
 				{% endfor %}
 			</div>
 		{% else %}
-			<li class="list-group-item">Aucun chantier en cours.</li>
+			<div class="row border border-light rounded rounded-lg bg-light m-2 p-2">
+				<h1 class="display-3">Chantier client</h1>
+				<div class="col-md-4 mt-2">
+					<li class="list-group-item d-flex justify-content-between align-items-center">
+						Aucun chantier en cours.
+					</li>
+				</div>
+			</div>
 		{% endif %}
 
-		<!-- SAV -->
-		<div class="row border border-light rounded bg-light m-2 p-2">
-			<h1 class="display-3">SAV</h1>
-			<div class="col-md-4">
-				<h2>SAV 1</h2>
-				<p>Donec id elit non mi porta gravida at eget metus. Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum nibh, ut fermentum massa justo sit amet risus. Etiam porta sem malesuada magna mollis euismod. Donec sed odio dui.
-				</p>
-				<p>
-					<a class="btn btn-secondary" href="#" role="button">View details »</a>
-				</p>
+
+			<!-- SAV -->
+			<div class="row border border-light rounded bg-light m-2 p-2">
+				<h1 class="display-3">SAV</h1>
+				<div class="col-md-4">
+					<h2>SAV 1</h2>
+					<p>Donec id elit non mi porta gravida at eget metus. Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum nibh, ut fermentum massa justo sit amet risus. Etiam porta sem malesuada magna mollis euismod. Donec sed odio dui.
+					</p>
+					<p>
+						<a class="btn btn-secondary" href="#" role="button">View details »</a>
+					</p>
+				</div>
 			</div>
-			<div class="col-md-4">
-				<h2>SAV 2</h2>
-				<p>Donec id elit non mi porta gravida at eget metus. Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum nibh, ut fermentum massa justo sit amet risus. Etiam porta sem malesuada magna mollis euismod. Donec sed odio dui.
-				</p>
-				<p>
-					<a class="btn btn-secondary" href="#" role="button">View details »</a>
-				</p>
-			</div>
-			<div class="col-md-4">
-				<h2>SAV 3</h2>
-				<p>Donec sed odio dui. Cras justo odio, dapibus ac facilisis in, egestas eget quam. Vestibulum id ligula porta felis euismod semper. Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum nibh, ut fermentum massa justo sit amet risus.</p>
-				<p>
-					<a class="btn btn-secondary" href="#" role="button">View details »</a>
-				</p>
-			</div>
+
+			<!-- Appels -->
+
 		</div>
-
-		<!-- Appels -->
-
-	</div>
-</main>{% endblock %}{% block stylesheets %}
-{{ parent() }}
-{{ encore_entry_link_tags('calendrierDashboard') }}{% endblock %}{% block javascripts %}
-{{ parent() }}
-{{ encore_entry_script_tags('calendrierDashboard') }}{% endblock %}
+	</main>
+{% endblock %}
+{% block stylesheets %}
+	{{ parent() }}
+	{{ encore_entry_link_tags('calendrierDashboard') }}
+{% endblock %}
+{% block javascripts %}
+	{{ parent() }}
+	{{ encore_entry_script_tags('calendrierDashboard') }}
+{% endblock %}
 

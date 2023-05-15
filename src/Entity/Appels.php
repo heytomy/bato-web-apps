@@ -42,7 +42,7 @@ class Appels
     #[ORM\Column(name: 'Date_debut', type: Types::DATETIME_MUTABLE)]
     private ?\DateTimeInterface $dateDebut = null;
 
-    #[ORM\Column(name: 'Date_Fin', type: Types::DATETIME_MUTABLE)]
+    #[ORM\Column(name: 'Date_Fin', type: Types::DATETIME_MUTABLE, nullable: true)]
     private ?\DateTimeInterface $dateFin = null;
 
     #[ORM\Column(nullable: true)]
@@ -152,7 +152,7 @@ class Appels
         return $this->dateFin;
     }
 
-    public function setDateFin(\DateTimeInterface $dateFin): self
+    public function setDateFin(?\DateTimeInterface $dateFin): self
     {
         $this->dateFin = $dateFin;
 

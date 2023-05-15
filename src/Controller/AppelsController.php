@@ -43,7 +43,12 @@ class AppelsController extends AbstractController
     }
 
     #[Route('/appels/new', name: 'app_appels_new')]
-    public function new(Request $request, EntityManagerInterface $em, TicketUrgentsRepository $ticketUrgent, StatutChantierRepository $statutChantierRepository): Response
+    public function new(
+        Request $request,
+        EntityManagerInterface $em,
+        TicketUrgentsRepository $ticketUrgent,
+        StatutChantierRepository $statutChantierRepository
+        ): Response
     {
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
 
@@ -56,15 +61,31 @@ class AppelsController extends AbstractController
 
         if ($form->isSubmitted() && $form->isValid()) {
 
-            $dateDebut = $form->get('dateDebut')->getData()->format('Y-m-d H:i:s');;
-            $dateFin = $form->get('dateFin')->getData()->format('Y-m-d H:i:s');;
-
-            if ($dateFin !== null) {
-                $dateFin = $dateFin;
-            } elseif ($form->get('allDay')->getData()) {
+            $dateDebut = $form->get('dateDebut')->getData()->format('Y-m-d H:i:s');
+            $dateFin = $form->get('dateFin')->getData();
+            
+            if (!$form->get('allDay')->getData() && $dateFin === null) {
+                $dateFin = (new DateTime($dateDebut))->modify('+1 hour');
+            } elseif ($dateFin !== null && $form->get('allDay')->getData()) {
                 $dateFin = null;
             }
-
+            
+            if ($dateFin !== null) {
+                $dateFin = $dateFin->format('Y-m-d H:i:s');
+            
+                $rdv
+                    ->setDateFin(new DateTime($dateFin))
+                    ->setAllDay(false);
+            } elseif ($form->get('allDay')->getData()) {
+                $rdv
+                    ->setAllDay(true)
+                    ->setDateFin(null);
+            } else {
+                $rdv
+                    ->setAllDay(false)
+                    ->setDateFin(null);
+            }
+            
             if ($dateFin !== null && new DateTime($dateDebut) > new DateTime($dateFin)) {
                 $this->addFlash(
                     'error',
@@ -73,43 +94,40 @@ class AppelsController extends AbstractController
             } else {
                 $rdv
                     ->setDateDebut($appel->getDateDebut())
-                    ->setDateFin($appel->getDateFin())
-                    ->setAllDay($form->get('allDay')->getData())
                     ->setTitre($appel->getNom());
-
+            
                 $appel
                     ->setStatut($statutEnCours)
                     ->setRdv($rdv)
                     ->setDescription(strip_tags($form->get('description')->getData()))
                     ->setCreatedAt(new \DateTimeImmutable());
-
+            
                 $em->persist($appel);
                 $em->flush($appel);
-
+            
                 $em->persist($rdv);
                 $em->flush($rdv);
-
+            
                 if ($form->get('isUrgent')->getData() && $form->get('status')->getData()) {
-
                     $status = $form->get('status')->getData();
-
+            
                     $ticketUrgent = new TicketUrgents();
                     $ticketUrgent
                         ->setAppelsUrgents($appel)
                         ->setStatus($status);
-
+            
                     $em->persist($ticketUrgent);
                     $em->flush($ticketUrgent);
                 }
-
+            
                 $this->addFlash(
                     'success',
-                    'Rendez-vous enregistré avec succès !'
+                    'Rendez-vous enregistré avec succès!'
                 );
-
-
+            
                 return $this->redirectToRoute('app_appels');
             }
+                      
         }
 
         return $this->render('appels/new.html.twig', [
@@ -123,44 +141,76 @@ class AppelsController extends AbstractController
         Request $request,
         Appels $appel,
         AppelsRepository $appelsRepository,
-        EntityManagerInterface $em
+        EntityManagerInterface $em,
+        StatutChantierRepository $statutChantierRepository
     ): Response {
+
+        $statutEnCours = $statutChantierRepository->findOneBy(['statut' => 'EN_COURS']);
+
         $form = $this->createForm(AppelsEditType::class, $appel);
         $form->handleRequest($request);
         $rdv = $appel->getRdv();
 
         if ($form->isSubmitted() && $form->isValid()) {
 
-            if($form->get('allDay'))
-            $rdv
-                ->setDateDebut($appel->getDateDebut())
-                ->setDateFin($appel->getDateFin())
-                ->setAllDay($form->get('allDay')->getData())
-                ->setTitre($appel->getNom());
-
-            $appel
-                ->setRdv($rdv)
-                ->setDescription(strip_tags($form->get('description')->getData()))
-                ->setCreatedAt(new \DateTimeImmutable());
-
-            $em->persist($appel);
-            $em->flush($appel);
-
-            $em->persist($rdv);
-            $em->flush($rdv);
-
-            if ($form->get('isUrgent')->getData() && $form->get('status')->getData()) {
-
-                $status = $form->get('status')->getData();
-
-                $ticketUrgent = new TicketUrgents();
-                $ticketUrgent
-                    ->setAppelsUrgents($appel)
-                    ->setStatus($status);
-
-                $em->persist($ticketUrgent);
-                $em->flush($ticketUrgent);
+            $dateDebut = $form->get('dateDebut')->getData()->format('Y-m-d H:i:s');
+            $dateFin = $form->get('dateFin')->getData();
+            
+            if (!$form->get('allDay')->getData() && $dateFin === null) {
+                $dateFin = (new DateTime($dateDebut))->modify('+1 hour');
+            } elseif ($dateFin !== null && $form->get('allDay')->getData()) {
+                $dateFin = null;
             }
+            
+            if ($dateFin !== null) {
+                $dateFin = $dateFin->format('Y-m-d H:i:s');
+            
+                $rdv
+                    ->setDateFin(new DateTime($dateFin))
+                    ->setAllDay(false);
+            } elseif ($form->get('allDay')->getData()) {
+                $rdv
+                    ->setAllDay(true)
+                    ->setDateFin(null);
+            } else {
+                $rdv
+                    ->setAllDay(false)
+                    ->setDateFin(null);
+            }
+            
+            if ($dateFin !== null && new DateTime($dateDebut) > new DateTime($dateFin)) {
+                $this->addFlash(
+                    'error',
+                    'La date et heure de fin doit être postérieure à la date et heure de début.'
+                );
+            } else {
+                $rdv
+                    ->setDateDebut($appel->getDateDebut())
+                    ->setTitre($appel->getNom());
+            
+                $appel
+                    ->setStatut($statutEnCours)
+                    ->setRdv($rdv)
+                    ->setDescription(strip_tags($form->get('description')->getData()))
+                    ->setCreatedAt(new \DateTimeImmutable());
+            
+                $em->persist($appel);
+                $em->flush($appel);
+            
+                $em->persist($rdv);
+                $em->flush($rdv);
+            
+                if ($form->get('isUrgent')->getData() && $form->get('status')->getData()) {
+                    $status = $form->get('status')->getData();
+            
+                    $ticketUrgent = new TicketUrgents();
+                    $ticketUrgent
+                        ->setAppelsUrgents($appel)
+                        ->setStatus($status);
+            
+                    $em->persist($ticketUrgent);
+                    $em->flush($ticketUrgent);
+                }
 
             $this->addFlash(
                 'success',
@@ -169,6 +219,7 @@ class AppelsController extends AbstractController
 
 
             return $this->redirectToRoute('app_appels');
+        }
         }
 
         return $this->render('appels/edit.html.twig', [

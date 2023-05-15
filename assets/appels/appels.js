@@ -106,10 +106,16 @@ function infiniteScrollHandler() {
 
 // function to create a new client element
 function createClientElement(client) {
-  const dateFormatOptions = { day: 'numeric', month: 'numeric', year: 'numeric', hour: 'numeric', minute: 'numeric' };
-  const formattedDateDebut = new Date(client.dateDebut).toLocaleDateString('fr-FR', dateFormatOptions);
-  const formattedDateFin = new Date(client.dateFin).toLocaleDateString('fr-FR', dateFormatOptions);
-
+  const dateFormatOptions = {
+    day: 'numeric',
+    month: 'long',
+    year: 'numeric',
+    hour: 'numeric',
+    minute: '2-digit',
+  };
+  
+  const formattedDateDebut = new Date(client.dateDebut).toLocaleTimeString('fr-FR', dateFormatOptions);
+  const formattedDateFin = new Date(client.dateFin).toLocaleTimeString('fr-FR', dateFormatOptions);
 
   const clientElement = document.createElement('div');
   clientElement.classList.add('row', 'border', 'border-light', 'rounded', 'bg-client', 'm-2', 'p-2', 'client');
@@ -135,8 +141,8 @@ function createClientElement(client) {
     <div class="row">
       <div class="col"><strong>Date du rendez-vous:</strong> ${formattedDateDebut}</div>
     </div>
-    <div class="row">
-      <div class="col"><strong>Fin prévu le:</strong> ${formattedDateFin}</div>
+    <div class="row mt-1">
+      <div class="col">${client.dateFin ? '<strong>Fin prévu le:</strong> ' + formattedDateFin : '<strong>Toute la journée</strong>'}</div>
     </div>
   </div>
 
@@ -164,7 +170,7 @@ function createClientModal(client, clientElement) {
   clientModal.setAttribute('aria-hidden','true');
   clientModal.setAttribute('aria-labelledby',`clientModalLabel-${client.codeAppel}`);
 
-  const dateFormatOptions = { day: 'numeric', month: 'numeric', year: 'numeric', hour: 'numeric', minute: 'numeric' };
+  const dateFormatOptions = { day: 'numeric', month: 'long', year: 'numeric', hour: 'numeric', minute: 'numeric' };
   const formattedDateDebut = new Date(client.dateDebut).toLocaleDateString('fr-FR', dateFormatOptions);
   const formattedDateFin = new Date(client.dateFin).toLocaleDateString('fr-FR', dateFormatOptions);
 
@@ -189,8 +195,8 @@ function createClientModal(client, clientElement) {
                 <p><strong>Adresse:</strong>            ${client.adr}<br>${client.cp} ${client.ville}</p>
               </div>
               <div class="col-md-6">
-                <p><strong>Date de rendez-vous:</strong>   ${formattedDateDebut}</p>
-                <p>${client.dateFin ? '<strong>Fin prévu le:</strong>' + formattedDateFin : ''}</p>
+                <p><strong>Date de rendez-vous:</strong> ${formattedDateDebut}</p>
+                <p>${client.dateFin ? '<strong>Fin prévu le:</strong> ' + formattedDateFin : '<strong>Toute la journée</strong>'}</p>
               </div>
               <div class="col-md-6">
                 <p><strong>Rendez-vous urgent ?</strong>      <br> ${client.isUrgent ? '<p>Oui</p>' : '<p">Non</p>'}</p>

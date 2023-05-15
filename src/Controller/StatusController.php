@@ -4,6 +4,7 @@ namespace App\Controller;
 
 use App\Entity\Appels;
 use App\Entity\ChantierApps;
+use App\Entity\DevisARealiser;
 use App\Entity\StatutChantier;
 use App\Repository\StatutChantierRepository;
 use Doctrine\ORM\EntityManagerInterface;
@@ -60,7 +61,7 @@ class StatusController extends AbstractController
 
             $this->addFlash(
                 'success',
-                'Le statut du chantier a été modifié'
+                'Le statut de l\'appel a été modifié'
             );
             // Redirect to the page that displays your entity
             return $this->redirectToRoute('app_appels', []);
@@ -70,5 +71,33 @@ class StatusController extends AbstractController
            'Le statut ne peut pas être changé'
         );
         return $this->redirectToRoute('app_appels_show', ['id' => $appel->getId()]);
+    }
+
+    #[Route('/status/change/devis/{id}', name: 'app_status_change_devis', methods:['POST'])]
+    public function changeStatusDevis(
+        Request $request, 
+        DevisARealiser $devis, 
+        EntityManagerInterface $em,
+        StatutChantierRepository $statutChantierRepository,
+        ): Response
+    {
+        if ($this->isCsrfTokenValid('change_status_'.$devis->getId(), $request->request->get('_token'))) {
+            $statutTermine = $statutChantierRepository->findOneBy(['statut' => 'TERMINE']);
+            $devis->setStatut($statutTermine);
+            $em->persist($devis);
+            $em->flush();
+
+            $this->addFlash(
+                'success',
+                'Le statut du devis a été modifié'
+            );
+            // Redirect to the page that displays your entity
+            return $this->redirectToRoute('app_devis', []);
+        }
+        $this->addFlash(
+           'error',
+           'Le statut ne peut pas être changé'
+        );
+        return $this->redirectToRoute('app_devis_show', ['id' => $devis->getId()]);
     }
 }

@@ -1,4 +1,4 @@
-<form method="post" action="{{ path('app_status_change_chantier', {'id': chantier.id}) }}">
+<form method="post" action="{{ path('app_status_change_chantier', {'id': chantier.id}) }}" onsubmit="return confirm('Êtes-vous sûr de changer le statut du chantier ?');">
     <input type="hidden" name="_token" value="{{ csrf_token('change_status_' ~ chantier.id) }}">
     <button class="btn btn-danger" type="submit"><i class="fa-solid fa-building-circle-check"></i> Marquer le chantier <strong>'Terminé'</strong></button>
 </form>

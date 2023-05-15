@@ -201,7 +201,7 @@ class ChantierController extends AbstractController
             'replies'           =>  $replies,
             'photos'            =>  $photos,
             'current_page'      =>  'app_chantier',
-            'devis'             =>  $devis
+            'devis'             =>  $devis,
         ]);
     }
 

@@ -31,7 +31,8 @@
 				<h1>{{appel.getRdv().titre}}</h1>
 				<div class="d-flex flex-column align-items-end">
 					<h5>Le
-						{{appel.getRdv().dateDebut | date('d/m/Y')}}</h5>
+						{{appel.getRdv().dateDebut | date('d/m/Y')}}
+					</h5>
 					<h5>à
 						{{appel.getRdv().dateDebut | date('h:i')}}</h5>
 				</div>
@@ -52,8 +53,9 @@
 			{% endif %}
 
 			<div class="d-flex flex-column align-items-end">
-				<h6>Fin prévu le
-					{{appel.getRdv().dateFin | date('d/m/Y H:i')}}</h6>
+				<h6>Fin prévu le:
+					{{ appel.getRdv().dateFin ? appel.getRdv().dateFin|date('d/m/Y H:i') : 'Toute la journée' }}
+				</h6>
 
 				<h5 class='text-primary'>
 					<strong>Technicien:

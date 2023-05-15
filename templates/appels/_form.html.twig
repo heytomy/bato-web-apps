@@ -29,11 +29,7 @@
 		</div>
 
 		{% if app.request.attributes.get('_route') == 'app_appels_edit' %}
-			<div class="row mt-3 d-none">
-				<div class="col">
-					{{ form_row(form.ClientList, {'attr': {'hidden': 'hidden'}}) }}
-				</div>
-			</div>
+
 		{% else %}
 			<div class="row mt-3 ">
 				<div class="col">{{ form_row(form.ClientList) }}</div>
@@ -41,14 +37,7 @@
 		{% endif %}
 
 		{% if app.request.attributes.get('_route') == 'app_appels_edit' %}
-			<div class="row mt-3 d-none">
-				<div class="col-md-6">
-					{{ form_row(form.CodeContrat, {'attr': {'hidden': 'hidden'}}) }}
-				</div>
-				<div class="col-md-6">
-					{{ form_row(form.CodeClient, {'attr': {'hidden': 'hidden'}}) }}
-				</div>
-			</div>
+
 		{% else %}
 			<div class="row mt-3">
 				<div class="col-md-6">

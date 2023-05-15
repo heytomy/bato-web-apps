@@ -106,8 +106,13 @@ function infiniteScrollHandler() {
 
 // function to create a new client element
 function createClientElement(client) {
-  const dateFormatOptions = { day: 'numeric', month: 'numeric', year: 'numeric' };
-  const formattedDateDebut = new Date(client.dateDebut).toLocaleDateString('fr-FR', dateFormatOptions);
+  const dateFormatOptions = {
+    day: 'numeric',
+    month: 'long',
+    year: 'numeric',
+    hour: 'numeric',
+    minute: 'numeric',
+  };  const formattedDateDebut = new Date(client.dateDebut).toLocaleDateString('fr-FR', dateFormatOptions);
   const formattedDateFin = new Date(client.dateFin).toLocaleDateString('fr-FR', dateFormatOptions);
 
   const clientElement = document.createElement('div');

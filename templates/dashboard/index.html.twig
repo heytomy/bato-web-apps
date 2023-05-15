@@ -15,13 +15,13 @@
 
 					<script>
 						setTimeout(function () {
-			var alert = document.querySelector('.alert');
-			alert.classList.remove('show');
-			alert.classList.add('hide');
-			setTimeout(function () {
-			alert.remove();
-			}, 1000);
-			}, 5000);
+var alert = document.querySelector('.alert');
+alert.classList.remove('show');
+alert.classList.add('hide');
+setTimeout(function () {
+alert.remove();
+}, 1000);
+}, 5000);
 					</script>
 				{% endif %}
 			{% endfor %}
@@ -32,7 +32,7 @@
 						{{ app.user.getIDUtilisateur.prenom }}!</h1>
 					<h4>Voici un petit récapitulatif de votre journée :</h4>
 					<ul class="list-unstyled mt-2" style="margin-left: 0.5rem;">
-						
+
 						<li class="list-group-item mb-2">
 							{% if devisARealiser|length > 0 %}
 								<a class="btn btn-secondary" data-bs-toggle="collapse" href="#devisCollapse" role="button" aria-expanded="false" aria-controls="devisCollapse">
@@ -44,16 +44,16 @@
 										<ul class="list-group list-group-flush" style="max-height: 150px; overflow-y: auto;">
 											{% set hasDevis = false %}
 											{% for devis in devisARealiser %}
-													{% set hasDevis = true %}
-													<li class="list-group-item d-flex justify-content-between align-items-center">
-														{# <a class="text-decoration-none link-dark" href="{{ path('app_devis_show', {'id': devis.id}) }}"> #}
-															{{ devis.nom }}
-														{# </a> #}
-														<span class="badge bg-primary text-wrap">
-															{{ devis.statut|replace({'EN_COURS': 'A faire'}) }}
-															{{ devis.date|date('d/m/Y H:i') }}
-														</span>
-													</li>
+												{% set hasDevis = true %}
+												<li class="list-group-item d-flex justify-content-between align-items-center">
+													<a class="text-decoration-none link-dark" href="{{ path('app_devis_show', {'id': devis.id}) }}">
+														{{ devis.nom }}
+													</a>
+													<span class="badge bg-primary text-wrap">
+														{{ devis.statut|replace({'EN_COURS': 'A faire'}) }}
+														{{ devis.date|date('d/m/Y H:i') }}
+													</span>
+												</li>
 											{% endfor %}
 											{% if not hasDevis %}
 												<li class="list-group-item">Plus aucun devis à réaliser !</li>
@@ -63,154 +63,132 @@
 								</div>
 							{% else %}
 								<li class="list-group-item">Aucun devis à réaliser aujourd'hui.</li>
-							{% endif %}</li>
-
-
-							{% if appelsCurrentUser|length > 0 %}
-								<a class="btn btn-secondary" data-bs-toggle="collapse" href="#rdvCollapse" role="button" aria-expanded="false" aria-controls="rdvCollapse">
-									{{ appelsCurrentUser|length }}
-									rendez-vous aujourd'hui.
-								</a>
-
-								<div class="collapse col-md-7" id="rdvCollapse">
-									<div class="row rounded bg-white m-2 p-1">
-										<ul
-											class="list-group list-group-flush" style="max-height: 150px; overflow-y: auto;">
-                                            {% set hasAppointment = false %}
-                                            {% for appels in appelsCurrentUser|sort((a, b) => a.RDV.dateDebut <=> b.RDV.dateDebut) %}
-                                                {% if appels.RDV.dateDebut|date_modify('+1 hour') >= now %}
-                                                    {% set hasAppointment = true %}
-                                                    <li class="list-group-item d-flex justify-content-between align-items-center">
-                                                        <a class="text-decoration-none link-dark" href="{{ path('app_appels_show', {'id': appels.id}) }}">
-                                                            {{ appels.nom }}
-                                                        </a>
-                                                        <span class="badge bg-primary text-wrap">{{ appels.RDV.dateDebut|date('d/m/Y H:i') }}</span>
-                                                    </li>
-                                                {% endif %}
-                                            {% endfor %}
-                                            {% if not hasAppointment %}
-                                                <li class="list-group-item">Plus aucun rendez-vous pour aujourd'hui !</li>
-                                            {% endif %}
-										</ul>
-									</div>
-								</div>
-							{% else %}
-								<li class="list-group-item">Aucun rendez-vous aujourd'hui.</li>
 							{% endif %}
 						</li>
-					</ul>
-				{% endif %}
-			</div>
 
-			<div class="row border border-light rounded bg-light m-2 p-2">
-				<h1 class="display-3">Calendrier</h1>
-				<div class="row">
-					<div class="col calendar-holder p-2" id="calendar-holder-dashboard-0" data-events-url="{{ path('fc_load_events') }}"></div>
-				</div>
-				<div class="row">
-					<div class="col calendar-holder calendar-holder-rest" id="calendar-holder-dashboard-1" data-events-url="{{ path('fc_load_events') }}"></div>
-					<div class="col calendar-holder calendar-holder-rest" id="calendar-holder-dashboard-2" data-events-url="{{ path('fc_load_events') }}"></div>
-					<div class="col calendar-holder calendar-holder-rest" id="calendar-holder-dashboard-3" data-events-url="{{ path('fc_load_events') }}"></div>
-					<div class="col calendar-holder calendar-holder-rest" id="calendar-holder-dashboard-4" data-events-url="{{ path('fc_load_events') }}"></div>
-				</div>
-			</div>
-			<!-- Devis à réaliser -->
-			<div class="row border border-light rounded bg-light m-2 p-2">
-				<h1 class="display-3">Devis à réaliser</h1>
-				<div class="col-md-4">
-					<h2>Devis 1</h2>
-					<p>Donec id elit non mi porta gravida at eget metus. Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum nibh, ut fermentum massa justo sit amet risus. Etiam porta sem malesuada magna mollis euismod. Donec sed odio dui.
-					</p>
-					<p>
-						<a class="btn btn-secondary" href="#" role="button">View details »</a>
-					</p>
-				</div>
-				<div class="col-md-4">
-					<h2>Devis 2</h2>
-					<p>Donec id elit non mi porta gravida at eget metus. Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum nibh, ut fermentum massa justo sit amet risus. Etiam porta sem malesuada magna mollis euismod. Donec sed odio dui.
-					</p>
-					<p>
-						<a class="btn btn-secondary" href="#" role="button">View details »</a>
-					</p>
-				</div>
-				<div class="col-md-4">
-					<h2>Devis 3</h2>
-					<p>Donec sed odio dui. Cras justo odio, dapibus ac facilisis in, egestas eget quam. Vestibulum id ligula porta felis euismod semper. Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum nibh, ut fermentum massa justo sit amet risus.</p>
-					<p>
-						<a class="btn btn-secondary" href="#" role="button">View details »</a>
-					</p>
-				</div>
-			</div>
 
-			<!-- Chantier client -->
-			<div class="row border border-light rounded bg-light m-2 p-2">
-				<h1 class="display-3">Chantier client</h1>
-				<div class="col-md-4">
-					<h2>1</h2>
-					<p>Donec id elit non mi porta gravida at eget metus. Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum nibh, ut fermentum massa justo sit amet risus. Etiam porta sem malesuada magna mollis euismod. Donec sed odio dui.
-					</p>
-					<p>
-						<a class="btn btn-secondary" href="#" role="button">View details »</a>
-					</p>
-				</div>
-				<div class="col-md-4">
-					<h2>2</h2>
-					<p>Donec id elit non mi porta gravida at eget metus. Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum nibh, ut fermentum massa justo sit amet risus. Etiam porta sem malesuada magna mollis euismod. Donec sed odio dui.
-					</p>
-					<p>
-						<a class="btn btn-secondary" href="#" role="button">View details »</a>
-					</p>
-				</div>
-				<div class="col-md-4">
-					<h2>3</h2>
-					<p>Donec sed odio dui. Cras justo odio, dapibus ac facilisis in, egestas eget quam. Vestibulum id ligula porta felis euismod semper. Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum nibh, ut fermentum massa justo sit amet risus.</p>
-					<p>
-						<a class="btn btn-secondary" href="#" role="button">View details »</a>
-					</p>
-				</div>
-			</div>
+						{% if appelsCurrentUser|length > 0 %}
+							<a class="btn btn-secondary" data-bs-toggle="collapse" href="#rdvCollapse" role="button" aria-expanded="false" aria-controls="rdvCollapse">
+								{{ appelsCurrentUser|length }}
+								rendez-vous aujourd'hui.
+							</a>
 
-			<!-- SAV -->
-			<div class="row border border-light rounded bg-light m-2 p-2">
-				<h1 class="display-3">SAV</h1>
-				<div class="col-md-4">
-					<h2>SAV 1</h2>
-					<p>Donec id elit non mi porta gravida at eget metus. Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum nibh, ut fermentum massa justo sit amet risus. Etiam porta sem malesuada magna mollis euismod. Donec sed odio dui.
-					</p>
-					<p>
-						<a class="btn btn-secondary" href="#" role="button">View details »</a>
-					</p>
-				</div>
-				<div class="col-md-4">
-					<h2>SAV 2</h2>
-					<p>Donec id elit non mi porta gravida at eget metus. Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum nibh, ut fermentum massa justo sit amet risus. Etiam porta sem malesuada magna mollis euismod. Donec sed odio dui.
-					</p>
-					<p>
-						<a class="btn btn-secondary" href="#" role="button">View details »</a>
-					</p>
-				</div>
-				<div class="col-md-4">
-					<h2>SAV 3</h2>
-					<p>Donec sed odio dui. Cras justo odio, dapibus ac facilisis in, egestas eget quam. Vestibulum id ligula porta felis euismod semper. Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum nibh, ut fermentum massa justo sit amet risus.</p>
-					<p>
-						<a class="btn btn-secondary" href="#" role="button">View details »</a>
-					</p>
-				</div>
-			</div>
-
-			<!-- Appels -->
-
+							<div class="collapse col-md-7" id="rdvCollapse">
+								<div class="row rounded bg-white m-2 p-1">
+									<ul class="list-group list-group-flush" style="max-height: 150px; overflow-y: auto;">
+										{% set hasAppointment = false %}
+										{% for appels in appelsCurrentUser|sort((a, b) => a.RDV.dateDebut <=> b.RDV.dateDebut) %}
+											{% if appels.RDV.dateDebut|date_modify('+1 hour') >= now %}
+												{% set hasAppointment = true %}
+												<li class="list-group-item d-flex justify-content-between align-items-center">
+													<a class="text-decoration-none link-dark" href="{{ path('app_appels_show', {'id': appels.id}) }}">
+														{{ appels.nom }}
+													</a>
+													<span class="badge bg-primary text-wrap">{{ appels.RDV.dateDebut|date('d/m/Y H:i') }}</span>
+												</li>
+											{% endif %}
+										{% endfor %}
+										{% if not hasAppointment %}
+											<li class="list-group-item">Plus aucun rendez-vous pour aujourd'hui !</li>
+										{% endif %}
+									</ul>
+								</div>
+							</div>
+						{% else %}
+							<li class="list-group-item">Aucun rendez-vous prévu aujourd'hui !</li>
+						{% endif %}
+					</li>
+				</ul>
+			{% endif %}
 		</div>
-	</main>
-{% endblock %}
 
-{% block stylesheets %}
-	{{ parent() }}
-	{{ encore_entry_link_tags('calendrierDashboard') }}
-{% endblock %}
+		<div class="row border border-light rounded bg-light m-2 p-2">
+			<h1 class="display-3">Calendrier</h1>
+			<div class="row">
+				<div class="col calendar-holder p-2" id="calendar-holder-dashboard-0" data-events-url="{{ path('fc_load_events') }}"></div>
+			</div>
+			<div class="row">
+				<div class="col calendar-holder calendar-holder-rest" id="calendar-holder-dashboard-1" data-events-url="{{ path('fc_load_events') }}"></div>
+				<div class="col calendar-holder calendar-holder-rest" id="calendar-holder-dashboard-2" data-events-url="{{ path('fc_load_events') }}"></div>
+				<div class="col calendar-holder calendar-holder-rest" id="calendar-holder-dashboard-3" data-events-url="{{ path('fc_load_events') }}"></div>
+				<div class="col calendar-holder calendar-holder-rest" id="calendar-holder-dashboard-4" data-events-url="{{ path('fc_load_events') }}"></div>
+			</div>
+		</div>
 
-{% block javascripts %}
-	{{ parent() }}
-	{{ encore_entry_script_tags('calendrierDashboard') }}
-{% endblock %}
+		<!-- Devis à réaliser -->
+		<div class="row border border-light rounded bg-light m-2 p-2">
+			{% if devisARealiser|length > 0 %}
+				<h1 class="display-3">Devis à réaliser</h1>
+				{% set sortedDevis = devisARealiser|sort((a, b) => a.date <=> b.date)|slice(-3) %}
+				{% for devis in sortedDevis %}
+					<div class="col-md-4">
+						<h2>{{ devis.nom }}</h2>
+						<p>{{ devis.description }}</p>
+						<p>
+							<a class="btn btn-secondary" href="{{ path('app_devis_show', {'id': devis.id}) }}" role="button">Voir les détails »</a>
+						</p>
+					</div>
+				{% endfor %}
+			</div>
+		{% else %}
+			<li class="list-group-item">Aucun devis à réaliser.</li>
+		{% endif %}
+
+		<!-- Chantier client -->
+		<div class="row border border-light rounded bg-light m-2 p-2">
+			{% if chantierEnCours|length > 0 %}
+				<h1 class="display-3">Chantier client</h1>
+				{% set sortedChantier = chantierEnCours|sort((a, b) => a.date <=> b.date)|slice(-3) %}
+				{% for chantier in sortedChantier %}
+					<div class="col-md-4">
+						<h2>{{ chantier.CodeClient }}</h2>
+						<h4>{{ chantier.libelle }}</h4>
+						<p>{{ chantier.description }}
+							{{ chantier.statut|replace({'EN_COURS': 'En cours'})}}</p>
+						<p>
+							<a class="btn btn-secondary" href="{{ path('app_chantier_show', {'id': chantier.id}) }}" role="button">Voir les détails »</a>
+						</p>
+					</div>
+				{% endfor %}
+			</div>
+		{% else %}
+			<li class="list-group-item">Aucun chantier en cours.</li>
+		{% endif %}
+
+		<!-- SAV -->
+		<div class="row border border-light rounded bg-light m-2 p-2">
+			<h1 class="display-3">SAV</h1>
+			<div class="col-md-4">
+				<h2>SAV 1</h2>
+				<p>Donec id elit non mi porta gravida at eget metus. Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum nibh, ut fermentum massa justo sit amet risus. Etiam porta sem malesuada magna mollis euismod. Donec sed odio dui.
+				</p>
+				<p>
+					<a class="btn btn-secondary" href="#" role="button">View details »</a>
+				</p>
+			</div>
+			<div class="col-md-4">
+				<h2>SAV 2</h2>
+				<p>Donec id elit non mi porta gravida at eget metus. Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum nibh, ut fermentum massa justo sit amet risus. Etiam porta sem malesuada magna mollis euismod. Donec sed odio dui.
+				</p>
+				<p>
+					<a class="btn btn-secondary" href="#" role="button">View details »</a>
+				</p>
+			</div>
+			<div class="col-md-4">
+				<h2>SAV 3</h2>
+				<p>Donec sed odio dui. Cras justo odio, dapibus ac facilisis in, egestas eget quam. Vestibulum id ligula porta felis euismod semper. Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum nibh, ut fermentum massa justo sit amet risus.</p>
+				<p>
+					<a class="btn btn-secondary" href="#" role="button">View details »</a>
+				</p>
+			</div>
+		</div>
+
+		<!-- Appels -->
+
+	</div>
+</main>{% endblock %}{% block stylesheets %}
+{{ parent() }}
+{{ encore_entry_link_tags('calendrierDashboard') }}{% endblock %}{% block javascripts %}
+{{ parent() }}
+{{ encore_entry_script_tags('calendrierDashboard') }}{% endblock %}
 

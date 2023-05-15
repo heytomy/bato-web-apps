@@ -2,11 +2,12 @@
 
 namespace App\Controller;
 
-use App\Entity\Appels;
-use App\Entity\DevisARealiser;
-use App\Repository\StatutChantierRepository;
 use DateTime;
+use App\Entity\Appels;
+use App\Entity\ChantierApps;
+use App\Entity\DevisARealiser;
 use Doctrine\ORM\EntityManagerInterface;
+use App\Repository\StatutChantierRepository;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -14,7 +15,10 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 class DashboardController extends AbstractController
 {
     #[Route('/dashboard', name: 'app_dashboard')]
-    public function index(EntityManagerInterface $em, StatutChantierRepository $statutChantierRepository): Response
+    public function index(
+        EntityManagerInterface $em,
+        StatutChantierRepository $statutChantierRepository
+        ): Response
     {
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
 
@@ -34,6 +38,8 @@ class DashboardController extends AbstractController
             ->getResult();
 
         $devisARealiser = $em->getRepository(DevisARealiser::class)->findByStatut('EN_COURS');
+        $chantierEnCours = $em->getRepository(ChantierApps::class)->findByStatut('EN_COURS');
+
 
         $em->clear();
         
@@ -41,6 +47,7 @@ class DashboardController extends AbstractController
             'current_page' => 'app_dashboard',
             'appelsCurrentUser' => $appelsCurrentUser,
             'devisARealiser' => $devisARealiser,
+            'chantierEnCours' => $chantierEnCours,
             'now' => $now
         ]);
     }

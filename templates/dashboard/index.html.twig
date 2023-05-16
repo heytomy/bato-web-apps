@@ -26,7 +26,7 @@ alert.remove();
 				{% endif %}
 			{% endfor %}
 
-			<div class="row border border-light rounded rounded-lg bg-light m-2 p-1 mt-5">
+			<div class="row border border-light rounded rounded-lg bg-light m-2 p-1 mt-5 mb-3">
 				{% if app.user %}
 					<h1 class="display-3">Bonjour
 						{{ app.user.getIDUtilisateur.prenom }}!</h1>
@@ -95,21 +95,23 @@ alert.remove();
 								</div>
 							</div>
 						{% else %}
-							<li class="list-group-item">Aucun rendez-vous prévu aujourd'hui !</li>
+						<div class="alert alert-info" role="alert">
+							<li class="list-group-item">Aucun rendez-vous prévu pour vous aujourd'hui !</li>
+						</div>
 						{% endif %}
 					</li>
 				</ul>
 			{% endif %}
 		</div>
 
-		<div class="row border border-light rounded rounded-lg bg-light m-2 p-2">
+		<div class="row border border-light rounded rounded-lg bg-light m-2 p-2 mb-3">
 			<h1 class="display-3">Calendrier</h1>
 			
 			<div class="row">
 				<div class="col calendar-holder p-2" id="calendar-holder-dashboard-0" data-events-url="{{ path('fc_load_events') }}"></div>
 			</div>
 
-			<div class="row">
+			<div class="row mb-3">
 				<div class="col calendar-holder calendar-holder-rest" id="calendar-holder-dashboard-1" data-events-url="{{ path('fc_load_events') }}"></div>
 				<div class="col calendar-holder calendar-holder-rest" id="calendar-holder-dashboard-2" data-events-url="{{ path('fc_load_events') }}"></div>
 				<div class="col calendar-holder calendar-holder-rest" id="calendar-holder-dashboard-3" data-events-url="{{ path('fc_load_events') }}"></div>
@@ -120,7 +122,7 @@ alert.remove();
 
 		<!-- Devis à réaliser -->
 		{% if devisARealiser is not null and devisARealiser|length > 0 %}
-		<div class="row border border-light rounded rounded-lg bg-light m-2 p-2">
+		<div class="row border border-light rounded rounded-lg bg-light m-2 p-2 mb-3">
 			<h1 class="display-3">Devis à réaliser</h1>
 				{% set sortedDevis = devisARealiser|sort((a, b) => a.date <=> b.date)|slice(-3) %}
 				{% for devis in sortedDevis %}
@@ -139,7 +141,7 @@ alert.remove();
 				{% endfor %}
 			</div>
 		{% else %}
-			<div class="row border border-light rounded rounded-lg bg-light m-2 p-2">
+			<div class="row border border-light rounded rounded-lg bg-light m-2 p-2 mb-3">
 				<h1 class="display-3">Chantier client</h1>
 				<div class="col-md-4 mt-2">
 					<li class="list-group-item d-flex justify-content-between align-items-center">
@@ -151,7 +153,7 @@ alert.remove();
 
 		<!-- Chantier client -->
 		{% if chantierEnCours is not null and chantierEnCours|length > 0 %}
-			<div class="row border border-light rounded rounded-lg bg-light m-2 p-2">
+			<div class="row border border-light rounded rounded-lg bg-light m-2 p-2 mb-3">
 				<h1 class="display-3">Chantier client</h1>
 				{% set sortedChantier = chantierEnCours|sort((a, b) => a.dateDebut <=> b.dateDebut)|slice(-3) %}
 				{% for chantier in sortedChantier %}
@@ -173,7 +175,7 @@ alert.remove();
 				{% endfor %}
 			</div>
 		{% else %}
-			<div class="row border border-light rounded rounded-lg bg-light m-2 p-2">
+			<div class="row border border-light rounded rounded-lg bg-light m-2 p-2 mb-3">
 				<h1 class="display-3">Chantier client</h1>
 				<div class="col-md-4 mt-2">
 					<li class="list-group-item d-flex justify-content-between align-items-center">
@@ -185,7 +187,7 @@ alert.remove();
 
 
 			<!-- SAV -->
-			<div class="row border border-light rounded bg-light m-2 p-2">
+			<div class="row border border-light rounded bg-light m-2 p-2 mb-3">
 				<h1 class="display-3">SAV</h1>
 				<div class="col-md-4">
 					<h2>SAV 1</h2>

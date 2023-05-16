@@ -34,7 +34,7 @@
 						{{appel.getRdv().dateDebut|format_datetime(locale='fr',pattern="dd MMMM YYYY") }}
 					</h5>
 					<h5>à
-						{{appel.getRdv().dateDebut|date('h:i')}}</h5>
+						{{appel.getRdv().dateDebut|format_datetime(locale='fr',pattern="HH:mm") }}</h5>
 				</div>
 			</div>
 			{% if appel.CodeContrat %}

@@ -4,17 +4,17 @@
 {% endblock %}
 
 {% block body %}
-	<main role="main">
-		<div class="container">
-			{% for message in app.flashes('success') %}
-				{% if loop.first %}
-					<div class="alert alert-success alert-dismissible fade show mb-1" role="alert">
-						{{ message }}
-						<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-					</div>
+<main role="main">
+	<div class="container">
+		{% for message in app.flashes('success') %}
+			{% if loop.first %}
+				<div class="alert alert-success alert-dismissible fade show mb-1" role="alert">
+					{{ message }}
+					<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+				</div>
 
-					<script>
-						setTimeout(function () {
+				<script>
+					setTimeout(function () {
 var alert = document.querySelector('.alert');
 alert.classList.remove('show');
 alert.classList.add('hide');
@@ -22,57 +22,23 @@ setTimeout(function () {
 alert.remove();
 }, 1000);
 }, 5000);
-					</script>
-				{% endif %}
-			{% endfor %}
+				</script>
+			{% endif %}
+		{% endfor %}
 
-			<div class="row border border-light rounded rounded-lg bg-light m-2 p-1 mt-5 mb-3">
-				{% if app.user %}
-					<h1 class="display-3">Bonjour
-						{{ app.user.getIDUtilisateur.prenom }}!</h1>
-					<h4>Voici un petit récapitulatif de votre journée :</h4>
-					<ul class="list-unstyled mt-2" style="margin-left: 0.5rem;">
-
+		<div class="row border border-light rounded rounded-lg bg-light m-2 p-1 mt-5 mb-3">
+			{% if app.user %}
+				<h1 class="display-3">Bonjour
+					{{ app.user.getIDUtilisateur.prenom }}!</h1>
+				<h4>Voici un petit récapitulatif de votre journée :</h4>
+				<ul class="list-unstyled mt-2" style="margin-left: 0.5rem;">
+					
+					{% if appelsCurrentUser|length > 0 %}
 						<li class="list-group-item mb-2">
-							{% if devisARealiser|length > 0 %}
-								<a class="btn btn-secondary" data-bs-toggle="collapse" href="#devisCollapse" role="button" aria-expanded="false" aria-controls="devisCollapse">
-									{{ devisARealiser|length }}
-									devis à réaliser.
-								</a>
-								<div class="collapse col-md-7" id="devisCollapse">
-									<div class="row rounded rounded-lg bg-white m-2 p-1">
-										<ul class="list-group list-group-flush" style="max-height: 150px; overflow-y: auto;">
-											{% set hasDevis = false %}
-											{% for devis in devisARealiser %}
-												{% set hasDevis = true %}
-												<li class="list-group-item d-flex justify-content-between align-items-center">
-													<a class="text-decoration-none link-dark" href="{{ path('app_devis_show', {'id': devis.id}) }}">
-														{{ devis.nom }}
-													</a>
-													<span class="badge bg-primary text-wrap">
-														{{ devis.statut|replace({'EN_COURS': 'A faire'}) }}
-														{{ devis.date|date('d/m/Y H:i') }}
-													</span>
-												</li>
-											{% endfor %}
-											{% if not hasDevis %}
-												<li class="list-group-item">Plus aucun devis à réaliser !</li>
-											{% endif %}
-										</ul>
-									</div>
-								</div>
-							{% else %}
-								<li class="list-group-item">Aucun devis à réaliser aujourd'hui.</li>
-							{% endif %}
-						</li>
-
-
-						{% if appelsCurrentUser|length > 0 %}
 							<a class="btn btn-secondary" data-bs-toggle="collapse" href="#rdvCollapse" role="button" aria-expanded="false" aria-controls="rdvCollapse">
 								{{ appelsCurrentUser|length }}
 								rendez-vous aujourd'hui.
 							</a>
-
 							<div class="collapse col-md-7" id="rdvCollapse">
 								<div class="row rounded rounded-lg bg-white m-2 p-1">
 									<ul class="list-group list-group-flush" style="max-height: 150px; overflow-y: auto;">
@@ -94,19 +60,55 @@ alert.remove();
 									</ul>
 								</div>
 							</div>
-						{% else %}
-						<div class="alert alert-info" role="alert">
-							<li class="list-group-item">Aucun rendez-vous prévu pour vous aujourd'hui !</li>
-						</div>
-						{% endif %}
+						</li>
+					{% else %}
+					<li class="list-group-item mb-2">
+						<a class="btn btn-secondary" data-bs-toggle="collapse" href="#rdvCollapse" role="button" aria-expanded="false" aria-controls="rdvCollapse">
+							{{ appelsCurrentUser|length }}
+							rendez-vous aujourd'hui.
+						</a>
 					</li>
+					{% endif %}
+					
+					{% if devisARealiser|length > 0 %}
+						<li class="list-group-item mb-2">
+							<a class="btn btn-secondary" data-bs-toggle="collapse" href="#devisCollapse" role="button" aria-expanded="false" aria-controls="devisCollapse">
+								{{ devisARealiser|length }}
+								devis à réaliser.
+							</a>
+							<div class="collapse col-md-7" id="devisCollapse">
+								<div class="row rounded rounded-lg bg-white m-2 p-1">
+									<ul class="list-group list-group-flush" style="max-height: 150px; overflow-y: auto;">
+										{% set hasDevis = false %}
+										{% for devis in devisARealiser %}
+											{% set hasDevis = true %}
+											<li class="list-group-item d-flex justify-content-between align-items-center">
+												<a class="text-decoration-none link-dark" href="{{ path('app_devis_show', {'id': devis.id}) }}">
+													{{ devis.nom }}
+												</a>
+												<span class="badge bg-primary text-wrap">
+													{{ devis.statut|replace({'EN_COURS': 'A faire'}) }} - 
+													{{ devis.date|date('d/m/Y H:i') }}
+												</span>
+											</li>
+										{% endfor %}
+										{% if not hasDevis %}
+											<li class="list-group-item">Plus aucun devis à réaliser !</li>
+										{% endif %}
+									</ul>
+								</div>
+							</div>
+						</li>
+					{% else %}
+						<li class="list-group-item">Aucun devis à réaliser aujourd'hui.</li>
+					{% endif %}
 				</ul>
 			{% endif %}
 		</div>
 
 		<div class="row border border-light rounded rounded-lg bg-light m-2 p-2 mb-3">
 			<h1 class="display-3">Calendrier</h1>
-			
+
 			<div class="row">
 				<div class="col calendar-holder p-2" id="calendar-holder-dashboard-0" data-events-url="{{ path('fc_load_events') }}"></div>
 			</div>
@@ -122,8 +124,8 @@ alert.remove();
 
 		<!-- Devis à réaliser -->
 		{% if devisARealiser is not null and devisARealiser|length > 0 %}
-		<div class="row border border-light rounded rounded-lg bg-light m-2 p-2 mb-3">
-			<h1 class="display-3">Devis à réaliser</h1>
+			<div class="row border border-light rounded rounded-lg bg-light m-2 p-2 mb-3">
+				<h1 class="display-3">Devis à réaliser</h1>
 				{% set sortedDevis = devisARealiser|sort((a, b) => a.date <=> b.date)|slice(-3) %}
 				{% for devis in sortedDevis %}
 					<div class="col-md-4 mt-2">
@@ -162,7 +164,7 @@ alert.remove();
 							<h2>{{ chantier.CodeClient }}</h2>
 						</a>
 						<p>
-							<span class="badge bg-primary text-wrap">{{ chantier.dateDebut|date('d/m/Y H:i') }}</span>
+							<span class="badge bg-primary text-wrap">{{ chantier.dateDebut|date('d/m/Y') }}</span>
 						</p>
 						<li class="list-group-item d-flex justify-content-between align-items-center">
 							<h4>{{ chantier.libelle|striptags|slice(0, 35) ~ '...' }}</h4>
@@ -186,23 +188,21 @@ alert.remove();
 		{% endif %}
 
 
-			<!-- SAV -->
-			<div class="row border border-light rounded bg-light m-2 p-2 mb-3">
-				<h1 class="display-3">SAV</h1>
-				<div class="col-md-4">
-					<h2>SAV 1</h2>
-					<p>Donec id elit non mi porta gravida at eget metus. Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum nibh, ut fermentum massa justo sit amet risus. Etiam porta sem malesuada magna mollis euismod. Donec sed odio dui.
-					</p>
-					<p>
-						<a class="btn btn-secondary" href="#" role="button">View details »</a>
-					</p>
-				</div>
+		<!-- SAV -->
+		<div class="row border border-light rounded bg-light m-2 p-2 mb-3">
+			<h1 class="display-3">SAV</h1>
+			<div class="col-md-4">
+				<h2>SAV 1</h2>
+				<p>Donec id elit non mi porta gravida at eget metus. Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum nibh, ut fermentum massa justo sit amet risus. Etiam porta sem malesuada magna mollis euismod. Donec sed odio dui.
+				</p>
+				<p>
+					<a class="btn btn-secondary" href="#" role="button">View details »</a>
+				</p>
 			</div>
-
-			<!-- Appels -->
-
 		</div>
-	</main>
+	</div>
+</main>
+
 {% endblock %}
 {% block stylesheets %}
 	{{ parent() }}

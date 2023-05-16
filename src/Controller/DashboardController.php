@@ -6,11 +6,15 @@ use DateTime;
 use App\Entity\Appels;
 use App\Entity\ChantierApps;
 use App\Entity\DevisARealiser;
+use App\Repository\DevisARealiserRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use App\Repository\StatutChantierRepository;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\Security\Http\Attribute\IsGranted;
+
 
 class DashboardController extends AbstractController
 {

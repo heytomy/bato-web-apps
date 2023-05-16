@@ -32,6 +32,7 @@ alert.remove();
 					{{ app.user.getIDUtilisateur.prenom }}!</h1>
 				<h4>Voici un petit récapitulatif de votre journée :</h4>
 				<ul class="list-unstyled mt-2" style="margin-left: 0.5rem;">
+					
 					{% if appelsCurrentUser|length > 0 %}
 						<li class="list-group-item mb-2">
 							<a class="btn btn-secondary" data-bs-toggle="collapse" href="#rdvCollapse" role="button" aria-expanded="false" aria-controls="rdvCollapse">
@@ -61,12 +62,14 @@ alert.remove();
 							</div>
 						</li>
 					{% else %}
-						<li class="list-group-item">
-							<div class="alert alert-info" role="alert">
-								Aucun rendez-vous prévu pour vous aujourd'hui !
-							</div>
-						</li>
+					<li class="list-group-item mb-2">
+						<a class="btn btn-secondary" data-bs-toggle="collapse" href="#rdvCollapse" role="button" aria-expanded="false" aria-controls="rdvCollapse">
+							{{ appelsCurrentUser|length }}
+							rendez-vous aujourd'hui.
+						</a>
+					</li>
 					{% endif %}
+					
 					{% if devisARealiser|length > 0 %}
 						<li class="list-group-item mb-2">
 							<a class="btn btn-secondary" data-bs-toggle="collapse" href="#devisCollapse" role="button" aria-expanded="false" aria-controls="devisCollapse">
@@ -150,7 +153,6 @@ alert.remove();
 			</div>
 		{% endif %}
 
-
 		<!-- Chantier client -->
 		{% if chantierEnCours is not null and chantierEnCours|length > 0 %}
 			<div class="row border border-light rounded rounded-lg bg-light m-2 p-2 mb-3">
@@ -162,7 +164,7 @@ alert.remove();
 							<h2>{{ chantier.CodeClient }}</h2>
 						</a>
 						<p>
-							<span class="badge bg-primary text-wrap">{{ chantier.dateDebut|date('d/m/Y H:i') }}</span>
+							<span class="badge bg-primary text-wrap">{{ chantier.dateDebut|date('d/m/Y') }}</span>
 						</p>
 						<li class="list-group-item d-flex justify-content-between align-items-center">
 							<h4>{{ chantier.libelle|striptags|slice(0, 35) ~ '...' }}</h4>

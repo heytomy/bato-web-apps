@@ -39,8 +39,6 @@
 					<h5>Début le: 
 						{{chantier.getRdv().dateDebut|format_datetime(locale='fr',pattern="dd MMMM YYYY") }}
 					</h5>
-					<h5>à
-						{{chantier.getRdv().dateDebut|date('h:i')}}</h5>
 				</div>
 			</div>
 			{% if chantier.id %}
@@ -59,7 +57,7 @@
 
 			<div class="d-flex flex-column align-items-end">
 				<h5>Fin prévu le:
-					{{ chantier.getRdv().dateFin ? chantier.getRdv().dateFin|format_datetime(locale='fr',pattern="dd MMMM YYYY HH:mm") : 'Toute la journée' }}
+					{{ chantier.getRdv().dateFin ? chantier.getRdv().dateFin|format_datetime(locale='fr',pattern="dd MMMM YYYY") : 'Toute la journée' }}
 				</h5>
 
 				<h5 class='text-primary'>

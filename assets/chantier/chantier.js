@@ -1,4 +1,5 @@
 // get references to the loading element and the client list container
+import moment from "moment";
 const loading = document.querySelector('.chargement');
 const clientListContainer = document.querySelector('.client-container');
 
@@ -106,14 +107,9 @@ function infiniteScrollHandler() {
 
 // function to create a new client element
 function createClientElement(client) {
-  const dateFormatOptions = {
-    day: 'numeric',
-    month: 'long',
-    year: 'numeric',
-    hour: 'numeric',
-    minute: 'numeric',
-  };  const formattedDateDebut = new Date(client.dateDebut).toLocaleDateString('fr-FR', dateFormatOptions);
-  const formattedDateFin = new Date(client.dateFin).toLocaleDateString('fr-FR', dateFormatOptions);
+
+  const formattedDateDebut = moment(client.dateDebut).locale('fr').format('DD MMMM YYYY');
+  const formattedDateFin = moment(client.dateFin).locale('fr').format('DD MMMM YYYY');
 
   const clientElement = document.createElement('div');
   clientElement.classList.add('row', 'border', 'border-light', 'rounded', 'bg-client', 'm-2', 'p-2', 'client');
@@ -167,10 +163,9 @@ function createClientModal(client, clientElement) {
   clientModal.setAttribute('aria-hidden','true');
   clientModal.setAttribute('aria-labelledby',`clientModalLabel-${client.codeChantier}`);
 
-  const dateFormatOptions = { day: 'numeric', month: 'numeric', year: 'numeric' };
-  const formattedDateDebut = new Date(client.dateDebut).toLocaleDateString('fr-FR', dateFormatOptions);
-  const formattedDateFin = new Date(client.dateFin).toLocaleDateString('fr-FR', dateFormatOptions);
-
+  const formattedDateDebut = moment(client.dateDebut).locale('fr').format('DD MMMM YYYY');
+  const formattedDateFin = moment(client.dateFin).locale('fr').format('DD MMMM YYYY');
+  
   clientModal.innerHTML = 
   `
     <div class="modal-dialog modal-dialog-centered">

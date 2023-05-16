@@ -29,7 +29,7 @@ use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\Form\Extension\Core\Type\DateTimeType;
 use Symfony\Component\Validator\Context\ExecutionContextInterface;
 
-class AppelsType extends AbstractType
+class AppelsEditType extends AbstractType
 {
     private $clientDefRepository;
     private $roles;
@@ -89,37 +89,6 @@ class AppelsType extends AbstractType
                     new NotBlank(['message' => 'Veuillez sélectionner un technicien'])
                 ]
             ])
-            // Champs séléctionnant uniquement les clients ayant un contrat d'entretion
-            // ->add('ClientList', EntityType::class, [
-            //     'mapped' => false,
-            //     'class' => ClientDef::class,
-            //     'choices' => $this->clientDefRepository->findByClientWithContrats(),
-            //     'label' => 'Client SAV',
-            //     'choice_label' => function (ClientDef $client) {
-            //         return $client->getNom();
-            //     },
-            //     'placeholder' => 'Choisissez le client',
-            //     'attr' => [
-            //         'class' => 'form-select',
-            //         'data-contrats-url' => $this->router->generate('get_client_and_contrats_info', ['id' => '__clientId__']),
-            //     ],
-            // ])
-
-            ->add('ClientList', EntityType::class, [
-                'required' => false,
-                'mapped' => false,
-                'class' => ClientDef::class,
-                'choices' => $this->clientDefRepository->findAll(),
-                'label' => 'Clients',
-                'choice_label' => function (ClientDef $client) {
-                    return $client->getNom();
-                },
-                'placeholder' => 'Choisissez le client',
-                'attr' => [
-                    'class' => 'form-select',
-                    'data-contrats-url' => $this->router->generate('get_client_and_contrats_info', ['id' => '__clientId__']),
-                ],
-            ])
 
             ->add('Nom', TextType::class, [
                 'required' => true,
@@ -132,30 +101,7 @@ class AppelsType extends AbstractType
                     new NotBlank(['message' => 'Veuillez saisir le nom du client']),
                 ],
             ])
-            ->add('CodeContrat', EntityType::class, [
-                'required' => false,
-                'placeholder' => 'Choisissez le client pour voir les contrats',
-                'class' => Contrat::class,
-                'label' => 'Code Contrat',
-                'attr' => [
-                    'class' => 'form-control',
-                    'id' => 'contrats-field',
-                    'readonly' => 'readonly',
-                ],
-                'choice_label' => 'libelle',
-            ])
-            ->add('CodeClient', EntityType::class, [
-                'required' => false,
-                'class' => ClientDef::class,
-                'placeholder' => 'Code Client',
-                'label' => 'Code Client',
-                'attr' => [
-                    'class' => 'form-control',
-                    'id' => 'client-field',
-                    'readonly' => 'readonly',
-                ],
-                'choice_label' => 'id',
-            ])
+
             ->add('Adr', TextType::class, [
                 'required' => true,
                 'label' => 'Adresse',

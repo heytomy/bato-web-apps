@@ -1,42 +1,121 @@
 <div class="container-fluid">
 
-	<div class="row mb-4">
-		<div class="col d-flex justify-content-end">
-			<button class="btn btn-secondary" id="clear-fields-btn">Réinitialiser</button>
+	{% if app.request.attributes.get('_route') != 'app_appels_edit' %}
+		<div class="row mb-4">
+			<div class="col d-flex justify-content-end">
+				<button class="btn btn-secondary" id="clear-fields-btn" onclick="return confirm('Êtes-vous sûr de vouloir réinitialiser les champs ?')">Réinitialiser</button>
+			</div>
 		</div>
-	</div>
+	{% endif %}
 
 	<div class="card border rounded-5 bg-light p-4">
 		{{ form_start(form) }}
 
-		<div class="row mb-4 mt-1 form-check">
-			<div class="col mb-2">{{ form_row(form.isNewClient) }}</div>
-		</div>
+		{% if app.request.attributes.get('_route') == 'app_appels_edit' %}
+			<div class="row mb-4 mt-1 form-check">
+				<div class="col mb-2">
+					{{ form_row(form.isNewClient, {'attr': {'disabled': 'disabled'}}) }}
+				</div>
+			</div>
+		{% else %}
+			<div class="row mb-4 mt-1 form-check">
+				<div class="col mb-2">{{ form_row(form.isNewClient) }}</div>
+			</div>
+		{% endif %}
+
 
 		<div class="row mt-3">
 			<div class="col">{{ form_row(form.ID_Utilisateur) }}</div>
 		</div>
 
-		<div class="row mt-3 ">
-			<div class="col">{{ form_row(form.ClientList) }}</div>
-		</div>
+		{% if app.request.attributes.get('_route') == 'app_appels_edit' %}
 
-		<div class="row mt-3">
-			<div class="col-md-6">{{ form_row(form.CodeContrat) }}</div>
-			<div class="col-md-6">{{ form_row(form.CodeClient) }}</div>
+		{% else %}
+			<div class="row mt-3 ">
+				<div class="col">{{ form_row(form.ClientList) }}</div>
+			</div>
+		{% endif %}
+
+		{% if app.request.attributes.get('_route') == 'app_appels_edit' %}
+
+		{% else %}
+			<div class="row mt-3">
+				<div class="col-md-6">
+					{{ form_row(form.CodeContrat) }}
+				</div>
+				<div class="col-md-6">
+					{{ form_row(form.CodeClient) }}
+				</div>
+			</div>
+		{% endif %}
+
+		<div class="row mt-4">
+			<div class="col-md-6">
+				{{ form_label(form.Nom) }}
+				{{ form_widget(form.Nom) }}
+				{% if form.Nom.vars.errors|length > 0 %}
+					{% for error in form.Nom.vars.errors %}
+						<div class="alert alert-danger mt-2" role="alert">{{ error.message }}</div>
+					{% endfor %}
+				{% endif %}
+			</div>
+			<div class="col-md-6">
+				{{ form_label(form.Adr) }}
+				{{ form_widget(form.Adr) }}
+				{% if form.Adr.vars.errors|length > 0 %}
+					{% for error in form.Adr.vars.errors %}
+						<div class="alert alert-danger mt-2" role="alert">{{ error.message }}</div>
+					{% endfor %}
+				{% endif %}
+			</div>
+			<div class="col-md-6">
+				{{ form_label(form.CP) }}
+				{{ form_widget(form.CP) }}
+				{% if form.CP.vars.errors|length > 0 %}
+					{% for error in form.CP.vars.errors %}
+						<div class="alert alert-danger mt-2" role="alert">{{ error.message }}</div>
+					{% endfor %}
+				{% endif %}
+			</div>
+			<div class="col-md-6">
+				{{ form_label(form.Ville) }}
+				{{ form_widget(form.Ville) }}
+				{% if form.Ville.vars.errors|length > 0 %}
+					{% for error in form.Ville.vars.errors %}
+						<div class="alert alert-danger mt-2" role="alert">{{ error.message }}</div>
+					{% endfor %}
+				{% endif %}
+			</div>
+			<div class="col-md-6">
+				{{ form_label(form.Tel) }}
+				{{ form_widget(form.Tel) }}
+				{% if form.Tel.vars.errors|length > 0 %}
+					{% for error in form.Tel.vars.errors %}
+						<div class="alert alert-danger mt-2" role="alert">{{ error.message }}</div>
+					{% endfor %}
+				{% endif %}
+			</div>
+			<div class="col-md-6">
+				{{ form_label(form.Email) }}
+				{{ form_widget(form.Email) }}
+				{% if form.Email.vars.errors|length > 0 %}
+					{% for error in form.Email.vars.errors %}
+						<div class="alert alert-danger mt-2" role="alert">{{ error.message }}</div>
+					{% endfor %}
+				{% endif %}
+			</div>
 		</div>
 
 		<div class="row mt-4">
-			<div class="col-md-6">{{ form_row(form.Nom) }}</div>
-			<div class="col-md-6">{{ form_row(form.Adr) }}</div>
-			<div class="col-md-6">{{ form_row(form.CP) }}</div>
-			<div class="col-md-6">{{ form_row(form.Ville) }}</div>
-			<div class="col-md-6">{{ form_row(form.Tel) }}</div>
-			<div class="col-md-6">{{ form_row(form.Email) }}</div>
-		</div>
-
-		<div class="row mt-4">
-			<div class="col">{{ form_row(form.description) }}</div>
+			<div class="col">
+				{{ form_label(form.description) }}
+				{{ form_widget(form.description) }}
+				{% if form.description.vars.errors|length > 0 %}
+					{% for error in form.description.vars.errors %}
+						<div class="alert alert-danger mt-2" role="alert">{{ error.message }}</div>
+					{% endfor %}
+				{% endif %}
+			</div>
 		</div>
 
 		<div class="row mt-3">
@@ -49,20 +128,37 @@
 				{% endfor %}
 			{% endif %}
 
-			<div class="col-md-6">{{ form_row(form.rdvDateTime) }}</div>
-			<div class="col-md-6">{{ form_row(form.rdvDateTimeFin) }}</div>
+			<div class="col-md-6">
+			{{ form_label(form.dateDebut) }}
+			{{ form_widget(form.dateDebut) }}
+				{% if form.dateDebut.vars.errors|length > 0 %}
+					{% for error in form.dateDebut.vars.errors %}
+						<div class="alert alert-danger mt-2" role="alert">{{ error.message }}</div>
+					{% endfor %}
+				{% endif %}
+			</div>
+
+			<div class="col-md-6">{{ form_row(form.dateFin) }}</div>
 		</div>
 
-		<div class="row mt-3 form-check">
+		<div class="row mb-1 mt-1 form-check">
 			<div class="col">{{ form_row(form.allDay) }}</div>
 		</div>
 
-		<div class="row mb-4 mt-1 form-check">
-			<div class="col mb-2">{{ form_row(form.isUrgent) }}</div>
-			<div class="col-3">{{ form_row(form.status) }}</div>
-		</div>
+		{% if app.request.attributes.get('_route') == 'app_appels_edit' %}
+			<div class="row mb-4 mt-1 form-check d-none">
+				<div class="col mb-2">{{ form_row(form.isUrgent, {'attr': {'hidden': 'hidden'}}) }}</div>
+				<div class="col-3">{{ form_row(form.status, {'attr': {'hidden': 'hidden'}}) }}</div>
+			</div>
+		{% else %}
+			<div class="row mb-4 mt-1 form-check">
+				<div class="col mb-2">{{ form_row(form.isUrgent) }}</div>
+				<div class="col-3">{{ form_row(form.status) }}</div>
+			</div>
+		{% endif %}
 
 		<button type="submit" class="btn btn-primary">{{ button_label|default('Enregistrer') }}</button>
 		{{ form_end(form) }}
 	</div>
 </div>
+

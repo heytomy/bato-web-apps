@@ -7,7 +7,7 @@
     <div class="container p-2">
         <div class="d-flex justify-content-between container flex-sm-row flex-column">
             <div class="p-2 col">
-                <a onclick="history.back()" class="btn btn-primary px-2" href="
+                <a onclick="window.history.go(-1); return false;" class="btn btn-primary px-2" href="
                 {% block back_button %}
                 {% endblock %}">
                     <i class="fa-solid fa-chevron-left"></i>

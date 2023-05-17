@@ -108,8 +108,8 @@ function infiniteScrollHandler() {
 // function to create a new client element
 function createClientElement(client) {
   
-  const formattedDateDebut = moment(client.dateDebut).subtract(2, 'hours').locale('fr').format('DD MMMM YYYY HH:mm');
-  const formattedDateFin = moment(client.dateFin).subtract(2, 'hours').locale('fr').format('DD MMMM YYYY HH:mm');
+  const formattedDateDebut = moment(client.dateDebut).locale('fr').format('DD MMMM YYYY HH:mm');
+  const formattedDateFin = moment(client.dateFin).locale('fr').format('DD MMMM YYYY HH:mm');
 
   const clientElement = document.createElement('div');
   clientElement.classList.add('row', 'border', 'border-light', 'rounded', 'bg-client', 'm-2', 'p-2', 'client');
@@ -164,8 +164,8 @@ function createClientModal(client, clientElement) {
   clientModal.setAttribute('aria-hidden','true');
   clientModal.setAttribute('aria-labelledby',`clientModalLabel-${client.codeAppel}`);
 
-  const formattedDateDebut = moment(client.dateDebut).subtract(2, 'hours').locale('fr').format('DD MMMM YYYY HH:mm');
-  const formattedDateFin = moment(client.dateFin).subtract(2, 'hours').locale('fr').format('DD MMMM YYYY HH:mm');
+  const formattedDateDebut = moment(client.dateDebut).locale('fr').format('DD MMMM YYYY HH:mm');
+  const formattedDateFin = moment(client.dateFin).locale('fr').format('DD MMMM YYYY HH:mm');
 
 
   clientModal.innerHTML = 

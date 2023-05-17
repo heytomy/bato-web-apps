@@ -7,7 +7,14 @@
     <div class="container p-2">
         <div class="d-flex justify-content-between container flex-sm-row flex-column">
             <div class="p-2 col">
-                <a class="btn btn-primary px-2" href="{% block back_button %}{{ path('app_dashboard') }}{% endblock %}">
+                <a onclick="goBack()" class="btn btn-primary px-2" href="
+                {% block back_button %}
+                {% endblock %}">
+                    <script>
+                        function goBack() {
+                    window.history.back();
+                    }
+                    </script>
                     <i class="fa-solid fa-chevron-left"></i>
                     Revenir en arrière
                 </a>
@@ -17,35 +24,6 @@
             {% endblock %}
         </div>
         {% block list %}
-            {# {% if items is defined%}
-                {% for item in items %}
-                    <h3 class="row border border-light rounded m-2 p-2">
-                        <strong>{{ item }} :</strong>
-                    </h3>
-
-                    <div class="row border border-light rounded m-2 p-2">
-                        <section class="gradient-custom justify-content-center">
-                            <div class="container justify-content-center">
-                                <div class="row d-flex justify-content-center">
-                                    <div class="col-md-12">
-                                        <div class="card">
-                                            <div class="card-body p-4 bg-client">
-                                                <div class="row">
-                                                    <div class="col">
-                                                        {% block block_item %}
-                                                        {% endblock %}
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </section>
-                    </div>
-                {% endfor %}
-            {% endif %} #}
-        
         {% endblock %}
     </div>
     {% block content %}

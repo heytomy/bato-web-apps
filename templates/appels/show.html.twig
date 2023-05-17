@@ -4,7 +4,6 @@
 {% endblock %}
 
 {% block back_button %}
-	{{ path('app_appels') }}
 {% endblock %}
 
 {% block search %}
@@ -34,11 +33,11 @@
 						{{appel.getRdv().dateDebut|format_datetime(locale='fr',pattern="dd MMMM YYYY") }}
 					</h5>
 					<h5>à
-						{{appel.getRdv().dateDebut|date('h:i')}}</h5>
+						{{appel.getRdv().dateDebut|format_datetime(locale='fr',pattern="HH:mm") }}</h5>
 				</div>
 			</div>
 			{% if appel.CodeContrat %}
-				<div>Code du contrat:
+				<div><strong>Code du contrat:</strong>
 					{{appel.CodeContrat}}
 					-
 					{{appel.CodeContrat.libelle}}</div>
@@ -46,7 +45,7 @@
 				<div>N'a pas de contrat d'entretien</div>
 			{% endif %}
 			{% if appel.CodeClient %}
-				<div>Code du client:
+				<div><strong>Code du client:</strong>
 					{{appel.CodeClient.getId()}}</div>
 			{% else %}
 				<div>Nouveau client !</div>

@@ -18,7 +18,6 @@
 {% endblock %}
 
 {% block back_button %}
-    {{ path('app_chantier') }}
 {% endblock %}
 
 {% block list %}
@@ -32,17 +31,42 @@
     {% endif %}
     
     <div class="border rounded container bg-light p-2">
-        <div class="row border border-light rounded bg-client m-2 p-2"> 
-            <div class="d-flex justify-content-between">
-                <h1>{{chantier.getCodeClient().nom}}</h1>
-                <div class="d-flex flex-column align-items-end">
-                    <h5>Le {{chantier.dateDebut | date('d/m/Y')}}</h5>
-                    <h5>à {{chantier.dateDebut | date('h:i')}}</h5>
+		<div class="row border border-light rounded bg-client m-2 p-2">
+			<div class="d-flex justify-content-between">
+				<h1>{{chantier.getRdv().titre}}</h1>
+				<div class="d-flex flex-column align-items-end">
+					<h5>Début le: 
+						{{chantier.getRdv().dateDebut|format_datetime(locale='fr',pattern="dd MMMM YYYY") }}
+					</h5>
+				</div>
+			</div>
+			{% if chantier.id %}
+				<div><strong>Code du contrat:</strong>
+					{{chantier.id}}
+				</div>
+			{% else %}
+				<div>N'a pas de contrat d'entretien</div>
+			{% endif %}
+			{% if chantier.CodeClient %}
+				<div><strong>Code du client:</strong>
+					{{chantier.CodeClient.getId()}}</div>
+			{% else %}
+				<div>Nouveau client !</div>
+			{% endif %}
 
-                    <h5 class='text-primary'><strong>Technicien: </strong>{{chantier.IDUtilisateur.IDUtilisateur.nom}} {{chantier.IDUtilisateur.IDUtilisateur.prenom}}</h5>
-                </div>
-            </div>
-        </div>
+			<div class="d-flex flex-column align-items-end">
+				<h5>Fin prévu le:
+					{{ chantier.getRdv().dateFin ? chantier.getRdv().dateFin|format_datetime(locale='fr',pattern="dd MMMM YYYY") : 'Toute la journée' }}
+				</h5>
+
+				<h5 class='text-primary'>
+					<strong>Technicien:
+					</strong>
+					{{chantier.IDUtilisateur.IDUtilisateur.nom}}
+					{{chantier.IDUtilisateur.IDUtilisateur.prenom}}</h5>
+			</div>
+
+		</div>
 
         <h3 class="row border border-light rounded m-2 p-2">
             <strong>Devis :</strong>
@@ -71,7 +95,8 @@
                                 <div class="card-body p-4 bg-client">
                                     <div class="row">
                                         <div class="col">
-                                            {{ chantier.description|raw }}
+                                            <h4>{{ chantier.libelle }}</h4>
+                                            <p>{{ chantier.description|raw }}</p>
                                         </div>
                                     </div>
                                 </div>

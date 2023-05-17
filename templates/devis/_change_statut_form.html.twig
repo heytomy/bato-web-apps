@@ -1,4 +1,4 @@
 <form method="post" action="{{ path('app_status_change_devis', {'id': devis.id}) }}" onsubmit="return confirm('Êtes-vous sûr de changer le statut du devis ?');">
     <input type="hidden" name="_token" value="{{ csrf_token('change_status_' ~ devis.id) }}">
-    <button class="btn btn-danger" type="submit"><i class="fa-solid fa-building-circle-check"></i> Marquer le devis <strong>'Réalisé'</strong></button>
+    <button class="btn btn-primary" type="submit"><i class="fa-solid fa-building-circle-check"></i> Marquer le devis <strong>'Réalisé'</strong></button>
 </form>

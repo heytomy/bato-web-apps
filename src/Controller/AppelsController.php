@@ -105,9 +105,6 @@ class AppelsController extends AbstractController
                 $em->persist($appel);
                 $em->flush($appel);
             
-                $em->persist($rdv);
-                $em->flush($rdv);
-            
                 if ($form->get('isUrgent')->getData() && $form->get('status')->getData()) {
                     $status = $form->get('status')->getData();
             
@@ -115,10 +112,17 @@ class AppelsController extends AbstractController
                     $ticketUrgent
                         ->setAppelsUrgents($appel)
                         ->setStatus($status);
+
+                    $rdv
+                        ->setAllDay(true)
+                        ->setDateFin(null);
             
                     $em->persist($ticketUrgent);
                     $em->flush($ticketUrgent);
                 }
+
+                $em->persist($rdv);
+                $em->flush($rdv);
             
                 $this->addFlash(
                     'success',

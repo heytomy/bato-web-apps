@@ -6,9 +6,10 @@
 {% block body %}
 <main role="main">
 	<div class="container">
+
 		{% for message in app.flashes('success') %}
 			{% if loop.first %}
-				<div class="alert alert-success alert-dismissible fade show mb-1" role="alert">
+				<div class="alert alert-success alert-dismissible fade show mt-1" role="alert">
 					{{ message }}
 					<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
 				</div>

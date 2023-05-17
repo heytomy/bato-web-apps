@@ -28,6 +28,7 @@ use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\Form\Extension\Core\Type\DateTimeType;
 use Symfony\Component\Validator\Context\ExecutionContextInterface;
+use Symfony\Component\Validator\Constraints\NotNull;
 
 class AppelsType extends AbstractType
 {
@@ -243,11 +244,11 @@ class AppelsType extends AbstractType
                 ],
                 'html5' => false,
                 'constraints' => [
+                    new Assert\NotBlank(['message' => 'Veuillez sélectionner une date et une heure.']),
                     new Assert\GreaterThanOrEqual([
                         'value' => 'today',
                         'message' => 'Un rendez-vous ne peut pas être placé à une date antérieure !',
                     ]),
-                    new Assert\NotBlank(['message' => 'Veuillez sélectionner une date et une heure.'])
                 ],
             ])
 

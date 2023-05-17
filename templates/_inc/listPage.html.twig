@@ -7,14 +7,9 @@
     <div class="container p-2">
         <div class="d-flex justify-content-between container flex-sm-row flex-column">
             <div class="p-2 col">
-                <a onclick="goBack()" class="btn btn-primary px-2" href="
+                <a onclick="history.back()" class="btn btn-primary px-2" href="
                 {% block back_button %}
                 {% endblock %}">
-                    <script>
-                        function goBack() {
-                    window.history.back();
-                    }
-                    </script>
                     <i class="fa-solid fa-chevron-left"></i>
                     Revenir en arrière
                 </a>

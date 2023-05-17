@@ -63,7 +63,7 @@ class AppelsController extends AbstractController
 
             $dateDebut = $form->get('dateDebut')->getData()->format('Y-m-d H:i:s');
             $dateFin = $form->get('dateFin')->getData();
-            
+
             if (!$form->get('allDay')->getData() && $dateFin === null) {
                 $dateFin = (new DateTime($dateDebut))->modify('+1 hour');
             } elseif ($dateFin !== null && $form->get('allDay')->getData()) {
@@ -201,9 +201,6 @@ class AppelsController extends AbstractController
                 $em->persist($appel);
                 $em->flush($appel);
             
-                $em->persist($rdv);
-                $em->flush($rdv);
-            
                 if ($form->get('isUrgent')->getData() && $form->get('status')->getData()) {
                     $status = $form->get('status')->getData();
             
@@ -211,10 +208,18 @@ class AppelsController extends AbstractController
                     $ticketUrgent
                         ->setAppelsUrgents($appel)
                         ->setStatus($status);
+
+                    $rdv
+                        ->setAllDay(true)
+                        ->setDateFin(null);
             
                     $em->persist($ticketUrgent);
                     $em->flush($ticketUrgent);
                 }
+
+                $em->persist($rdv);
+                $em->flush($rdv);
+            
 
             $this->addFlash(
                 'success',

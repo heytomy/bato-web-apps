@@ -4,52 +4,59 @@
 {% endblock %}
 
 {% block body %}
-	<form action="{{ path('app_login') }}" method="post">
-		{% if error %}
-			<div class="alert alert-danger">{{ error.messageKey|trans(error.messageData, 'security') }}</div>
-		{% endif %}
+<form action="{{ path('app_login') }}" method="post">
+    {% if error %}
+        <div class="alert alert-danger">{{ error.messageKey|trans(error.messageData, 'security') }}</div>
+    {% endif %}
 
-		<div class="container-fluid mt-5 p-5">
-			<div class="row justify-content-center">
-				<div class="col-md-6 col-lg-6">
-					<div class="card border rounded-5 bg-light">
-						<h5 class="card-title align-self-center mt-2 mx-2 px-4 pt-4">
-							<strong>Login</strong>
-						</h5>
-						<div class="d-flex card-body flex-column px-4 pb-4">
-							<label for="inputNom_utilisateur">Utilisateur</label>
-							<div class="input-group mb-3 py-2">
-								<span class="input-group-text">
-									<i class="fa-regular fa-user"></i>
-								</span>
-								<input type="text" value="{{ last_username }}" name="Nom_utilisateur" id="inputNom_utilisateur" class="form-control" autocomplete="username" required autofocus>
-							</div>
+    <div class="container mt-5 mb-5">
+        <div class="row justify-content-center">
+            <div class="col-md-6">
+                <div class="card border rounded-5 bg-light">
+                    <h5 class="card-title text-center mt-4">
+                        <strong>Login</strong>
+                    </h5>
+                    <div class="card-body px-4 pb-4">
+                        <div class="mb-3">
+                            <label for="inputNom_utilisateur" class="form-label">Utilisateur</label>
+                            <div class="input-group">
+                                <span class="input-group-text">
+                                    <i class="fa-regular fa-user"></i>
+                                </span>
+                                <input type="text" value="{{ last_username }}" name="Nom_utilisateur" id="inputNom_utilisateur" class="form-control" autocomplete="username" required autofocus>
+                            </div>
+                        </div>
 
-							<label for="inputPassword">Password</label>
-							<div class="input-group mb-3 py-2">
-								<span class="input-group-text">
-									<i class="fa-solid fa-lock"></i>
-								</span>
-								<input type="password" name="password" id="inputPassword" class="form-control" autocomplete="current-password" required>
-								<input type="hidden" name="_csrf_token" value="{{ csrf_token('authenticate') }}">
-							</div>
+                        <div class="mb-3">
+                            <label for="inputPassword" class="form-label">Password</label>
+                            <div class="input-group">
+                                <span class="input-group-text">
+                                    <i class="fa-solid fa-lock"></i>
+                                </span>
+                                <input type="password" name="password" id="inputPassword" class="form-control" autocomplete="current-password" required>
+                                <input type="hidden" name="_csrf_token" value="{{ csrf_token('authenticate') }}">
+                            </div>
+                        </div>
 
-							<div class="form-check form-switch mb-3 py-2">
-								<input class="form-check-input" id="flexSwitchCheckChecked" checked type="checkbox" name="_remember_me">
-								<label class="form-check-label" for="flexSwitchCheckChecked">Se souvenir de moi</label>
-							</div>
+                        <div class="form-check mb-3">
+                            <input class="form-check-input" id="flexSwitchCheckChecked" checked type="checkbox" name="_remember_me">
+                            <label class="form-check-label" for="flexSwitchCheckChecked">Se souvenir de moi</label>
+                        </div>
 
-							<button type="submit" class="btn btn-dark mb-2 align-self-center py-2 mt-4">
-								<strong>Se connecter</strong>
-							</button>
-							<a class="align-self-center text-dark text-decoration-none py-2" href="#">Mot de passe oublié ?</a>
-						</div>
-					</div>
-				</div>
-			</div>
-		</div>
+                        <div class="d-grid">
+                            <button type="submit" class="btn btn-dark mb-2">
+                                <strong>Se connecter</strong>
+                            </button>
+                            <a class="text-dark text-decoration-none" href="#">Mot de passe oublié ?</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</form>
 
-	</form>
+
 
 {% endblock %}
 

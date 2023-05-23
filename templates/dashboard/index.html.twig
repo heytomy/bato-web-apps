@@ -195,17 +195,38 @@ alert.remove();
 
 
 		<!-- SAV -->
-		<div class="row border border-light rounded bg-light m-2 p-2 mb-3">
-			<h1 class="display-3">SAV</h1>
-			<div class="col-md-4">
-				<h2>SAV 1</h2>
-				<p>Donec id elit non mi porta gravida at eget metus. Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum nibh, ut fermentum massa justo sit amet risus. Etiam porta sem malesuada magna mollis euismod. Donec sed odio dui.
-				</p>
-				<p>
-					<a class="btn btn-secondary" href="#" role="button">View details »</a>
-				</p>
+		{% if appelsLast is not null and appelsLast|length > 0 %}
+			<div class="row border border-light rounded rounded-lg bg-light m-2 p-2 mb-3">
+				<h1 class="display-3">Les derniers appels</h1>
+				{% set sortedAppels = appelsLast|sort((a, b) => b.createdAt <=> a.createdAt)|slice(0, 3) %}
+				{% for appels in sortedAppels %}
+					<div class="col-md-4 mt-2">
+						<a class="text-decoration-none link-dark" href="{{ path('app_appels_show', {'id': appels.id}) }}">
+							<h2>{{ appels.CodeClient }}</h2>
+						</a>
+						<p>
+							<span class="badge bg-primary text-wrap">{{ appels.dateDebut|date('d/m/Y') }}</span>
+						</p>
+						<p>{{ appels.description|striptags|slice(0, 130) ~ '...' }}</p>
+						<p>
+							<a class="btn btn-secondary" href="{{ path('app_appels_show', {'id': appels.id}) }}" role="button">Voir les détails »</a>
+						</p>
+					</div>
+				{% endfor %}
 			</div>
-		</div>
+		{% else %}
+			<div class="row border border-light rounded rounded-lg bg-light m-2 p-2 mb-3">
+				<h1 class="display-3">Les derniers appels</h1>
+				<div class="col-md-4 mt-2">
+					<li class="list-group-item d-flex justify-content-between align-items-center">
+						Aucun appel en cours.
+					</li>
+				</div>
+			</div>
+		{% endif %}
+
+
+		
 	</div>
 </main>
 

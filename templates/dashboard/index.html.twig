@@ -37,14 +37,19 @@ alert.remove();
 					{% if appelsCurrentUser|length > 0 %}
 						<li class="list-group-item mb-2">
 							<a class="btn btn-secondary" data-bs-toggle="collapse" href="#rdvCollapse" role="button" aria-expanded="false" aria-controls="rdvCollapse">
-								{{ appelsCurrentUser|length }}
+								{% set currentTime = now %}
+								{% set oneHourAgo = currentTime|date_modify('-1 hour') %}
+								{% set filteredAppels = appelsCurrentUser|filter(a => a.RDV.dateDebut > oneHourAgo) %}
+								{% set appelsCount = filteredAppels|length %} 
+								{{ appelsCount }}
+								{# {{ appelsCurrentUser|length }} #}
 								rendez-vous aujourd'hui.
 							</a>
 							<div class="collapse col-md-7" id="rdvCollapse">
 								<div class="row rounded rounded-lg bg-white m-2 p-1">
 									<ul class="list-group list-group-flush" style="max-height: 150px; overflow-y: auto;">
 										{% set hasAppointment = false %}
-										{% for appels in appelsCurrentUser|sort((a, b) => a.RDV.dateDebut <=> b.RDV.dateDebut) %}
+										{% for appels in appelsCurrentUser|sort((a, b) => a.RDV.dateFin <=> b.RDV.dateDebut) %}
 											{% if appels.RDV.dateDebut|date_modify('+1 hour') >= now %}
 												{% set hasAppointment = true %}
 												<li class="list-group-item d-flex justify-content-between align-items-center">
@@ -145,7 +150,7 @@ alert.remove();
 			</div>
 		{% else %}
 			<div class="row border border-light rounded rounded-lg bg-light m-2 p-2 mb-3">
-				<h1 class="display-3">Chantier client</h1>
+				<h1 class="display-3">Devis à réaliser</h1>
 				<div class="col-md-4 mt-2">
 					<li class="list-group-item d-flex justify-content-between align-items-center">
 						Aucun devis à réaliser.

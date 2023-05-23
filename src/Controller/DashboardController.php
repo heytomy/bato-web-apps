@@ -43,6 +43,7 @@ class DashboardController extends AbstractController
 
         $devisARealiser = $em->getRepository(DevisARealiser::class)->findByStatut('EN_COURS');
         $chantierEnCours = $em->getRepository(ChantierApps::class)->findByStatut('EN_COURS');
+        $appelsLast = $em->getRepository(Appels::class)->findByStatut('EN_COURS');
 
 
         $em->clear();
@@ -50,6 +51,7 @@ class DashboardController extends AbstractController
         return $this->render('dashboard/index.html.twig', [
             'current_page' => 'app_dashboard',
             'appelsCurrentUser' => $appelsCurrentUser,
+            'appelsLast' => $appelsLast,
             'devisARealiser' => $devisARealiser,
             'chantierEnCours' => $chantierEnCours,
             'now' => $now

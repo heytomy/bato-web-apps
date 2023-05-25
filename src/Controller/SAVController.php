@@ -2,12 +2,15 @@
 
 namespace App\Controller;
 
+use App\Controller\PdfFileController as ControllerPdfFileController;
 use DateTime;
 use App\Entity\Contrat;
 use App\Entity\SAVSearch;
+use App\Form\PDFType;
 use App\Form\SAVSearchType;
 use App\Entity\CommentairesSAV;
 use App\Form\CommentairesSAVType;
+use PdfFileController;
 use App\Entity\RepCommentairesSAV;
 use App\Form\RepCommentairesSAVType;
 use App\Repository\ContratRepository;
@@ -49,7 +52,8 @@ class SAVController extends AbstractController
         CommentairesSAVRepository $commentairesSAVRepository, 
         Request $request, EntityManagerInterface $em, 
         RepCommentairesSAVRepository $repCommentairesSAVRepository,
-        PhotosSAVRepository $photosSAVRepository
+        PhotosSAVRepository $photosSAVRepository,
+        ControllerPdfFileController $pdfFileController
         ): Response
     {
         $comments = $commentairesSAVRepository->findBy(
@@ -58,6 +62,7 @@ class SAVController extends AbstractController
         );
         $user = $this->getUser() ?? null;
         $nom = $user->getIdUtilisateur()->getNom() ." ". $user->getIdUtilisateur()->getPrenom();
+
         /**
          * Partie commentaires
          */
@@ -153,6 +158,31 @@ class SAVController extends AbstractController
             );
         }
 
+
+        /**
+         * Partie enregistrement de devis
+         */
+
+        $form = $this->createForm(PDFType::class);
+        $form->handleRequest($request);
+
+        // Enregistrement du fichier
+        if ($form->isSubmitted() && $form->isValid()) {
+            $dossier = "Devis_SAV/";
+            $codeContrat = $contrat->getId();
+            $codeClient =  $contrat->getCodeClient()->getId();
+            $pattern = "Devis_" . $codeContrat . "_" . $codeClient . "_";
+            $verif = '/^' . preg_quote($pattern, '/') . '.*\.pdf$/i';
+            try {
+
+                $pdfFileController->uploadPdfFromForm($form->get('pdfFile'), $dossier, $codeClient, $verif);
+
+            } catch (BadRequestHttpException $e) {
+
+                echo 'Erreur : '.$e->getMessage();
+            }
+        }
+
         return $this->render('sav/show.html.twig', [
             'current_page'      => 'app_sav',
             'contrat'           => $contrat,
@@ -163,6 +193,7 @@ class SAVController extends AbstractController
             'replyForm'         => $replyForm->createView(),
             'photos'            => $photos,
             'devis'             => $devis,
+            'form'              => $form->createView(),
         ]);
     }
 }

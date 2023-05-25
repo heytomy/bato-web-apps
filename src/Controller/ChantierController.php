@@ -4,6 +4,7 @@ namespace App\Controller;
 
 use App\Entity\Calendrier;
 use DateTime;
+use App\Form\PDFType;
 use App\Entity\ChantierApps;
 use App\Form\ChantierAppsType;
 use App\Entity\CommentairesChantier;
@@ -23,6 +24,8 @@ use App\Repository\StatutChantierRepository;
 use Exception;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use App\Controller\PdfFileController as ControllerPdfFileController;
+use Symfony\Component\HttpFoundation\File\Exception\FileException;
 
 #[Route('/chantier')]
 #[IsGranted('ROLE_GESTION')]
@@ -103,6 +106,7 @@ class ChantierController extends AbstractController
         EntityManagerInterface $em, 
         RepCommentairesChantierRepository $repCommentairesChantierRepository,
         PhotosChantierRepository $photosChantierRepository,
+        ControllerPdfFileController $pdfFileController
         ): Response
     {
         $user = $this->getUser() ?? null;
@@ -200,6 +204,33 @@ class ChantierController extends AbstractController
             );
         }
 
+        /**
+         * Partie enregistrement de devis
+         */
+
+         $form = $this->createForm(PDFType::class);
+         $form->handleRequest($request);
+         $errorMessage = "";
+ 
+         // Enregistrement du fichier
+         if ($form->isSubmitted() && $form->isValid()) {
+            $dossier = "Devis_CHANTIERS/";                 
+            $codeChantier = $chantier->getId();
+            $codeClient =  $chantier->getCodeClient()->getId();
+            $pattern = "Devis_" . $codeChantier . "_" . $codeClient . "_";
+            $verif = '/^' . preg_quote($pattern, '/') . '.*\.pdf$/i';
+
+            try { 
+                $pdfFileController->uploadPdfFromForm($form->get('pdfFile'), $dossier, $codeChantier, $verif);                
+            } catch (FileException $e) {
+                dd('az');
+                $this->addFlash(
+                    'errorUpload',
+                    'Une erreur s`\'est produite lors du traitement du fichier'
+                 );
+            }
+        }
+
         return $this->render('chantier/show.html.twig',[
             'chantier'          =>  $chantier,
             'comments'          =>  $comments,
@@ -210,6 +241,8 @@ class ChantierController extends AbstractController
             'photos'            =>  $photos,
             'current_page'      =>  'app_chantier',
             'devis'             =>  $devis,
+            'form'              =>  $form->createView(),
+            'errorMessage'      =>  $errorMessage,
         ]);
     }
 

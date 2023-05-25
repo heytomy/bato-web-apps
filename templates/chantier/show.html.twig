@@ -81,6 +81,54 @@
                 {% endfor %}
             </ul>
         </h3>
+        <!-- Button trigger modal -->
+        <div class="container p-2">
+            <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#devisModal">
+                Rajouter un devis
+            </button>
+
+        {% for message in app.flashes('errorUpload') %}
+                    {% if loop.first %}
+                        <div class="alert alert-success alert-dismissible fade show mt-1" role="alert">
+                            {{ message }}
+                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                        </div>
+
+                        <script>
+                            setTimeout(function () {
+        var alert = document.querySelector('.alert');
+        alert.classList.remove('show');
+        alert.classList.add('hide');
+        setTimeout(function () {
+        alert.remove();
+        }, 1000);
+        }, 5000);
+                </script>
+            {% endif %}
+        {% endfor %}
+
+            <!-- Modal -->
+            <div class="modal fade" id="devisModal" tabindex="-1" aria-labelledby="devisModalLabel" aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h1 class="modal-title fs-5" id="devisModalLabel">Rajouter un devis</h1>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                            {{ form_start(form) }}
+                                {{ form_row(form.pdfFile) }}                            
+                        <div class="modal-footer">                    
+                            <button type="submit" class="btn btn-secondary" data-bs-dismiss="modal">Enregistrer</button>
+                            {{ form_end(form) }}
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fermer</button>
+                        </div> 
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        
 
         <h3 class="row border border-light rounded m-2 p-2">
             <strong>Description :</strong>

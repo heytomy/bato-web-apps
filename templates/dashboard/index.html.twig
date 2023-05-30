@@ -116,14 +116,14 @@ alert.remove();
 			<h1 class="display-3">Calendrier</h1>
 
 			<div class="row">
-				<div class="col calendar-holder p-2" id="calendar-holder-dashboard-0" data-events-url="{{ path('fc_load_events') }}"></div>
+				<div class="col calendar-holder p-2" id="calendar-holder-dashboard-0" data-events-url="{{ path('fc_load_events') }}" data-user-id="{{ app.user.id }}"></div>
 			</div>
 
 			<div class="row mb-3">
-				<div class="col calendar-holder calendar-holder-rest" id="calendar-holder-dashboard-1" data-events-url="{{ path('fc_load_events') }}"></div>
-				<div class="col calendar-holder calendar-holder-rest" id="calendar-holder-dashboard-2" data-events-url="{{ path('fc_load_events') }}"></div>
-				<div class="col calendar-holder calendar-holder-rest" id="calendar-holder-dashboard-3" data-events-url="{{ path('fc_load_events') }}"></div>
-				<div class="col calendar-holder calendar-holder-rest" id="calendar-holder-dashboard-4" data-events-url="{{ path('fc_load_events') }}"></div>
+				<div class="col calendar-holder calendar-holder-rest" id="calendar-holder-dashboard-1" data-events-url="{{ path('fc_load_events') }}" data-user-id="{{ app.user.id }}"></div>
+				<div class="col calendar-holder calendar-holder-rest" id="calendar-holder-dashboard-2" data-events-url="{{ path('fc_load_events') }}" data-user-id="{{ app.user.id }}"></div>
+				<div class="col calendar-holder calendar-holder-rest" id="calendar-holder-dashboard-3" data-events-url="{{ path('fc_load_events') }}" data-user-id="{{ app.user.id }}"></div>
+				<div class="col calendar-holder calendar-holder-rest" id="calendar-holder-dashboard-4" data-events-url="{{ path('fc_load_events') }}" data-user-id="{{ app.user.id }}"></div>
 			</div>
 
 		</div>

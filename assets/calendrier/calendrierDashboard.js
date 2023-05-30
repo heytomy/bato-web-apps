@@ -8,9 +8,12 @@ import "./index.css"; // this will create a calendar.css file reachable to 'enco
 document.addEventListener("DOMContentLoaded", () => {
     let calendarElToday = document.getElementById("calendar-holder-dashboard-0");
     let calendarEls = document.querySelectorAll(".calendar-holder");
-  
+    let userId = calendarElToday.dataset.userId;
+
+    console.log(userId);
+
     let { eventsUrl } = calendarElToday.dataset;
-  
+
     const currentDate = new Date();
 
     // Create an array of dates for the current week
@@ -36,6 +39,8 @@ document.addEventListener("DOMContentLoaded", () => {
             method: "POST",
             extraParams: {
               filters: JSON.stringify({
+                userId: userId, 
+                "calendar-id": "dashboard-view",
                 dateDebut: moment(date).format('YYYY-MM-DD'), // filter events by date
                 dateFin: moment(date).endOf('day').format('YYYY-MM-DDTHH:mm:ss'), // filter events by date
               })

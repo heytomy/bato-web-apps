@@ -19,7 +19,7 @@ document.addEventListener("DOMContentLoaded", () => {
         url: eventsUrl,
         method: "POST",
         extraParams: {
-          filters: JSON.stringify({}) // pass your parameters to the subscriber
+          filters: JSON.stringify({ "calendar-id": "calendar-view" })
         },
         failure: () => {
            alert("Il y avait une erreur pendant le fetching de FullCalendar!");

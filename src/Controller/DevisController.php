@@ -12,6 +12,7 @@ use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\BinaryFileResponse;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use App\Controller\PdfFileController as ControllerPdfFileController;
+use Symfony\Component\HttpFoundation\File\Exception\FileException;
 
 #[Route('/devis')]
 class DevisController extends AbstractController
@@ -44,12 +45,14 @@ class DevisController extends AbstractController
         
         //On définit le prefix du pdf pour chercher dans le fichier
         $prefix = "Devis_"; 
+
+        //On récupére la date en BDD pour ciblé le fichier du devis
+        $date = $devis->getDate();
+        $currentDate = $date->format('dmY');
         
         //On définit le chemin du devis pour ce client. J'utilise la fonction "getParameter" qui prend le parametre pour le chemin
         //qui est une variable globale dans le fichier service.yaml
-        $devisPath = $this->getParameter('devis_creer_chemin') . $devis->getNom() . "_" ?? null;                                                                        // FINIR ICI
-        
-
+        $devisPath = $this->getParameter('devis_creer_chemin') . $devis->getNom() . "_" . $currentDate?? null; 
 
         /**
          * Ici, on scan le dossier pour trouver tous les fichier. On filtre les fichier qu'on veut et les mettre dans la liste "devis"
@@ -73,26 +76,36 @@ class DevisController extends AbstractController
          * Partie enregistrement de devis
          */
 
+         // On récupére le PDF depuis le formulaire
          $form = $this->createForm(PDFType::class);
          $form->handleRequest($request);
+         $errorMessage = "";
  
-         // Enregistrement du fichier
+         // On crée le nom du dossier au besoin et on génére la variable de vérification du nom de fichier
          if ($form->isSubmitted() && $form->isValid()) {
             $dossier = "Devis_CREER/";           
             $nomClient = $devis->getNom();
-            $currentDate = new \DateTime();
-            $monthYear = $currentDate->format('dmY');
-            $nomPdf = $nomClient . "_" . $monthYear;
-            $pattern = "Devis_";
-            $verif = '/^' . preg_quote($pattern, '/') . '.*' . preg_quote($monthYear, '/') . '\.pdf$/i';
+            $date = $devis->getDate();
+            $currentDate = $date->format('dmY');
+            $nomPdf = $nomClient . "_" . $currentDate;
+            $pattern = "Devis_" . $nomClient . "_" . $currentDate;
+            $verif = '/^' . preg_quote($pattern, '/') . '.pdf$/i';
 
             try {
  
-                $pdfFileController->uploadPdfFromForm($form->get('pdfFile'), $dossier, $nomPdf, $verif);
+                $nomCorrect = $pdfFileController->uploadPdfFromForm($form->get('pdfFile'), $dossier, $nomPdf, $verif);
+
+                // Si le fichier n'a pas le bon nom, récupére un NULL de PdfFileController pour envoyer un message d'erreur
+                if ($nomCorrect == NULL){
+                    $errorMessage = "Le nom du fichier ne correspond pas à la page devis actuel.";
+                }
  
-            } catch (BadRequestHttpException $e) {
- 
-                echo 'Erreur : '.$e->getMessage();
+            } catch (FileException $e) {
+                dd('az');
+                $this->addFlash(
+                    'errorUpload',
+                    'Une erreur s`\'est produite lors du traitement du fichier'
+                 );
             }
         }
    
@@ -102,6 +115,8 @@ class DevisController extends AbstractController
             'devis'         =>  $devis,
             'photos'        =>  $photos,
             'form'          => $form->createView(),
+            'error'         =>  $errorMessage,
+            'devisCreer'    => $devisCreer
         ]);
 
     }
@@ -121,6 +136,18 @@ class DevisController extends AbstractController
         $devispath = $this->getParameter('devis_chantier_chemin').$id;
 
         $filePath = $devispath .'/'.$filename;
+        return new BinaryFileResponse($filePath);
+    }
+
+    #[Route('/creer/{id}/{filename}', name: 'app_devis_creer', methods: ['POST', 'GET'])]
+    public function devisCreer($id, $filename, DevisARealiser $devis,)
+    {
+        $date = $devis->getDate();
+        $currentDate = $date->format('dmY');
+        $dossier = $devis->getNom() . "_" . $currentDate;
+        $devispath = $this->getParameter('devis_creer_chemin').$dossier;
+
+        $filePath = $devispath .'/'. $filename;
         return new BinaryFileResponse($filePath);
     }
 }

@@ -208,11 +208,12 @@ class ChantierController extends AbstractController
          * Partie enregistrement de devis
          */
 
+         // On récupére le PDF depuis le formulaire
          $form = $this->createForm(PDFType::class);
          $form->handleRequest($request);
          $errorMessage = "";
  
-         // Enregistrement du fichier
+         // On crée le nom du dossier au besoin et on génére la variable de vérification du nom de fichier
          if ($form->isSubmitted() && $form->isValid()) {
             $dossier = "Devis_CHANTIERS/";                 
             $codeChantier = $chantier->getId();
@@ -221,7 +222,14 @@ class ChantierController extends AbstractController
             $verif = '/^' . preg_quote($pattern, '/') . '.*\.pdf$/i';
 
             try { 
-                $pdfFileController->uploadPdfFromForm($form->get('pdfFile'), $dossier, $codeChantier, $verif);                
+
+                $nomCorrect = $pdfFileController->uploadPdfFromForm($form->get('pdfFile'), $dossier, $codeChantier, $verif);     
+                
+                // Si le fichier n'a pas le bon nom, récupére un NULL de PdfFileController pour envoyer un message d'erreur
+                if ($nomCorrect == NULL){
+                    $errorMessage = "Le nom du fichier ne correspond pas à la page chantier actuel.";
+                }
+
             } catch (FileException $e) {
                 dd('az');
                 $this->addFlash(
@@ -242,7 +250,7 @@ class ChantierController extends AbstractController
             'current_page'      =>  'app_chantier',
             'devis'             =>  $devis,
             'form'              =>  $form->createView(),
-            'errorMessage'      =>  $errorMessage,
+            'error'             =>  $errorMessage,
         ]);
     }
 

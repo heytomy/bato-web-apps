@@ -2,15 +2,14 @@
 
 namespace App\Controller;
 
-use App\Controller\PdfFileController as ControllerPdfFileController;
 use DateTime;
+use Exception;
 use App\Entity\Contrat;
 use App\Entity\SAVSearch;
 use App\Form\PDFType;
 use App\Form\SAVSearchType;
 use App\Entity\CommentairesSAV;
 use App\Form\CommentairesSAVType;
-use PdfFileController;
 use App\Entity\RepCommentairesSAV;
 use App\Form\RepCommentairesSAVType;
 use App\Repository\ContratRepository;
@@ -21,9 +20,10 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use App\Repository\RepCommentairesSAVRepository;
-use Exception;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\File\Exception\FileException;
+use App\Controller\PdfFileController as ControllerPdfFileController;
 
 #[Route('/sav')]
 #[IsGranted('ROLE_GESTION')]
@@ -163,10 +163,12 @@ class SAVController extends AbstractController
          * Partie enregistrement de devis
          */
 
+        // On récupére le PDF depuis le formulaire
         $form = $this->createForm(PDFType::class);
         $form->handleRequest($request);
+        $errorMessage = "";
 
-        // Enregistrement du fichier
+         // On crée le nom du dossier au besoin et on génére la variable de vérification du nom de fichier
         if ($form->isSubmitted() && $form->isValid()) {
             $dossier = "Devis_SAV/";
             $codeContrat = $contrat->getId();
@@ -175,11 +177,19 @@ class SAVController extends AbstractController
             $verif = '/^' . preg_quote($pattern, '/') . '.*\.pdf$/i';
             try {
 
-                $pdfFileController->uploadPdfFromForm($form->get('pdfFile'), $dossier, $codeClient, $verif);
+                $nomCorrect = $pdfFileController->uploadPdfFromForm($form->get('pdfFile'), $dossier, $codeClient, $verif);
+                
+                // Si le fichier n'a pas le bon nom, récupére un NULL de PdfFileController pour envoyer un message d'erreur
+                if ($nomCorrect == NULL){
+                    $errorMessage = "Le nom du fichier ne correspond pas à la page SAV actuel.";
+                }
 
-            } catch (BadRequestHttpException $e) {
-
-                echo 'Erreur : '.$e->getMessage();
+            } catch (FileException $e) {
+                dd('az');
+                $this->addFlash(
+                    'errorUpload',
+                    'Une erreur s`\'est produite lors du traitement du fichier'
+                 );
             }
         }
 
@@ -194,6 +204,7 @@ class SAVController extends AbstractController
             'photos'            => $photos,
             'devis'             => $devis,
             'form'              => $form->createView(),
+            'error'             => $errorMessage,
         ]);
     }
 }

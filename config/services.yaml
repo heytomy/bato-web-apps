@@ -4,10 +4,15 @@
 # Put parameters here that don't need to change on each machine where the app is deployed
 # https://symfony.com/doc/current/best_practices.html#use-parameters-for-application-configuration
 parameters:
-    devis_chemin: '%kernel.project_dir%/../devis/'
 
-    devis_sav_chemin: '%devis_chemin%SAV/'
-    devis_chantier_chemin: '%devis_chemin%Chantier/'
+    devis_chemin: '%kernel.project_dir%/../Devis/'
+
+    devis_sav_chemin: '%devis_chemin%Devis_SAV/'
+
+    devis_chantier_chemin: '%devis_chemin%Devis_CHANTIERS/'
+
+    devis_creer_chemin: '%devis_chemin%Devis_CREER/'
+    
     
 services:
     # default configuration for services in *this* file
@@ -26,3 +31,7 @@ services:
 
     # add more service definitions when explicit configuration is needed
     # please note that last definitions always *replace* previous ones
+
+    App\Controller\PdfFileController:
+        arguments:
+            $targetDirectory: '%kernel.project_dir%/../Devis/'

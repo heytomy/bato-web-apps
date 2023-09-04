@@ -27,8 +27,6 @@ class DemonstrationAppelsFixtures extends Fixture implements FixtureGroupInterfa
         $this->appsUtilisateurRepository = $appsUtilisateurRepository;
     }
 
-
-    // TODO: I need to add the proper properties for Appels and Calendrier
     public function load(ObjectManager $manager): void
     {
         $users = $this->appsUtilisateurRepository->findAll();
